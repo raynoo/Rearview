@@ -1,5 +1,6 @@
 package edu.cs424.traffic.components;
 
+import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 
@@ -23,6 +24,14 @@ public class Filter extends Panel implements TouchEnabled
 	public boolean touch(float x, float y, boolean down) 
 	{
 		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
+	@Override
+	public boolean draw() {
+		background(EnumColor.SOMERANDOM);
+		line(0, 0, width, height);
 		return false;
 	}
 

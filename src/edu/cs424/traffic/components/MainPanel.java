@@ -29,5 +29,12 @@ public class MainPanel extends Panel implements TouchEnabled
 		
 	}
 	
+	
+	@Override
+	public boolean draw() {
+		filter.draw();
+		
+		return false;
+	}
 
 }
