@@ -4,7 +4,8 @@ public enum EnumConfig
 {
 	
 ONWALL("onwall"),
-ZOOMFACTOR("zoomfactor");
+SCALEFACTOR("scalefactor"),
+RENDERER("renderer");
 
 
 String propName;

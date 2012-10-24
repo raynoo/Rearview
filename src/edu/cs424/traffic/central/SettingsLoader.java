@@ -1,6 +1,8 @@
 package edu.cs424.traffic.central;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -14,20 +16,41 @@ public class SettingsLoader
 	private static Properties properties;
 
 	static PApplet papp;
-	private PFont helvetica;
+	private static PFont helvetica;
+	public static int scaleFactor;
+	private String dir;
 
 	private SettingsLoader(PApplet papp) 
 	{
 		this.papp = papp;
+
 		
+		try 
+		{
+			dir = new File(".").getCanonicalPath();
+
+			if (dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase("/lib")   || dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase("/bin")) 
+			{
+				dir = dir.substring(0, dir.length() - 4);
+			}
+		} 
+		catch (IOException e)
+		{
+			System.out.println("SettingsLoader.SettingsLoader()" +e.getMessage());
+		}
+
+
+
 		loadConfigFile();
 		loadPappletSetting();
+
+		scaleFactor = getConfigValueAsInt(EnumConfig.SCALEFACTOR);
 	}
 
 
 	private void loadPappletSetting() {
-		  helvetica = papp.loadFont("fonts/Helvetica-120.vlw");
-		
+		helvetica = papp.loadFont(dir +"/fonts/Helvetica-120.vlw");
+
 	}
 
 
@@ -35,7 +58,7 @@ public class SettingsLoader
 		properties = new Properties();
 		try 
 		{
-			properties.load(new FileInputStream(FILENAME));
+			properties.load(new FileInputStream(dir + "/" + FILENAME));
 
 		}
 
@@ -68,6 +91,11 @@ public class SettingsLoader
 	public static boolean getConfigValueAsBoolean(EnumConfig config)
 	{
 		return Boolean.valueOf(properties.getProperty(config.getPropName()));
+	}
+	
+	public static PFont getHelvetica()
+	{
+		return helvetica;
 	}
 
 }
