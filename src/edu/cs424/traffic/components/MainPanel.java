@@ -2,11 +2,13 @@ package edu.cs424.traffic.components;
 
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
+import edu.cs424.traffic.map.Map;
 
 public class MainPanel extends Panel implements TouchEnabled
 {
 	
 	Filter filter;
+	Map map;
 	
 	public enum MouseMovements{
 		MOUSEUP,
@@ -31,8 +33,11 @@ public class MainPanel extends Panel implements TouchEnabled
 	@Override
 	public void setup() 
 	{
-		filter = new Filter(740, 225, 255, 95, x0, y0);
+		filter = new Filter(740, 245, 255, 95, x0, y0);
 		addTouchSubscriber(filter);
+		
+		map = new Map(40, 60, 620, 280, x0, y0);
+		addTouchSubscriber(map);
 		
 	}
 	
@@ -40,7 +45,7 @@ public class MainPanel extends Panel implements TouchEnabled
 	@Override
 	public void draw() {
 		filter.draw();
-		
+		map.draw();
 		
 	}
 
