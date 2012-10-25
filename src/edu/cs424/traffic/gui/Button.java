@@ -65,7 +65,9 @@ public abstract class Button extends Panel implements TouchEnabled
 			
 			textSize(8);
 			textAlign(PApplet.CENTER, PApplet.CENTER);
-			text(text, width/2f, height/2f);		
+			text(text, width/2f, height/2f);
+			
+			needRedraw = false;
 			popStyle();
 		}
 		

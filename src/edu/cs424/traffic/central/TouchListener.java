@@ -4,23 +4,23 @@ import omicronAPI.OmicronTouchListener;
 
 public class TouchListener implements OmicronTouchListener {
 
-  private Main p;
+  private Main main;
 
-  public TouchListener(Main p) {
-    this.p = p;
+  public TouchListener(Main main) {
+    this.main = main;
   }
 
   @Override
   public void touchDown(int ID, float xPos, float yPos, float xWidth, float yWidth) {
-    p.touchDown(ID, xPos, yPos, xWidth, yWidth);
+    main.touchDown(ID, xPos, yPos, xWidth, yWidth);
   }
   
   @Override
   public void touchMove(int ID, float xPos, float yPos, float xWidth, float yWidth) {
-    p.touchMove(ID, xPos, yPos, xWidth, yWidth);
+    main.touchMove(ID, xPos, yPos, xWidth, yWidth);
   }
   @Override
   public void touchUp(int ID, float xPos, float yPos, float xWidth, float yWidth) {
-    p.touchUp(ID, xPos, yPos, xWidth, yWidth);
+    main.touchUp(ID, xPos, yPos, xWidth, yWidth);
   }
 }

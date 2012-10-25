@@ -46,8 +46,11 @@ public class Filter extends Panel implements TouchEnabled
 	{
 		if(needRedraw)
 		{
+			System.out.println("Filter.draw()");
 			for(Button button : buttons)
 				button.draw();
+					
+			needRedraw = false;
 
 		}
 	}

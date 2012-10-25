@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
 
+import com.carinov.commons.aider.sql.DBAider;
+
+
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -22,9 +25,7 @@ public class SettingsLoader
 
 	private SettingsLoader(PApplet papp) 
 	{
-		this.papp = papp;
-
-		
+		this.papp = papp;		
 		try 
 		{
 			dir = new File(".").getCanonicalPath();
@@ -38,21 +39,23 @@ public class SettingsLoader
 		{
 			System.out.println("SettingsLoader.SettingsLoader()" +e.getMessage());
 		}
-
-
-
 		loadConfigFile();
 		loadPappletSetting();
+		loadSQLSettings();
 
 		scaleFactor = getConfigValueAsInt(EnumConfig.SCALEFACTOR);
 	}
 
+	private void loadSQLSettings()
+	{
+		com.carinov.commons.aider.sql.SettingsLoader settings = new com.carinov.commons.aider.sql.SettingsLoader(dir + File.separator + "app.settings");
+		DBAider.init(settings);
+	}
 
 	private void loadPappletSetting() {
 		helvetica = papp.loadFont(dir +"/fonts/Helvetica-120.vlw");
 
 	}
-
 
 	private void loadConfigFile() {
 		properties = new Properties();
@@ -66,9 +69,7 @@ public class SettingsLoader
 		{
 			System.out.println(e.toString());
 		}
-
 	}
-
 
 	public static  SettingsLoader getInstance( PApplet papp)
 	{
