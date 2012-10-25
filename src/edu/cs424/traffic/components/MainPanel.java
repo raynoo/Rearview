@@ -7,6 +7,12 @@ public class MainPanel extends Panel implements TouchEnabled
 {
 	
 	Filter filter;
+	
+	public enum MouseMovements{
+		MOUSEUP,
+		MOUSEDOWN,
+		MOUSEMOVE
+	}
 
 	public MainPanel(float x0, float y0, float width, float height,
 			float parentX0, float parentY0) 
@@ -16,25 +22,26 @@ public class MainPanel extends Panel implements TouchEnabled
 	}
 
 	@Override
-	public boolean touch(float x, float y, boolean down)
+	public boolean touch(float x, float y, MouseMovements event)
 	{
-		// TODO Auto-generated method stub
+		propagateTouch(x, y, event);
 		return false;
 	}
 
 	@Override
 	public void setup() 
 	{
-		filter = new Filter(10, 10, 100, 100, x0, y0);
+		filter = new Filter(740, 225, 255, 95, x0, y0);
+		addTouchSubscriber(filter);
 		
 	}
 	
 	
 	@Override
-	public boolean draw() {
+	public void draw() {
 		filter.draw();
 		
-		return false;
+		
 	}
 
 }

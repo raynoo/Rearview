@@ -1,6 +1,7 @@
 package edu.cs424.traffic.central;
 
 import edu.cs424.traffic.components.MainPanel;
+import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import omicronAPI.OmicronAPI;
 import omicronAPI.OmicronTouchListener;
 import processing.core.PApplet;
@@ -88,15 +89,15 @@ public class Main extends PApplet implements OmicronTouchListener
 
 	public void touchDown(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
-		System.out.println("Main.touchDown()");
+		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEDOWN);
 	}
 	public void touchMove(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
-		System.out.println("Main.touchMove()");
+		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEMOVE);
 	}
 	public void touchUp(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
-		System.out.println("Main.touchUp()");
+		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEUP);
 	}
 
 }

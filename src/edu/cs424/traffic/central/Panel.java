@@ -2,6 +2,8 @@ package edu.cs424.traffic.central;
 
 import java.util.ArrayList;
 
+import edu.cs424.traffic.components.MainPanel.MouseMovements;
+
 
 
 import processing.core.PFont;
@@ -13,8 +15,9 @@ public abstract class Panel
 {
 	float x0Zoom, y0Zoom, widthZoom, heightZoom, parentX0Zoom, parentY0Zoom;
 	public float x0, y0, width, height, parentX0, parentY0;
+	protected boolean needRedraw = true;
 
-	  ArrayList<TouchEnabled> touchChildren = new ArrayList<TouchEnabled>();
+	ArrayList<TouchEnabled> touchChildren = new ArrayList<TouchEnabled>();
 
 	public Panel(float x0, float y0, float width, float height, float parentX0, float parentY0) 
 	{
@@ -249,39 +252,44 @@ public abstract class Panel
 	public void createGraphicsImage(PGraphics pg, float c, float d) {
 		Main.main.image(pg, s(c), s(d));
 	}
-	
-	
-	  public boolean draw() {
-		    Main.main.pushStyle();
-		    Main.main.fill(EnumColor.SOMERANDOM.getValue());
-		    Main.main.rect(x0Zoom, y0Zoom, widthZoom, heightZoom);
-		    Main.main.popStyle();
 
-		    return false;
-		  }
+
+	public void draw() {
+		Main.main.pushStyle();
+		Main.main.fill(EnumColor.SOMERANDOM.getValue());
+		Main.main.rect(x0Zoom, y0Zoom, widthZoom, heightZoom);
+		Main.main.popStyle();
+
+
+	}
+
+	public boolean containsPoint(float x, float y) {
+		return x > x0Zoom && x < x0Zoom + widthZoom && y > y0Zoom && y < y0Zoom + heightZoom;
+	}
+
+	public void addTouchSubscriber(TouchEnabled child) {
+		touchChildren.add(child);
+	}
+
+	public boolean propagateTouch(float x, float y, MouseMovements event)
+	{
+		boolean consumed = false;
+
+		for (TouchEnabled child : touchChildren) 
+		{
+			if( child.containsPoint(x, y) && child.touch(x, y, event) ) 
+			{
+				consumed = true;
+				break;
+			}
+		}
+		return consumed;
+	}
 	
-	  public boolean containsPoint(float x, float y) {
-		    return x > x0Zoom && x < x0Zoom + widthZoom && y > y0Zoom && y < y0Zoom + heightZoom;
-		  }
-	  
-	  public void addTouchSubscriber(TouchEnabled child) {
-		    touchChildren.add(child);
-		  }
-	  
-	  public boolean propagateTouch(float x, float y, boolean down)
-	  {
-		    boolean consumed = false;
-		    
-		    for (TouchEnabled child : touchChildren) 
-		    {
-		      if( child.containsPoint(x, y) && child.touch(x, y, down) ) 
-		      {
-		        consumed = true;
-		        break;
-		      }
-		    }
-		    return consumed;
-		  }
+	public void setReDraw()
+	{
+		needRedraw = true;
+	}
 
 
 }
