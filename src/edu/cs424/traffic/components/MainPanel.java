@@ -1,15 +1,19 @@
 package edu.cs424.traffic.components;
 
+import edu.cs424.data.helper.AppConstants;
+import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.map.Map;
 
 public class MainPanel extends Panel implements TouchEnabled
 {
-	
-	Filter filter;
-	Map map;
-	
+
+	public FilterPanel filter;
+	public Map map;
+	public FilterValuePanel filterValues;
+	boolean isFirstTime = true;
+
 	public enum MouseMovements{
 		MOUSEUP,
 		MOUSEDOWN,
@@ -26,27 +30,41 @@ public class MainPanel extends Panel implements TouchEnabled
 	@Override
 	public boolean touch(float x, float y, MouseMovements event)
 	{
-		propagateTouch(x, y, event);
+		if(event == MouseMovements.MOUSEDOWN)
+			propagateTouch(x, y, event);
 		return false;
 	}
 
 	@Override
 	public void setup() 
 	{
-		filter = new Filter(740, 245, 255, 95, x0, y0);
+		filter = new FilterPanel(740, 245, 255, 95, x0, y0,this);
 		addTouchSubscriber(filter);
 		
+		filterValues = new FilterValuePanel(AppConstants.filterValuesX, AppConstants.filterValuesY, AppConstants.filterValuesWidth,
+				AppConstants.filterValuesHeight, x0, y0,filter);
+		addTouchSubscriber(filterValues);
+
 		map = new Map(40, 60, 620, 280, x0, y0);
 		addTouchSubscriber(map);
-		
+
 	}
-	
-	
+
+
 	@Override
-	public void draw() {
+	public void draw() 
+	{
+		if(isFirstTime)
+		{
+			background(EnumColor.GOLD);
+			isFirstTime = false;
+		}
+		
 		filter.draw();
 		map.draw();
-		
+		filterValues.draw();
+
+
 	}
 
 }

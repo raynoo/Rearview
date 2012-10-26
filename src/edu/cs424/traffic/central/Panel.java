@@ -125,7 +125,7 @@ public abstract class Panel
 	public void background(EnumColor color) {
 		pushStyle();
 		fill(color.getValue());
-
+		Main.main.noStroke();
 		Main.main.rect(x0Zoom, y0Zoom, widthZoom, heightZoom);
 		popStyle();
 	}
