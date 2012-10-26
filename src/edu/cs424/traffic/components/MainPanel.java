@@ -45,8 +45,8 @@ public class MainPanel extends Panel implements TouchEnabled
 				AppConstants.filterValuesHeight, x0, y0,filter);
 		addTouchSubscriber(filterValues);
 
-		map = new Map(40, 60, 620, 280, x0, y0);
-		addTouchSubscriber(map);
+//		map = new Map(40, 60, 620, 280, x0, y0);
+//		addTouchSubscriber(map);
 
 	}
 
