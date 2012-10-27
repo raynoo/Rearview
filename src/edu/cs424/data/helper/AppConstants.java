@@ -55,36 +55,36 @@ public class AppConstants {
 	
 	
 	//Tab text panel (Place tab names inside this)
-	public static int tabPanelX = 680;
-	public static int tabPanelY = 220;
+	public static int tabPanelX = 660;
+	public static int tabPanelY = 235;
 	public static int tabPanelWidth = 340;//a bit too optimistically wide
 	public static int tabPanelHeight = 25;
 	//font size 16
 	
 	//Main control panel below Tabs
-	public static int controlPanelX = 680;
+	public static int controlPanelX = 660;
 	public static int controlPanelY = 245;
 	public static int controlPanelWidth = 660;
 	public static int controlPanelHeight = 115;
 	
 	//Buttons to select (filters for) graph
-	public static int graph1ButtonX = 680;
-	public static int graph1ButtonY = 260; //width=60, height = 20 //font 10
-	public static int graph2ButtonX = 680;
-	public static int graph2ButtonY = 284;
+	public static int graph1ButtonX = Math.abs(controlPanelX - 680);
+	public static int graph1ButtonY = Math.abs(controlPanelY - 260); //width=60, height = 20 //font 10
+	public static int graph2ButtonX = Math.abs(controlPanelX - 680);
+	public static int graph2ButtonY = Math.abs(controlPanelY - 284);
 	
 	//Filter categories panel with all the big buttons
-	public static int filtersX = 760;
-	public static int filtersY = 260;
+	public static int filtersX = Math.abs(controlPanelX - 760);
+	public static int filtersY = Math.abs(controlPanelY - 260);
 	public static int filtersWidth = 260;
 	public static int filtersHeight = 100;
 	
-	public static int filterButtonX = 763; //inside above panel, x=3, y=2, width=60, height=20
-	public static int filterButtonY = 262;
+	public static int filterButtonX = Math.abs(controlPanelX - 763); //inside above panel, x=3, y=2, width=60, height=20
+	public static int filterButtonY = Math.abs(controlPanelY - 262);
 		
 	//Filter values panel
-	public static int filterValuesX = 1040;
-	public static int filterValuesY = 260;
+	public static int filterValuesX = Math.abs(controlPanelX - 1040);
+	public static int filterValuesY = Math.abs(controlPanelY - 260);
 	public static int filterValuesWidth = 180;
 	public static int filterValuesHeight = 100;
 	
@@ -92,8 +92,8 @@ public class AppConstants {
 	public static int filterValueButtonY = 270;
 	
 	//All selected filter values panel
-	public static int selectedValuesX = 1240;
-	public static int selectedValuesY = 260;
+	public static int selectedValuesX = Math.abs(controlPanelX - 1240);
+	public static int selectedValuesY = Math.abs(controlPanelY - 260);
 	public static int selectedValuesWidth = 100;
 	public static int selectedValuesHeight = 100;
 	
