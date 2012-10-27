@@ -12,6 +12,7 @@ public class MainPanel extends Panel implements TouchEnabled
 	public FilterPanel filter;
 	public Map map;
 	public FilterValuePanel filterValues;
+	public ShowSelectedAttribute showSelected;
 	boolean isFirstTime = true;
 
 	public enum MouseMovements{
@@ -38,16 +39,20 @@ public class MainPanel extends Panel implements TouchEnabled
 	@Override
 	public void setup() 
 	{
-		filter = new FilterPanel(740, 245, 255, 95, x0, y0,this);
+		filter = new FilterPanel(AppConstants.filterButtonX, AppConstants.filterButtonY-1, 255, 95, x0, y0,this);
 		addTouchSubscriber(filter);
 		
 		filterValues = new FilterValuePanel(AppConstants.filterValuesX, AppConstants.filterValuesY, AppConstants.filterValuesWidth,
-				AppConstants.filterValuesHeight, x0, y0,filter);
+				AppConstants.filterValuesHeight, x0, y0,this);
 		addTouchSubscriber(filterValues);
 
 //		map = new Map(40, 60, 620, 280, x0, y0);
 //		addTouchSubscriber(map);
-
+		
+		showSelected = new ShowSelectedAttribute(AppConstants.selectedValuesX, AppConstants.filterValuesY,
+				AppConstants.selectedValuesWidth, AppConstants.selectedValuesHeight, x0, y0 , filterValues,filter);
+		addTouchSubscriber(showSelected);
+		
 	}
 
 
@@ -61,8 +66,9 @@ public class MainPanel extends Panel implements TouchEnabled
 		}
 		
 		filter.draw();
-		map.draw();
+		//map.draw();
 		filterValues.draw();
+		showSelected.draw();
 
 
 	}

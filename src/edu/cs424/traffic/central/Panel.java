@@ -1,6 +1,8 @@
 package edu.cs424.traffic.central;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
@@ -17,7 +19,7 @@ public abstract class Panel
 	public float x0, y0, width, height, parentX0, parentY0;
 	protected boolean needRedraw = true;
 
-	ArrayList<TouchEnabled> touchChildren = new ArrayList<TouchEnabled>();
+	Set<TouchEnabled> touchChildren = new HashSet<TouchEnabled>();
 
 	public Panel(float x0, float y0, float width, float height, float parentX0, float parentY0) 
 	{
@@ -290,6 +292,18 @@ public abstract class Panel
 	{
 		needRedraw = true;
 	}
+	
+	public void removeTouchSuscribedElement(TouchEnabled toReomve)
+	{
+		touchChildren.remove(toReomve);
+	}
+	
+	public void removeAllTouchSuscribers()
+	{
+		touchChildren.clear();
+	}
+	
+	
 
 
 }

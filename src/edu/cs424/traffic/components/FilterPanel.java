@@ -15,7 +15,7 @@ import edu.cs424.traffic.gui.Button;
 public class FilterPanel extends Panel implements TouchEnabled
 {	
 	MainPanel mainPanel;
-	
+
 	HashMap<String,FilterButton> filterButtons;
 	public HashMap<String, Set<String>> selectedButtonList;
 	String currentFilter;
@@ -25,7 +25,7 @@ public class FilterPanel extends Panel implements TouchEnabled
 	{
 		super(x0, y0, width, height, parentX0, parentY0);		
 		this.mainPanel = mainPanel;
-		
+
 	}
 
 
@@ -34,15 +34,15 @@ public class FilterPanel extends Panel implements TouchEnabled
 	{	
 		filterButtons = new HashMap<String, FilterButton>();
 		selectedButtonList = new HashMap<String, Set<String>>();
-		
+
 		int count = 0;
 		Object[] buttonName = ButtonData.buttonValues.keySet().toArray();
-		
+
 		for ( ;count< buttonName.length ; count++)
 		{
 			FilterButton button = new FilterButton(count/4*65, (count%4)*25, 60, 20, x0, y0, (String)buttonName[count], this,true);
 			filterButtons.put((String)buttonName[count], button);
-			
+
 			Set<String> subButtonList = new HashSet<String>();
 			selectedButtonList.put((String)buttonName[count], subButtonList);
 			addTouchSubscriber(button);
@@ -65,8 +65,10 @@ public class FilterPanel extends Panel implements TouchEnabled
 		{
 			System.out.println("Filter.draw()");
 			for(Button button : filterButtons.values())
-				button.draw();					
-					needRedraw = false;
+			{
+				button.draw();
+			}
+			needRedraw = false;
 		}
 	}
 
@@ -74,7 +76,7 @@ public class FilterPanel extends Panel implements TouchEnabled
 	{
 		currentFilter = buttontext;
 		mainPanel.filterValues.addFilterValues();
-		
+
 		for(String key : filterButtons.keySet())
 		{
 			FilterButton temp = filterButtons.get(key);
@@ -88,14 +90,12 @@ public class FilterPanel extends Panel implements TouchEnabled
 			}
 			else
 				temp.setPressed(false);
-				
 		}
-		
 		setReDraw();
-		
+
 	}
-	
-	
+
+
 	public void handleFilterValueButtonClick(String buttontext,boolean isPressed)
 	{
 		if(isPressed)
@@ -106,6 +106,24 @@ public class FilterPanel extends Panel implements TouchEnabled
 		{
 			selectedButtonList.get(currentFilter).remove(buttontext);
 		}
+
+	}
+
+	public void selectDeselectbutton(String parent,String subvalue,boolean isPressed)
+	{
+		if(isPressed)
+		{
+			selectedButtonList.get(parent).add(subvalue);
+
+		}
+		else
+		{
+			selectedButtonList.get(parent).remove(subvalue);
+		}
+
+		mainPanel.filterValues.selectDeselectbutton(parent,subvalue,isPressed);		
+		setReDraw();
+
 	}
 
 }

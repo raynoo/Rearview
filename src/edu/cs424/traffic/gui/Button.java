@@ -8,7 +8,7 @@ import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
 public abstract class Button extends Panel implements TouchEnabled
 {
-	public boolean isSelected = false;
+	
 	public boolean isPressed = false;
 	private boolean isVisible = false;
 	
@@ -66,11 +66,7 @@ public abstract class Button extends Panel implements TouchEnabled
 				rect(0, 0, width, height, roundCorners, roundCorners, roundCorners, roundCorners);	
 				fill(EnumColor.BLACK);
 			}
-			
-			if(isSelected && isPressed)
-				fill(EnumColor.WHITE);
-			else if(isSelected)
-				fill(EnumColor.GOLD);
+		
 			
 			textSize(8);
 			textAlign(PApplet.CENTER, PApplet.CENTER);
@@ -80,14 +76,7 @@ public abstract class Button extends Panel implements TouchEnabled
 			popStyle();
 		}		
 	}
-	
-	//the button is selected only if
-	// any of its sub value is selected
-	public void setSelected(boolean isSelected)
-	{
-		this.isSelected = isSelected;
-		setReDraw();
-	}
+
 	
 	@Override
 	public boolean containsPoint(float x, float y) {

@@ -12,14 +12,14 @@ import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
 public class FilterValuePanel extends Panel implements TouchEnabled
 {
-	
-	HashMap<String, ArrayList<FilterValueButton> > buttons;
-	FilterPanel filterPanel;
+
+	public HashMap<String, ArrayList<FilterValueButton> > buttons;
+	MainPanel mainPanel;
 
 	public FilterValuePanel(float x0, float y0, float width, float height,
-			float parentX0, float parentY0,FilterPanel filterPanel) {
+			float parentX0, float parentY0,MainPanel mainPanel) {
 		super(x0, y0, width, height, parentX0, parentY0);
-		this.filterPanel = filterPanel;
+		this.mainPanel = mainPanel;
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 	public void setup() 
 	{
 		buttons = new HashMap<String, ArrayList<FilterValueButton>>();
-		HashMap<String,Set<String>> ButtonValues = ButtonData.buttonValues;
+		HashMap<String,ArrayList<String>> ButtonValues = ButtonData.buttonValues;
 
 		for(String key : ButtonValues.keySet())
 		{
@@ -67,7 +67,8 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 		if(needRedraw)
 		{
 			System.out.println("FilterValuePanel.draw()");
-			background(EnumColor.GRAY);			
+			populatePanel();
+			background(EnumColor.GOLD);			
 			for(String buttonKey : buttons.keySet())
 			{
 				ArrayList<FilterValueButton> list = buttons.get(buttonKey);
@@ -81,18 +82,19 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 	}
 
 	public void addFilterValues()
-	{
-		
-		populatePanel();
-		
+	{		
+		setReDraw();
 	}
-	
+
+
 	public void  handleFilterValueButtonClick(boolean isPressed,String text)
 	{
-		populatePanel();
-		filterPanel.handleFilterValueButtonClick(text, isPressed);
+
+		mainPanel.filter.handleFilterValueButtonClick(text, isPressed);
+		mainPanel.showSelected.setReDraw();
+		setReDraw();
 	}
-	
+
 	private void populatePanel()
 	{
 		for(String buttonKey : buttons.keySet())
@@ -104,28 +106,34 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 			}
 		}
 
-		ArrayList<FilterValueButton> list = buttons.get(filterPanel.currentFilter);
-		if(list != null)
+		if(mainPanel.filter.currentFilter != null)
 		{
-			for(FilterValueButton temp : list)
+			ArrayList<FilterValueButton> list = buttons.get(mainPanel.filter.currentFilter);
+			if(list != null)
 			{
-				temp.setVisibilty(true);
+				for(FilterValueButton temp : list)
+				{
+					temp.setVisibilty(true);
+				}
 			}
 		}
 
-		setReDraw();
 	}
 
-	public void clearPanel()
+
+
+	public void selectDeselectbutton(String parent,String value , boolean isPressed)
 	{
-		for(String buttonKey : buttons.keySet())
+		ArrayList<FilterValueButton> subList = buttons.get(parent);
+
+		for(FilterValueButton temp : subList)
 		{
-			ArrayList<FilterValueButton> list = buttons.get(buttonKey);
-			for(FilterValueButton temp : list)
+			if(temp.text.equals(value))
 			{
-				temp.setVisibilty(false);
+				temp.isPressed = isPressed;
 			}
 		}
+
 		setReDraw();
 	}
 
