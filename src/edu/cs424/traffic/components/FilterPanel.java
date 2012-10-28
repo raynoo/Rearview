@@ -14,17 +14,17 @@ import edu.cs424.traffic.gui.Button;
 
 public class FilterPanel extends Panel implements TouchEnabled
 {	
-	MainPanel mainPanel;
+	FilterHolder filterHolder;
 
 	HashMap<String,FilterButton> filterButtons;
 	public HashMap<String, Set<String>> selectedButtonList;
 	String currentFilter;
 
 	public FilterPanel(float x0, float y0, float width, float height,
-			float parentX0, float parentY0,MainPanel mainPanel)
+			float parentX0, float parentY0,FilterHolder filterHolder)
 	{
 		super(x0, y0, width, height, parentX0, parentY0);		
-		this.mainPanel = mainPanel;
+		this.filterHolder = filterHolder;
 
 	}
 
@@ -75,7 +75,7 @@ public class FilterPanel extends Panel implements TouchEnabled
 	public void handleFilterButtonClicks(String buttontext)
 	{
 		currentFilter = buttontext;
-		mainPanel.filterValues.addFilterValues();
+		filterHolder.filterValues.addFilterValues();
 
 		for(String key : filterButtons.keySet())
 		{
@@ -121,9 +121,19 @@ public class FilterPanel extends Panel implements TouchEnabled
 			selectedButtonList.get(parent).remove(subvalue);
 		}
 
-		mainPanel.filterValues.selectDeselectbutton(parent,subvalue,isPressed);		
+		filterHolder.filterValues.selectDeselectbutton(parent,subvalue,isPressed);		
 		setReDraw();
 
+	}
+	
+	public void forceRedrawAllComponents()
+	{
+		for(Button button : filterButtons.values())
+		{
+			button.setReDraw();
+		}
+		setReDraw();
+		
 	}
 
 }

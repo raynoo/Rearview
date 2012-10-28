@@ -261,8 +261,6 @@ public abstract class Panel
 		Main.main.fill(EnumColor.SOMERANDOM.getValue());
 		Main.main.rect(x0Zoom, y0Zoom, widthZoom, heightZoom);
 		Main.main.popStyle();
-
-
 	}
 
 	public boolean containsPoint(float x, float y) {

@@ -72,5 +72,14 @@ public class ShowSelectedAttribute extends Panel implements TouchEnabled
 		filterPanel.selectDeselectbutton(value[0], value[1], false);
 		
 	}
+	
+	public void forceRedrawAllComponents()
+	{
+		for(SelectedAttrButton temp : buttonList)
+		{
+			temp.setReDraw();
+		}
+		setReDraw();
+	}
 
 }
