@@ -14,12 +14,12 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 {
 
 	public HashMap<String, ArrayList<FilterValueButton> > buttons;
-	MainPanel mainPanel;
+	FilterHolder filterHolder;
 
 	public FilterValuePanel(float x0, float y0, float width, float height,
-			float parentX0, float parentY0,MainPanel mainPanel) {
+			float parentX0, float parentY0,FilterHolder filterHolder) {
 		super(x0, y0, width, height, parentX0, parentY0);
-		this.mainPanel = mainPanel;
+		this.filterHolder = filterHolder;
 	}
 
 	@Override
@@ -90,8 +90,8 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 	public void  handleFilterValueButtonClick(boolean isPressed,String text)
 	{
 
-		mainPanel.filter.handleFilterValueButtonClick(text, isPressed);
-		mainPanel.showSelected.setReDraw();
+		filterHolder.filter.handleFilterValueButtonClick(text, isPressed);
+		filterHolder.showSelected.setReDraw();
 		setReDraw();
 	}
 
@@ -106,9 +106,9 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 			}
 		}
 
-		if(mainPanel.filter.currentFilter != null)
+		if(filterHolder.filter.currentFilter != null)
 		{
-			ArrayList<FilterValueButton> list = buttons.get(mainPanel.filter.currentFilter);
+			ArrayList<FilterValueButton> list = buttons.get(filterHolder.filter.currentFilter);
 			if(list != null)
 			{
 				for(FilterValueButton temp : list)
@@ -134,6 +134,19 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 			}
 		}
 
+		setReDraw();
+	}
+	
+	public void forceRedrawAllComponents()
+	{
+		for(String key : buttons.keySet())
+		{
+			ArrayList<FilterValueButton> temp = buttons.get(key);
+			for( FilterValueButton tempButton : temp)
+			{
+				tempButton.setReDraw();
+			}
+		}		
 		setReDraw();
 	}
 

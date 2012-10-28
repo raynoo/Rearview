@@ -6,9 +6,8 @@ import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
-public abstract class Button extends Panel implements TouchEnabled
-{
-	
+public  class Button extends Panel implements TouchEnabled
+{	
 	public boolean isPressed = false;
 	private boolean isVisible = false;
 	
@@ -32,7 +31,6 @@ public abstract class Button extends Panel implements TouchEnabled
 			isPressed = !isPressed;
 			setReDraw();
 		}		
-		
 		return false;
 	}
 	
@@ -65,13 +63,10 @@ public abstract class Button extends Panel implements TouchEnabled
 				stroke(EnumColor.BLACK);
 				rect(0, 0, width, height, roundCorners, roundCorners, roundCorners, roundCorners);	
 				fill(EnumColor.BLACK);
-			}
-		
-			
+			}			
 			textSize(8);
 			textAlign(PApplet.CENTER, PApplet.CENTER);
-			text(text, width/2f, height/2f);
-			
+			text(text, width/2f, height/2f);			
 			needRedraw = false;
 			popStyle();
 		}		

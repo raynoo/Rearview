@@ -5,15 +5,17 @@ import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.map.Map;
+import static edu.cs424.data.helper.AppConstants.*;
 
 public class MainPanel extends Panel implements TouchEnabled
-{
-
-	public FilterPanel filter;
-	public Map map;
-	public FilterValuePanel filterValues;
-	public ShowSelectedAttribute showSelected;
+{	
+	public Map map;	
+	public BarGraph graph1,graph2;
+	
+	boolean isTab1 = true,isTab2;
 	boolean isFirstTime = true;
+	
+	Tab1 tab1;
 
 	public enum MouseMovements{
 		MOUSEUP,
@@ -39,20 +41,16 @@ public class MainPanel extends Panel implements TouchEnabled
 	@Override
 	public void setup() 
 	{
-		filter = new FilterPanel(AppConstants.filterButtonX, AppConstants.filterButtonY-1, 255, 95, x0, y0,this);
-		addTouchSubscriber(filter);
-		
-		filterValues = new FilterValuePanel(AppConstants.filterValuesX, AppConstants.filterValuesY, AppConstants.filterValuesWidth,
-				AppConstants.filterValuesHeight, x0, y0,this);
-		addTouchSubscriber(filterValues);
+
 
 //		map = new Map(40, 60, 620, 280, x0, y0);
 //		addTouchSubscriber(map);
 		
-		showSelected = new ShowSelectedAttribute(AppConstants.selectedValuesX, AppConstants.filterValuesY,
-				AppConstants.selectedValuesWidth, AppConstants.selectedValuesHeight, x0, y0 , filterValues,filter);
-		addTouchSubscriber(showSelected);
-		
+		tab1 = new Tab1(controlPanelX, controlPanelY, controlPanelWidth, controlPanelHeight, x0, y0);
+		addTouchSubscriber(tab1);
+				
+		graph1  = new BarGraph(graph1X, graph1Y, graph1Width, graph1Height, x0, y0);
+		graph2  = new BarGraph(graph2X, graph2Y, graph2Width, graph2Height, x0, y0);		
 	}
 
 
@@ -62,14 +60,22 @@ public class MainPanel extends Panel implements TouchEnabled
 		if(isFirstTime)
 		{
 			background(EnumColor.GOLD);
+			fill(EnumColor.BLACK);
+			rect(tabPanelX, tabPanelY, tabPanelWidth, tabPanelHeight);
 			isFirstTime = false;
 		}
 		
-		filter.draw();
-		//map.draw();
-		filterValues.draw();
-		showSelected.draw();
-
+		if(isTab1)
+		{
+			tab1.draw();
+		}
+		else if(isTab2)
+		{
+			
+		}
+		
+		graph1.draw();
+		graph2.draw();
 
 	}
 
