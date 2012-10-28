@@ -47,8 +47,7 @@ public  class Button extends Panel implements TouchEnabled
 	public void draw() 
 	{
 		if(needRedraw && isVisible)
-		{
-			
+		{			
 			pushStyle();		
 			if(isPressed)
 			{

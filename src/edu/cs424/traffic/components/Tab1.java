@@ -80,6 +80,7 @@ public class Tab1 extends Panel implements TouchEnabled
 			pushStyle();			
 			textSize(10);
 			textAlign(PConstants.LEFT, PConstants.TOP);
+			fill(EnumColor.BLACK);
 			text("Select Filter", filterHolderX, 5);
 			text("Filter Values",filterHolderX+filterValuesX , 5);
 			text("Selected Values",filterHolderX+selectedValuesX , 5);						
@@ -99,8 +100,13 @@ public class Tab1 extends Panel implements TouchEnabled
 	public void forceRedrawAllComponents()
 	{
 		background(EnumColor.GOLD);
+		
+		graph1Button.setReDraw();
+		graph2Button.setReDraw();
+		
 		graph1Button.draw();
 		graph2Button.draw();
+		
 		
 		pushStyle();
 		

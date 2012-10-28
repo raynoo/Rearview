@@ -19,10 +19,17 @@ public class AppConstants {
 	public static int mapHeight = 280;
 	
 	//Graph(1) panel
-	public static int graph1X = 740;
-	public static int graph1Y = 60;
-	public static int graph1Width = 260;
-	public static int graph1Height = 140;
+	public static int graph1X = 660;
+	public static int graph1Y = 20;
+	public static int graph1Width = 310;
+	public static int graph1Height = 180;
+	
+	public static int graphAxisX = 20;
+	public static int graphAxisY = 20;
+	public static int graphAxisWidth = 280;
+	public static int graphAxisHeight = 140;
+	
+	
 	
 	public static int graph1TitleX = 740;
 	public static int graph1TitleY = 26;
@@ -32,10 +39,10 @@ public class AppConstants {
 	public static int graph1ClearButtonY = 188;
 	
 	//Graph(2) panel
-	public static int graph2X = 1060;
-	public static int graph2Y = 60;
-	public static int graph2Width = 260;
-	public static int graph2Height = 140;
+	public static int graph2X = 1010;
+	public static int graph2Y = 20;
+	public static int graph2Width = 310;
+	public static int graph2Height = 180;
 	
 	public static int graph2TitleX = 1060;
 	public static int graph2TitleY = 26;

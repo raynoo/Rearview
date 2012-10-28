@@ -1,5 +1,6 @@
 package edu.cs424.traffic.components;
 
+import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
@@ -22,7 +23,21 @@ public class Tab2 extends Panel implements TouchEnabled
 	@Override
 	public void setup() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void draw() {
+		if(needRedraw)
+		{
+			background(EnumColor.GOLD);
+			needRedraw = false;
+		}
+	}
+	
+	public void forceRedrawAllComponents()
+	{
+		background(EnumColor.GOLD);;
 	}
 
 }
