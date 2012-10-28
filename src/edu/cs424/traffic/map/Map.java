@@ -28,15 +28,18 @@ public class Map extends PApplet implements TouchEnabled {
 	static InteractiveMap map;
 
 	// buttons take x,y and width,height:
-	ZoomButton out = new ZoomButton(5,5,14,14,false);
-	ZoomButton in = new ZoomButton(22,5,14,14,true);
-	PanButton up = new PanButton(14,25,14,14,UP);
-	PanButton down = new PanButton(14,57,14,14,DOWN);
-	PanButton left = new PanButton(5,41,14,14,LEFT);
-	PanButton right = new PanButton(22,41,14,14,RIGHT);
+	ZoomButton out = new ZoomButton(5,365,14,14,false);
+	ZoomButton in = new ZoomButton(5,348,14,14,true);
+//	PanButton up = new PanButton(14,25,14,14,UP);
+//	PanButton down = new PanButton(14,57,14,14,DOWN);
+//	PanButton left = new PanButton(5,41,14,14,LEFT);
+//	PanButton right = new PanButton(22,41,14,14,RIGHT);
+	MapTypeButton aerial = new MapTypeButton(25, 365, 20, 14, "A");
+	MapTypeButton hybrid = new MapTypeButton(47, 365, 20, 14, "H");
+	MapTypeButton road = new MapTypeButton(69, 365, 20, 14, "R");
 
 	// all the buttons in one place, for looping:
-	Button[] buttons = { in, out, up, down, left, right };
+	Button[] buttons = { in, out, aerial, hybrid, road };
 
 	PFont font;
 
@@ -79,20 +82,23 @@ public class Map extends PApplet implements TouchEnabled {
 //		omicronManager = new OmicronAPI(this);
 //		omicronManager.setFullscreen(false);
 
-		this.size(1360, 384, JAVA2D);
+		int scaleFactor = 1;
+		
+		mapSize = new PVector(460, 285);
+		mapOffset = new PVector(30, 60);
 
-		mapSize = new PVector(600, 250);
-		mapOffset = new PVector(20, 45);
-
+		this.size(1360 * scaleFactor, 384 * scaleFactor, JAVA2D);
+		
 		String template = "http://{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png";
 		String[] subdomains = new String[] { "otile1", "otile2", "otile3", "otile4" };
-		map = new InteractiveMap(this, new Microsoft.AerialProvider(), mapOffset.x, mapOffset.y, mapSize.x, mapSize.y );
-
-		setMapProvider(1);
+		
+		map = new InteractiveMap(this, new Microsoft.AerialProvider(), mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
+		
+		map.MAX_IMAGES_TO_KEEP = 80;
+		setMapProvider(0);
 		map.setCenterZoom(locationUSA, 3);
-
 		font = createFont("Helvetica", 12);
-
+		
 		// enable the mouse wheel, for zooming
 		addMouseWheelListener(new java.awt.event.MouseWheelListener() {
 			public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
@@ -113,26 +119,74 @@ public class Map extends PApplet implements TouchEnabled {
 	public void draw() {
 		setBackground(new Color(0));
 		map.draw();
+		
+		noFill();
+		stroke(86,86,86);
+		textFont(font, 24);
+		text("Rear-View Mirror", 20, 30);
 
-		drawPointsForStates();
+		// Draw a rectangle showing the resized and offset map
+		noFill();
+		stroke(86,86,86);//dark gray
+		strokeWeight(2);
+		rect(mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
+		strokeWeight(1);
 
-//		background(EnumColor.GRAY);
+		// Do not use smooth() on the wall with P2D (JAVA2D ok)
+		noSmooth();
+
+		// draw all the buttons and check for mouse-over
+		boolean hand = false;
+		if (gui) {
+			for (int i = 0; i < buttons.length; i++) {
+				buttons[i].draw();
+				hand = hand || buttons[i].mouseOver();
+			}
+		}
+
+//		drawPointsForStates();
+		getBoundary();
+		
+	}
+	
+	void drawUIControls() {
+		
 	}
 
 	void drawPointsForStates() {
 		int pointSize = (2 * map.getZoom()) + 2;
 
-		for(Entry<String, MapLocation> state : states.entrySet())  {
-			Location loc = new Location((float)state.getValue().getLat(), (float)state.getValue().getLon());
+//		for(Entry<String, MapLocation> state : states.entrySet())  {
+		for(MapLocation state : states.values())  {
+			Location loc = new Location((float)state.getLat(), (float)state.getLon());
 			Point2f p = map.locationPoint(loc);
 			
 			strokeWeight(1.5f);
-			stroke(153,0,0);
-			fill(255,153,204);
+			stroke(153,0,0);//dark red
+			fill(255,153,204);//light red
 			ellipse(p.x, p.y, pointSize, pointSize);
 		}
+		noFill();
 	}
 
+	void getBoundary() {
+		Location centerLocation = map.getCenter();
+		float leftX = (map.locationPoint(centerLocation).x - mapSize.x/2);
+		float rightX = (map.locationPoint(centerLocation).x + mapSize.x/2);
+		float topY = (map.locationPoint(centerLocation).y - mapSize.y/2);
+		float bottomY = (map.locationPoint(centerLocation).y + mapSize.y/2);
+		
+//		Location a = map.pointLocation(leftX, topY);
+//		Location b = map.pointLocation(rightX, bottomY);
+		
+		strokeWeight(1.5f);
+		stroke(153,0,0);
+//		fill(255,153,204);
+		ellipse(leftX, topY, 10, 10);
+		ellipse(rightX, bottomY, 10, 10);
+		noFill();
+	}
+	
 	@Override
 	public void keyPressed() {
 		if(key == 'c') {
@@ -190,37 +244,38 @@ public class Map extends PApplet implements TouchEnabled {
 		else if (out.mouseOver()) {
 			map.zoomOut();
 		}
-		else if (up.mouseOver()) {
-			map.panUp();
+		else if (aerial.mouseOver()) {
+			setMapProvider(2);
 		}
-		else if (down.mouseOver()) {
-			map.panDown();
+		else if (hybrid.mouseOver()) {
+			setMapProvider(1);
 		}
-		else if (left.mouseOver()) {
-			map.panLeft();
-		}
-		else if (right.mouseOver()) {
-			map.panRight();
+		else if (road.mouseOver()) {
+			setMapProvider(0);
 		}
 		
 	}
 
 	// zoom in or out:
 	public void mouseWheel(int delta) {
-		float sc = 1.0f;
-		if (delta < 0) {
-			sc = 1.05f;
+		//zoom only the offset part of the map
+		if(mouseX > mapOffset.x && mouseX < (mapOffset.x+mapSize.x)
+				&& mouseY > mapOffset.y && mouseY < (mapOffset.y + mapSize.y)) {
+			float sc = 1.0f;
+			if (delta < 0) {
+				sc = 1.2f;
+			}
+			else if (delta > 0) {
+				sc = 1.0f/1.2f; 
+			}
+			float mx = (mouseX - mapOffset.x) - mapSize.x/2;
+			float my = (mouseY - mapOffset.y) - mapSize.y/2;
+			map.tx -= mx/map.sc;
+			map.ty -= my/map.sc;
+			map.sc *= sc;
+			map.tx += mx/map.sc;
+			map.ty += my/map.sc;
 		}
-		else if (delta > 0) {
-			sc = 1.0f/1.05f; 
-		}
-		float mx = (mouseX - mapOffset.x) - mapSize.x/2;
-		float my = (mouseY - mapOffset.y) - mapSize.y/2;
-		map.tx -= mx/map.sc;
-		map.ty -= my/map.sc;
-		map.sc *= sc;
-		map.tx += mx/map.sc;
-		map.ty += my/map.sc;
 	}
 
 	@Override
@@ -379,7 +434,24 @@ public class Map extends PApplet implements TouchEnabled {
 		}
 
 	}
+	class MapTypeButton extends Button {
 
+		String type;
+		
+		MapTypeButton(float x, float y, float w, float h, String type) {
+			super(x, y, w, h);
+			this.type = type;
+		}
+
+		void draw() {
+			super.draw();
+			stroke(0);
+			textFont(font, 6);
+			text(type, x+3, y+h/2);
+//			line(x+3,y+h/2,x+w-3,y+h/2);
+		}
+
+	}
 	class PanButton extends Button {
 
 		int dir = UP;
