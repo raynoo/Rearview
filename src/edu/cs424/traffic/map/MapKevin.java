@@ -44,7 +44,7 @@ public class MapKevin
 
 	public void setup() {
 
-		int scaleFactor = 1;		
+		//int scaleFactor = 1;		
 		mapSize = new PVector(100, 100);
 		mapOffset = new PVector(30, 60);	
 		String template = "http://{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png";

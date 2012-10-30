@@ -18,7 +18,7 @@ public class SettingsLoader
 	private static SettingsLoader instance;
 	private static Properties properties;
 
-	static PApplet papp;
+	public static PApplet papp;
 	private static PFont helvetica;
 	public static int scaleFactor;
 	private String dir;

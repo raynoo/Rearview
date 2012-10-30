@@ -12,6 +12,7 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
+import processing.core.PVector;
 
 public abstract class Panel 
 {
@@ -52,6 +53,11 @@ public abstract class Panel
 		return x * SettingsLoader.getConfigValueAsInt(EnumConfig.SCALEFACTOR);
 	}
 
+	public PVector createPvector(float x, float y)
+	{
+		return new PVector(s(x), s(y));
+	}
+	
 	public void line(float x1, float y1, float x2, float y2) 
 	{
 

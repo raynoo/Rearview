@@ -108,7 +108,7 @@ public class MainPanel extends Panel implements TouchEnabled
 		graph2  = new BarGraph(graph2X, graph2Y, graph2Width, graph2Height, x0, y0,Event.ATTRIBUTE_SELECT_DESELECT_GRAPH2);	
 		graph2.setup();
 
-		mapPanel = new MapPanel(mapX, mapY, 1384, mapHeight, x0, y0);
+		mapPanel = new MapPanel(mapPanelX, mapPanelY, mapPanelWidth, mapPanelHeight, x0, y0);
 		mapPanel.setup();
 
 
@@ -123,8 +123,9 @@ public class MainPanel extends Panel implements TouchEnabled
 			mapPanel.draw();			
 			
 			pushStyle();
+			// drawing the background for the graph/UI region
 			fill(EnumColor.BLACK);
-			rect(mapWidth, 0,fullScreenWidth-mapWidth , fullScreenHeight);
+			rect(mapPanelWidth, 0,fullScreenWidth-mapPanelWidth , fullScreenHeight);
 			popStyle();
 			
 			if(isTab1)
