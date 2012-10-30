@@ -17,10 +17,13 @@ public class AppConstants {
 	public static int yearY = titleY + titleFontSize - yearFontSize; //to get same baseline
 	
 	//Map panel
-	public static int mapX = 0;
-	public static int mapY = 0;
-	public static int mapWidth = 650;
-	public static int mapHeight = 384;
+	public static int mapPanelX = 0;
+	public static int mapPanelY = 0;
+	public static int mapPanelWidth = 650;
+	public static int mapPanelHeight = 384;
+	
+	public static int mapOffsetX = 30;
+	public static int mapOfffsetY = 30;
 	
 	//Graph(1) panel
 	public static int graph1X = 660;
