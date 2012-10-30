@@ -5,6 +5,7 @@ import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import omicronAPI.OmicronAPI;
 import omicronAPI.OmicronTouchListener;
 import processing.core.PApplet;
+import static edu.cs424.data.helper.AppConstants.*;
 
 public class Main extends PApplet implements OmicronTouchListener
 {
@@ -40,13 +41,13 @@ public class Main extends PApplet implements OmicronTouchListener
 		if (sl.getConfigValueAsBoolean(EnumConfig.ONWALL)) 
 		{
 			omicronManager.setFullscreen(true);
-			width = 8160;
-			height = 2304;
+			width = fullScreenWidth * 6;
+			height = fullScreenHeight * 6;
 		}
 		else
 		{
-			width = 1360 * SettingsLoader.scaleFactor;
-			height = 384 * SettingsLoader.scaleFactor;
+			width = fullScreenWidth * SettingsLoader.scaleFactor;
+			height = fullScreenHeight * SettingsLoader.scaleFactor;
 		}
 	}
 

@@ -20,7 +20,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	@Override
 	public void receiveNotification(Event eventName, Object... object) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -32,13 +32,24 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	@Override
 	public void setup() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
-	public void draw() {
-		System.out.println("MapPanel.draw()" + "map re drawn");
-		background(EnumColor.BLACK);
+	public void draw() 
+	{
+		if(needRedraw)
+		{
+			System.out.println("MapPanel.draw()" + "map re drawn");
+			background(EnumColor.SOMERANDOM);
+			needRedraw = false;
+		}
+	}
+
+	public void forceRedrawAllComponents()
+	{
+		needRedraw = true;
+		
 	}
 
 }

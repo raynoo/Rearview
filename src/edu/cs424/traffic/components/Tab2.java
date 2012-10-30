@@ -37,7 +37,7 @@ public class Tab2 extends Panel implements TouchEnabled
 	
 	public void forceRedrawAllComponents()
 	{
-		background(EnumColor.GOLD);;
+		needRedraw = true;
 	}
 
 }

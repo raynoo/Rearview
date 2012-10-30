@@ -15,7 +15,7 @@ public class FilterHolder extends Panel implements TouchEnabled
 	public ShowSelectedAttribute showSelected;
 	public Tab1 tab;
 	Event toPublish;
-		
+
 	public FilterHolder(float x0, float y0, float width, float height,
 			float parentX0, float parentY0,Tab1 tab,Event toPublish) {
 		super(x0, y0, width, height, parentX0, parentY0);
@@ -53,17 +53,22 @@ public class FilterHolder extends Panel implements TouchEnabled
 	 * */
 	public void draw()
 	{
-		filter.draw();
-		filterValues.draw();
-		showSelected.draw();
+		if(needRedraw)
+		{
+			filter.draw();
+			filterValues.draw();
+			showSelected.draw();
+			needRedraw = false;
+		}
 	}
 
 	public void forceRedraw()
 	{
-		background(EnumColor.GOLD);
+
 		filter.forceRedrawAllComponents();
 		filterValues.forceRedrawAllComponents();
 		showSelected.forceRedrawAllComponents();
+		needRedraw = true;
 	}
 
 }

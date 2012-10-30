@@ -70,6 +70,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 				fill(EnumColor.BLACK);
 				text("2050", graphAxisX + (i*28) + 14 , graphAxisY + graphAxisHeight +10);
 				
+				needRedraw = false;
 			}
 			
 			popStyle();
