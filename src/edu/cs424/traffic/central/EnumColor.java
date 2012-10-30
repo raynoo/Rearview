@@ -8,8 +8,8 @@ public enum EnumColor
 	GRAY(190,190,190),
 	WHITE(255,255,255),
 	BLACK(0,0,0),
-	GOLD(255,215,0);
-	
+	GOLD(255,215,0),
+	LIGHT_RED(255,153,204);
 	
 	int color;
 	private EnumColor(int r,int g , int b) 
