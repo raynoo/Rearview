@@ -61,6 +61,8 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		// all the buttons in one place, for looping:
 		ArrayList<Button> buttons = new ArrayList<Button>();
 	
+//	edu.cs424.traffic.gui zoomIn = new edu.cs424.traffic.components.Button(100, 200, 14, 14, x0, y0, "+", this, true);
+	
 	Location locationUSA = new Location(38.962f, -93.928f);
 
 	public boolean touch(int ID,float x, float y, MouseMovements event) {
@@ -199,9 +201,14 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	{
 		if(needRedraw)
 		{
+			pushStyle();
 			System.out.println("MapPanel.draw()" + "map re drawn");
 			background(EnumColor.SOMERANDOM);
 			map.draw();
+<<<<<<< HEAD
+			noFill();
+			rect(mapOffsetX, mapOfffsetY, mapPanelWidth - 2*mapOffsetX, mapPanelHeight - 2*mapOfffsetY);
+=======
 			
 			
 			float[] xy = getBoundary();
@@ -211,7 +218,9 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 //			else
 //				;
 			drawMapButtons();
+>>>>>>> ee3a03ef9d5565c887b86de7e1700cba3374b29a
 			needRedraw = false;
+			popStyle();
 		}
 	}
 
