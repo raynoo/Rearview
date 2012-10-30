@@ -1,10 +1,12 @@
 package edu.cs424.traffic.components;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 
+import processing.core.PApplet;
 import processing.core.PVector;
 
 import com.modestmaps.InteractiveMap;
@@ -44,44 +46,79 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	PVector initTouchPos;
 	PVector initTouchPos2;
 
-	ArrayList<Point> touchList;
+	HashMap<Integer,Point> touchList;
+	int touchID1,touchID2;
 
-	@Override
-	public boolean touch(float x, float y, MouseMovements event) {
+	public boolean touch(int ID,float x, float y, MouseMovements event) {
 
 		if(this.containsPoint(x, y))
 		{
 			if(MouseMovements.MOUSEDOWN == event)
-			{
-				
-				map.zoomIn();
-//				//				lastTouchPos.x = x;
-//				//				lastTouchPos.y = y;				
-//
-//				if(touchList.size() == 0)
-//				{
-//					Point p = new Point(x, y);
-//					touchList.add(p);
-//					//					initTouchPos.x = x;
-//					//				    initTouchPos.y = y;
-//				}
-//				else
-//				{
-//					touchList.clear();
-//				}
+			{			
+				lastTouchPos.x = x;
+				lastTouchPos.y = y;				
+				Point p = new Point(ID,x, y);
+				touchList.put(ID,p);
+
+				if(touchList.size() == 1)
+				{
+					touchID1 = ID;
+					initTouchPos.x = x;
+					initTouchPos.y = y;
+				}
+				else if(touchList.size() == 2 )
+				{
+					touchID2 = ID;
+					initTouchPos2.x = x;
+					initTouchPos2.y = y;
+				}
 
 			}
 			else if(MouseMovements.MOUSEUP == event)
 			{
-				touchList.clear();
+				touchList.remove(ID);
 			}
-			else // mouse move
+			else 
 			{
-				if(touchList.size() == 1)
+				if(touchList.size() < 2)
 				{
-					map.tx += (x - touchList.get(0).x)/map.sc;
-					map.ty += (y - touchList.get(0).y)/map.sc;
+					map.tx += (x - lastTouchPos.x)/map.sc;
+					map.ty += (y - lastTouchPos.y)/map.sc;					
+
 				}
+				else if(touchList.size() == 2)
+				{
+					float sc = PApplet.dist(lastTouchPos.x, lastTouchPos.y, lastTouchPos2.x, lastTouchPos2.y);
+					float initPos = PApplet.dist(initTouchPos.x,initTouchPos.y,initTouchPos2.x,initTouchPos2.y);
+					PVector midpoint = new PVector( (lastTouchPos.x+lastTouchPos2.x)/2, (lastTouchPos.y+lastTouchPos2.y)/2 );
+					sc -= initPos;
+					sc /= 5000;
+					sc += 1;
+
+					float mx = (midpoint.x - mapOffset.x) - mapSize.x/2;
+					float my = (midpoint.y - mapOffset.y) - mapSize.y/2;
+					map.tx -= mx/map.sc;
+					map.ty -= my/map.sc;
+					map.sc *= sc;
+					map.tx += mx/map.sc;
+					map.ty += my/map.sc;					
+				}
+				else if( touchList.size() >= 5 )
+				{				    
+					// Zoom to entire USA				   
+				}				 
+				  // Update touch IDs 1 and 2
+				  if( ID == touchID1 ){
+				    lastTouchPos.x = x;
+				    lastTouchPos.y = y;
+				  } else if( ID == touchID2 ){
+				    lastTouchPos2.x = x;
+				    lastTouchPos2.y = y;
+				  } 
+				  
+				  // Update touch list
+				  Point t = new Point( ID, x,y );
+				  touchList.put(ID,t);
 			}
 		}
 
@@ -91,7 +128,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	@Override
 	public void setup() 
 	{
-		touchList = new ArrayList();
+		touchList = new HashMap<Integer, Point>();
 		lastTouchPos = new PVector();
 		lastTouchPos2 = new PVector();
 		initTouchPos = new PVector();
@@ -119,6 +156,12 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	{
 		needRedraw = true;
 
+	}
+
+	@Override
+	public boolean touch(float x, float y, MouseMovements event) {
+		System.out.println("MapPanel.touch()" + "NOT IMPLEMENTED");
+		return false;
 	}
 
 }

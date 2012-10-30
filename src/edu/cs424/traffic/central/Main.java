@@ -94,17 +94,17 @@ public class Main extends PApplet implements OmicronTouchListener
 	@Override
 	public void touchDown(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
-		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEDOWN);
+		mainPanel.touch(ID,xPos, yPos, MouseMovements.MOUSEDOWN);
 	}
 	@Override
 	public void touchMove(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
-		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEMOVE);
+		mainPanel.touch(ID,xPos, yPos, MouseMovements.MOUSEMOVE);
 	}
 	@Override
 	public void touchUp(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
-		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEUP);
+		mainPanel.touch(ID,xPos, yPos, MouseMovements.MOUSEUP);
 	}
 
 }
