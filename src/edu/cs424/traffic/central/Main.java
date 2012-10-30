@@ -5,12 +5,13 @@ import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import omicronAPI.OmicronAPI;
 import omicronAPI.OmicronTouchListener;
 import processing.core.PApplet;
+import static edu.cs424.data.helper.AppConstants.*;
 
 public class Main extends PApplet implements OmicronTouchListener
 {
 	static Main main;
 	OmicronAPI omicronManager;
-	TouchListener touchListener;
+	//TouchListener touchListener;
 
 	int width = 1360,height = 384;
 	SettingsLoader sl;
@@ -40,13 +41,13 @@ public class Main extends PApplet implements OmicronTouchListener
 		if (sl.getConfigValueAsBoolean(EnumConfig.ONWALL)) 
 		{
 			omicronManager.setFullscreen(true);
-			width = 8160;
-			height = 2304;
+			width = fullScreenWidth * 6;
+			height = fullScreenHeight * 6;
 		}
 		else
 		{
-			width = 1360 * SettingsLoader.scaleFactor;
-			height = 384 * SettingsLoader.scaleFactor;
+			width = fullScreenWidth * SettingsLoader.scaleFactor;
+			height = fullScreenHeight * SettingsLoader.scaleFactor;
 		}
 	}
 
@@ -57,8 +58,7 @@ public class Main extends PApplet implements OmicronTouchListener
 		if(sl == null)
 			initProcedure();
 		
-		size(width, height,sl.getConfigValueAsString(EnumConfig.RENDERER));
-				
+		size(width, height,sl.getConfigValueAsString(EnumConfig.RENDERER));				
 		System.out.println("Main.setup()");
 
 		if (sl.getConfigValueAsBoolean(EnumConfig.ONWALL)) 
@@ -66,10 +66,11 @@ public class Main extends PApplet implements OmicronTouchListener
 			omicronManager.ConnectToTracker(7001, 7340, "131.193.77.159");
 			
 		}
-		touchListener = new TouchListener(this);
-		omicronManager.setTouchListener(touchListener);
+		//touchListener = new TouchListener(this);
+		omicronManager.setTouchListener(this);
 		
 		mainPanel = new MainPanel(0, 0, width, height, 0, 0);
+		mainPanel.setup();
 		smooth();
 		frameRate(10);
 		
@@ -78,23 +79,29 @@ public class Main extends PApplet implements OmicronTouchListener
 
 	@Override
 	public void draw() 
-	{	
-		
+	{			
 		mainPanel.draw();
 		omicronManager.process();
 	}
 	
+	
+	public static PApplet getPapplet()
+	{
+		return main;
+	}
 
 
-
+	@Override
 	public void touchDown(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
 		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEDOWN);
 	}
+	@Override
 	public void touchMove(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
 		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEMOVE);
 	}
+	@Override
 	public void touchUp(int ID, float xPos, float yPos, float xWidth, float yWidth) 
 	{
 		mainPanel.touch(xPos, yPos, MouseMovements.MOUSEUP);

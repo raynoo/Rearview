@@ -2,6 +2,10 @@ package edu.cs424.data.helper;
 
 public class AppConstants {
     
+	public static int fullScreenWidth = 1360;
+	public static int fullScreenHeight = 384;
+	
+	
 	//Main Title
 	public static int titleFontSize = 24;
 	public static int titleX = 20;
@@ -13,10 +17,10 @@ public class AppConstants {
 	public static int yearY = titleY + titleFontSize - yearFontSize; //to get same baseline
 	
 	//Map panel
-	public static int mapX = 40;
-	public static int mapY = 60;
-	public static int mapWidth = 620;
-	public static int mapHeight = 280;
+	public static int mapX = 0;
+	public static int mapY = 0;
+	public static int mapWidth = 650;
+	public static int mapHeight = 384;
 	
 	//Graph(1) panel
 	public static int graph1X = 660;

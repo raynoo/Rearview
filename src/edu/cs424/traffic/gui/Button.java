@@ -22,6 +22,10 @@ public  class Button extends Panel implements TouchEnabled
 		this.text = text;
 		this.isVisible = isVisible;
 	}
+	
+	public void setup(){
+		
+	}
 
 	@Override
 	public boolean touch(float x, float y, MouseMovements event) {
@@ -34,14 +38,7 @@ public  class Button extends Panel implements TouchEnabled
 		return false;
 	}
 	
-	
 
-	@Override
-	public void setup() 
-	{
-		
-		
-	}
 	
 	@Override
 	public void draw() 

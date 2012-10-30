@@ -11,6 +11,8 @@ import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
+import edu.cs424.traffic.pubsub.PubSub;
+import edu.cs424.traffic.pubsub.PubSub.Event;
 
 public class FilterPanel extends Panel implements TouchEnabled
 {	
@@ -19,17 +21,17 @@ public class FilterPanel extends Panel implements TouchEnabled
 	HashMap<String,FilterButton> filterButtons;
 	public HashMap<String, Set<String>> selectedButtonList;
 	String currentFilter;
+	Event toPublish;
 
 	public FilterPanel(float x0, float y0, float width, float height,
-			float parentX0, float parentY0,FilterHolder filterHolder)
+			float parentX0, float parentY0,FilterHolder filterHolder,Event toPublish)
 	{
 		super(x0, y0, width, height, parentX0, parentY0);		
 		this.filterHolder = filterHolder;
-
+		this.toPublish = toPublish;
 	}
 
 
-	@Override
 	public void setup()
 	{	
 		filterButtons = new HashMap<String, FilterButton>();
@@ -41,6 +43,7 @@ public class FilterPanel extends Panel implements TouchEnabled
 		for ( ;count< buttonName.length ; count++)
 		{
 			FilterButton button = new FilterButton(count/4*65, (count%4)*25, 60, 20, x0, y0, (String)buttonName[count], this,true);
+			button.setup();
 			filterButtons.put((String)buttonName[count], button);
 
 			Set<String> subButtonList = new HashSet<String>();
@@ -106,7 +109,8 @@ public class FilterPanel extends Panel implements TouchEnabled
 		{
 			selectedButtonList.get(currentFilter).remove(buttontext);
 		}
-
+		PubSub.publishEvent(toPublish, selectedButtonList);
+		
 	}
 
 	public void selectDeselectbutton(String parent,String subvalue,boolean isPressed)
@@ -114,14 +118,15 @@ public class FilterPanel extends Panel implements TouchEnabled
 		if(isPressed)
 		{
 			selectedButtonList.get(parent).add(subvalue);
-
 		}
 		else
 		{
 			selectedButtonList.get(parent).remove(subvalue);
 		}
-
-		filterHolder.filterValues.selectDeselectbutton(parent,subvalue,isPressed);		
+		
+		filterHolder.filterValues.selectDeselectbutton(parent,subvalue,isPressed);
+		PubSub.publishEvent(toPublish, selectedButtonList);
+		
 		setReDraw();
 
 	}

@@ -40,6 +40,11 @@ public class Label extends Button
 		
 	}
 	
+	public void forceRedrawAllComponents()
+	{
+		needRedraw = true;
+	}
+	
 	
 	
 
