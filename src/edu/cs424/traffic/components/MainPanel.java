@@ -13,7 +13,6 @@ import static edu.cs424.data.helper.AppConstants.*;
 
 public class MainPanel extends Panel implements TouchEnabled
 {	
-
 	public BarGraph graph1,graph2;
 	Label label1,label2,label3;
 
@@ -21,7 +20,6 @@ public class MainPanel extends Panel implements TouchEnabled
 	Tab1 tab1;
 	Tab2 tab2;
 	MapPanel mapPanel;
-
 
 	public enum MouseMovements{
 		MOUSEUP,
@@ -36,60 +34,57 @@ public class MainPanel extends Panel implements TouchEnabled
 
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public boolean touch(int ID,float x, float y, MouseMovements event)
 	{
 		// handle the stuff that should happen on touch
-				if(event == MouseMovements.MOUSEDOWN)
-				{
-					if(label1.containsPoint(x, y) && !label1.isPressed)
-					{
-						label1.setPressed(true);
-						label2.setPressed(false);
-						label3.setPressed(false);
-						isTab1 = true;
-						isTab2 = false;
-					}
-					else if(label2.containsPoint(x, y) && !label2.isPressed)
-					{
-						label2.setPressed(true);
-						label1.setPressed(false);
-						label3.setPressed(false);
-						isTab1 = false;
-						isTab2 = true;
-					}			
-				}		
+		if(event == MouseMovements.MOUSEDOWN)
+		{
+			if(label1.containsPoint(x, y) && !label1.isPressed)
+			{
+				label1.setPressed(true);
+				label2.setPressed(false);
+				label3.setPressed(false);
+				isTab1 = true;
+				isTab2 = false;
+			}
+			else if(label2.containsPoint(x, y) && !label2.isPressed)
+			{
+				label2.setPressed(true);
+				label1.setPressed(false);
+				label3.setPressed(false);
+				isTab1 = false;
+				isTab2 = true;
+			}			
+		}		
 
-				if(mapPanel.containsPoint(x, y))
-				{
-					mapPanel.touch(ID,x, y, event);
-				}
+		if(mapPanel.containsPoint(x, y))
+		{
+			mapPanel.touch(ID,x, y, event);
+		}
 
-				// after touch has been handled redraw 
-				mapPanel.forceRedrawAllComponents();
+		// after touch has been handled redraw 
+		mapPanel.forceRedrawAllComponents();
+		if(isTab1)
+		{
+			tab1.touch(x, y, event);
+			tab1.forceRedrawAllComponents();
+		}
+		else if(isTab2)
+		{
+			tab2.touch(x, y, event);
+			tab2.forceRedrawAllComponents();
+		}
 
-				if(isTab1)
-				{
-					tab1.touch(x, y, event);
-					tab1.forceRedrawAllComponents();
-				}
-				else if(isTab2)
-				{
-					tab2.touch(x, y, event);
-					tab2.forceRedrawAllComponents();
-				}
-				
-				label1.forceRedrawAllComponents();
-				label2.forceRedrawAllComponents();
-				label3.forceRedrawAllComponents();
-				
-				graph1.forceRedrawAllComponents();
-				graph2.forceRedrawAllComponents();
-				
-				needRedraw = true;
-				return false;
+		label1.forceRedrawAllComponents();
+		label2.forceRedrawAllComponents();
+		label3.forceRedrawAllComponents();
+		graph1.forceRedrawAllComponents();
+		graph2.forceRedrawAllComponents();
+		needRedraw = true;
+		return false;
 	}
-	
+
 	@Override
 	public boolean touch(float x, float y, MouseMovements event) {
 		System.out.println("MainPanel.touch() " + "NOT IMPLEMENTED");
@@ -121,8 +116,6 @@ public class MainPanel extends Panel implements TouchEnabled
 
 		mapPanel = new MapPanel(mapPanelX, mapPanelY, mapPanelWidth, mapPanelHeight, x0, y0);
 		mapPanel.setup();
-
-
 	}
 
 
@@ -131,14 +124,13 @@ public class MainPanel extends Panel implements TouchEnabled
 	{
 		if(needRedraw)
 		{
-			mapPanel.draw();			
-			
+			mapPanel.draw();	
 			pushStyle();
 			// drawing the background for the graph/UI region
 			fill(EnumColor.BLACK);
 			rect(mapPanelWidth, 0,fullScreenWidth-mapPanelWidth , fullScreenHeight);
 			popStyle();
-			
+
 			if(isTab1)
 			{
 				tab1.draw();
@@ -155,7 +147,6 @@ public class MainPanel extends Panel implements TouchEnabled
 			label3.draw();
 			needRedraw = false;
 		}
-
 	}
 
 }

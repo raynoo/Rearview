@@ -145,10 +145,14 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	{
 		if(needRedraw)
 		{
+			pushStyle();
 			System.out.println("MapPanel.draw()" + "map re drawn");
 			background(EnumColor.SOMERANDOM);
 			map.draw();
+			noFill();
+			rect(mapOffsetX, mapOfffsetY, mapPanelWidth - 2*mapOffsetX, mapPanelHeight - 2*mapOfffsetY);
 			needRedraw = false;
+			popStyle();
 		}
 	}
 

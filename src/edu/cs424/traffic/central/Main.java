@@ -35,17 +35,18 @@ public class Main extends PApplet implements OmicronTouchListener
 	{
 		this.main = this;
 		sl = SettingsLoader.getInstance(this);
-
 		omicronManager = new OmicronAPI(this);
 
 		if (sl.getConfigValueAsBoolean(EnumConfig.ONWALL)) 
 		{
+			
 			omicronManager.setFullscreen(true);
 			width = fullScreenWidth * 6;
 			height = fullScreenHeight * 6;
 		}
 		else
 		{
+			System.out.println("Main.initProcedure()" + "NOT ON wall");
 			width = fullScreenWidth * SettingsLoader.scaleFactor;
 			height = fullScreenHeight * SettingsLoader.scaleFactor;
 		}
@@ -55,24 +56,27 @@ public class Main extends PApplet implements OmicronTouchListener
 	@Override
 	public void setup()
 	{	
+		System.out.println("Main.setup() started");
+		
 		if(sl == null)
 			initProcedure();
 		
-		size(width, height,sl.getConfigValueAsString(EnumConfig.RENDERER));				
-		System.out.println("Main.setup()");
+		size(width, height,sl.getConfigValueAsString(EnumConfig.RENDERER));			
 
 		if (sl.getConfigValueAsBoolean(EnumConfig.ONWALL)) 
 		{
 			omicronManager.ConnectToTracker(7001, 7340, "131.193.77.159");
-			
+			System.out.println("Main.setup() " + "on wall");
 		}
-		//touchListener = new TouchListener(this);
-		omicronManager.setTouchListener(this);
 		
+		//touchListener = new TouchListener(this);
+		omicronManager.setTouchListener(this);		
 		mainPanel = new MainPanel(0, 0, width, height, 0, 0);
 		mainPanel.setup();
 		smooth();
 		frameRate(10);
+		
+		System.out.println("Main.setup()" + "stopped");
 		
 	}
 

@@ -125,10 +125,8 @@ public class FilterPanel extends Panel implements TouchEnabled
 		}
 		
 		filterHolder.filterValues.selectDeselectbutton(parent,subvalue,isPressed);
-		PubSub.publishEvent(toPublish, selectedButtonList);
-		
+		PubSub.publishEvent(toPublish, selectedButtonList);		
 		setReDraw();
-
 	}
 	
 	public void forceRedrawAllComponents()
