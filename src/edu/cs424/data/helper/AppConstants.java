@@ -34,8 +34,7 @@ public class AppConstants {
 	public static int graphAxisX = 20;
 	public static int graphAxisY = 20;
 	public static int graphAxisWidth = 280;
-	public static int graphAxisHeight = 140;
-	
+	public static int graphAxisHeight = 140;	
 	
 	
 	public static int graph1TitleX = 740;
@@ -116,10 +115,7 @@ public class AppConstants {
 	public static int selectedValuesX = 480;
 	public static int selectedValuesY = 15;
 	public static int selectedValuesWidth = 100;
-	public static int selectedValuesHeight = 100;
-	
-	
-	
+	public static int selectedValuesHeight = 100;	
 	
 	
 	//Buttons

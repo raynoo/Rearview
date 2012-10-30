@@ -10,8 +10,10 @@ public class Label extends Button
 {
 
 	public Label(float x0, float y0, float width, float height, float parentX0,
-			float parentY0, String text) {
+			float parentY0, String text,boolean isPressed) {
+		
 		super(x0, y0, width, height, parentX0, parentY0, text, true);
+		this.isPressed = isPressed;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -20,7 +22,7 @@ public class Label extends Button
 	{
 		if(needRedraw)
 		{	
-			background(EnumColor.DARK_GRAY);
+			background(EnumColor.BLACK,EnumColor.WHITE,5);
 			pushStyle();		
 			if(isPressed)
 			{	

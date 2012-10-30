@@ -132,6 +132,15 @@ public abstract class Panel
 		Main.main.rect(x0Zoom, y0Zoom, widthZoom, heightZoom);
 		popStyle();
 	}
+	
+	public void background(EnumColor color,EnumColor strokeColor,int round)
+	{
+		pushStyle();
+		fill(color.getValue());
+		Main.main.stroke(strokeColor.getValue());
+		Main.main.rect(x0Zoom, y0Zoom, widthZoom, heightZoom,round,round,round,round);
+		popStyle();
+	}
 
 	public void background(EnumColor color, float alpha) {
 		pushStyle();
