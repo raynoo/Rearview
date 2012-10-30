@@ -23,7 +23,7 @@ import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.map.dataset.MapLocation;
 import edu.cs424.traffic.map.dataset.StateLatLon;
 
-public class Map extends PApplet implements TouchEnabled {
+public class Map extends PApplet {
 
 	static InteractiveMap map;
 
@@ -233,7 +233,10 @@ public class Map extends PApplet implements TouchEnabled {
 //			//map.mouseDragged();
 //		}
 		
-		map.mouseDragged();
+		if(mouseX > mapOffset.x && mouseX < (mapOffset.x+mapSize.x)
+				&& mouseY > mapOffset.y && mouseY < (mapOffset.y + mapSize.y)) {
+			map.mouseDragged();
+		}
 	}
 
 	// see if we're over any buttons, and respond accordingly:
@@ -278,19 +281,6 @@ public class Map extends PApplet implements TouchEnabled {
 		}
 	}
 
-	@Override
-	public boolean touch(float x, float y, MouseMovements event) {
-		return false;
-	}
-
-	@Override
-	public boolean containsPoint(float x, float y) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-
 	// See TouchListener on how to use this function call
 	// In this example TouchListener draws a solid ellipse
 	// Ths functions here draws a ring around the solid ellipse
@@ -299,7 +289,7 @@ public class Map extends PApplet implements TouchEnabled {
 	//	       using an ID of -1 and an xWidth and yWidth value of 10.
 
 	// Touch position at last frame
-	/*	PVector lastTouchPos = new PVector();
+	PVector lastTouchPos = new PVector();
 	PVector lastTouchPos2 = new PVector();
 	int touchID1;
 	int touchID2;
@@ -351,7 +341,7 @@ public class Map extends PApplet implements TouchEnabled {
 	    sc -= initPos;
 	    sc /= 5000;
 	    sc += 1;
-	    //println(sc);
+	    
 	    float mx = (midpoint.x - mapOffset.x) - mapSize.x/2;
 	    float my = (midpoint.y - mapOffset.y) - mapSize.y/2;
 	    map.tx -= mx/map.sc;
@@ -359,17 +349,18 @@ public class Map extends PApplet implements TouchEnabled {
 	    map.sc *= sc;
 	    map.tx += mx/map.sc;
 	    map.ty += my/map.sc;
-	  } else if( touchList.size() >= 5 ){
+	    
+	  } else if( touchList.size() >= 5 ) {
 
 	    // Zoom to entire USA
 	    map.setCenterZoom(locationUSA, 6);  
 	  }
 
 	  // Update touch IDs 1 and 2
-	  if( ID == touchID1 ){
+	  if( ID == touchID1 ) {
 	    lastTouchPos.x = xPos;
 	    lastTouchPos.y = yPos;
-	  } else if( ID == touchID2 ){
+	  } else if( ID == touchID2 ) {
 	    lastTouchPos2.x = xPos;
 	    lastTouchPos2.y = yPos;
 	  } 
@@ -379,18 +370,32 @@ public class Map extends PApplet implements TouchEnabled {
 	  touchList.put(ID,t);
 	}// touchMove
 
-	void touchUp(int ID, float xPos, float yPos, float xWidth, float yWidth){
-	  noFill();
-	  stroke(0,0,255);
-	  ellipse( xPos, yPos, xWidth * 2, yWidth * 2 );
+	void touchUp(int ID, float xPos, float yPos, float xWidth, float yWidth) {
+//	  noFill();
+//	  stroke(0,0,255);
+//	  ellipse( xPos, yPos, xWidth * 2, yWidth * 2 );
 
 	  // Remove touch and ID from list
 	  touchList.remove(ID);
 	}// touchUp
-	 */
+	
+	class Touch {
+		float xPos;
+		float yPos;
+		float xWidth;
+		float yWidth;
+		int ID;
+
+		Touch( int id, float x, float y, float w, float h ){
+			ID = id;
+			xPos = x;
+			yPos = y;
+			xWidth = w;
+			yWidth = h;
+		}
+	}
 
 	class Button {
-
 		public Button() {
 		}
 
@@ -412,11 +417,9 @@ public class Map extends PApplet implements TouchEnabled {
 			fill(mouseOver() ? 255 : 220);
 			rect(x,y,w,h); 
 		}
-
 	}
 
 	class ZoomButton extends Button {
-
 		boolean in = false;
 
 		ZoomButton(float x, float y, float w, float h, boolean in) {
@@ -435,9 +438,8 @@ public class Map extends PApplet implements TouchEnabled {
 
 	}
 	class MapTypeButton extends Button {
-
 		String type;
-		
+
 		MapTypeButton(float x, float y, float w, float h, String type) {
 			super(x, y, w, h);
 			this.type = type;
@@ -450,10 +452,8 @@ public class Map extends PApplet implements TouchEnabled {
 			text(type, x+3, y+h/2);
 //			line(x+3,y+h/2,x+w-3,y+h/2);
 		}
-
 	}
 	class PanButton extends Button {
-
 		int dir = UP;
 
 		PanButton(float x, float y, float w, float h, int dir) {
