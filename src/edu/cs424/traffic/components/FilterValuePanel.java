@@ -29,7 +29,6 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 		return false;
 	}
 
-	@Override
 	public void setup() 
 	{
 		buttons = new HashMap<String, ArrayList<FilterValueButton>>();
@@ -45,6 +44,7 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 			for(int i = 0 ; i < limit ; i++)
 			{
 				FilterValueButton temp = new FilterValueButton(5, 3 + i*15, 82, 12, x0, y0, (String)values[i], false,this);
+				temp.setup();
 				addTouchSubscriber(temp);
 				ValueButtons.add(temp);
 			}
@@ -53,6 +53,7 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 			for(int i = 0 ; i < limit ; i++)
 			{
 				FilterValueButton temp = new FilterValueButton(93, 3 + i*15, 82, 12, x0, y0, (String)values[6+i], false,this);
+				temp.setup();
 				addTouchSubscriber(temp);
 				ValueButtons.add(temp);
 			}		
@@ -89,7 +90,6 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 
 	public void  handleFilterValueButtonClick(boolean isPressed,String text)
 	{
-
 		filterHolder.filter.handleFilterValueButtonClick(text, isPressed);
 		filterHolder.showSelected.setReDraw();
 		setReDraw();
@@ -117,11 +117,8 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 				}
 			}
 		}
-
 	}
-
-
-
+	
 	public void selectDeselectbutton(String parent,String value , boolean isPressed)
 	{
 		ArrayList<FilterValueButton> subList = buttons.get(parent);

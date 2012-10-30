@@ -22,7 +22,6 @@ public class ShowSelectedAttribute extends Panel implements TouchEnabled
 		this.filterPanel = filterPanel;
 	}
 
-	@Override
 	public void setup() {
 
 

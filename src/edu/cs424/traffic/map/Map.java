@@ -114,11 +114,19 @@ public class Map extends PApplet implements TouchEnabled {
 		case 2: map.setMapProvider( new Microsoft.AerialProvider() ); break;
 		}
 	}
+	boolean isFirstTime = true;
 
 	@Override
 	public void draw() {
 		setBackground(new Color(0));
 		map.draw();
+		
+		if(isFirstTime)
+		{
+			fill(233);
+			rect(10, 10, 100, 100);
+			isFirstTime = false;
+		}
 		
 		noFill();
 		stroke(86,86,86);
@@ -143,6 +151,8 @@ public class Map extends PApplet implements TouchEnabled {
 				hand = hand || buttons[i].mouseOver();
 			}
 		}
+		
+		
 
 //		drawPointsForStates();
 		getBoundary();

@@ -39,14 +39,9 @@ public abstract class Panel
 		this.width = width;
 		this.height = height;
 
-		setup();
+		
 	}
-
-	/*
-	 * setup intialize all the images and panel u will use
-	 * it is called in the constructor
-	 * u will never call this 
-	 * */
+	
 	public abstract void setup();
 
 	protected float s(float x) {
