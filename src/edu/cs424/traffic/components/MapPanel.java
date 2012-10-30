@@ -71,17 +71,18 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 				if(MouseMovements.MOUSEDOWN == event)
 				{
 					//check if xy is on the buttons
-					if(in.containsPoint(x, y)) {
+					if(in.containsPoint(x, y))
 						map.zoomIn();
-						needRedraw = true;
-					}
-					else if(out.containsPoint(x, y)) {
+					
+					else if(out.containsPoint(x, y))
 						map.zoomOut();
-					}
+					
 					else if(aerial.containsPoint(x, y))
 						map.setMapProvider( new Microsoft.AerialProvider() );
+					
 					else if(hybrid.containsPoint(x, y))
 						map.setMapProvider( new Microsoft.HybridProvider() );
+					
 					else if(road.containsPoint(x, y))
 						map.setMapProvider( new Microsoft.RoadProvider() );
 
@@ -136,7 +137,8 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 					}
 					else if( touchList.size() >= 5 )
 					{				    
-						// Zoom to entire USA				   
+						// Zoom to entire USA
+						map.setCenterZoom(locationUSA, 4);
 					}				 
 					// Update touch IDs 1 and 2
 					if( ID == touchID1 ){
@@ -203,7 +205,6 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			background(EnumColor.SOMERANDOM);
 			map.draw();
 			
-			
 			float[] xy = getBoundary();
 			HashMap<Location, Integer> states = getDataPoints(xy[0], xy[1], xy[2], xy[3]);
 //			if(map.getZoom() > 6)
@@ -261,8 +262,13 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	
 	public void forceRedrawAllComponents()
 	{
+		in.setReDraw();
+		out.setReDraw();
+		road.setReDraw();
+		aerial.setReDraw();
+		hybrid.setReDraw();
+		
 		needRedraw = true;
-
 	}
 
 	@Override
