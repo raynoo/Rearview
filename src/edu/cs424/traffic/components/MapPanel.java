@@ -226,6 +226,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			cluster(states, latlong);
 
 			drawMapControlPanel();
+			drawMapButtons();
 			needRedraw = false;
 		}
 	}
@@ -296,17 +297,17 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		
 		drawGridLines();
 		
-		drawCluster(createCluster(data, 0, 0, loc00, loc11));
-		drawCluster(createCluster(data, 0, 1, loc10, loc21));
-		drawCluster(createCluster(data, 0, 2, loc20, loc31));
+		drawCluster(createCluster(data, loc00, loc11));
+		drawCluster(createCluster(data, loc10, loc21));
+		drawCluster(createCluster(data, loc20, loc31));
 		
-		drawCluster(createCluster(data, 1, 0, loc01, loc21));
-		drawCluster(createCluster(data, 1, 1, loc11, loc22));
-		drawCluster(createCluster(data, 1, 2, loc21, loc32));
+		drawCluster(createCluster(data, loc01, loc21));
+		drawCluster(createCluster(data, loc11, loc22));
+		drawCluster(createCluster(data, loc21, loc32));
 		
-		drawCluster(createCluster(data, 2, 0, loc02, loc13));
-		drawCluster(createCluster(data, 2, 1, loc12, loc23));
-		drawCluster(createCluster(data, 2, 2, loc22, loc33));
+		drawCluster(createCluster(data, loc02, loc13));
+		drawCluster(createCluster(data, loc12, loc23));
+		drawCluster(createCluster(data, loc22, loc33));
 		
 	}
 	
@@ -332,8 +333,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		popStyle();
 	}
 	
-	DataPoint createCluster(ArrayList<DataPoint> data,
-			int row, int col, Location topLeft, Location bottomRight) {
+	DataPoint createCluster(ArrayList<DataPoint> data, Location topLeft, Location bottomRight) {
 
 		DataPoint cluster = new DataPoint();
 		cluster.setLocation(new Location(topLeft.lat - ((topLeft.lat - bottomRight.lat)/2),
@@ -352,7 +352,13 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	
 	
 	void drawCluster(DataPoint cluster) {
-		int pointSize = (int) (0.05 * (float)cluster.getCrashCount());
+		float factor = 0.03f;
+		if(map.getZoom() == 4)
+			factor = 0.01f;
+		if(map.getZoom() > 6)
+			factor = 0.06f;
+		
+		int pointSize = (int) (factor * (float)cluster.getCrashCount() * map.getZoom());
 
 		pushStyle();
 		strokeWeight(1.5f);
@@ -399,7 +405,6 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	{
 		for(Button b:buttons)
 			b.setReDraw();
-
 		needRedraw = true;
 	}
 
