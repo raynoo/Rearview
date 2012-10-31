@@ -6,8 +6,6 @@ import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.gui.Label;
-import edu.cs424.traffic.map.Map;
-import edu.cs424.traffic.map.MapKevin;
 import edu.cs424.traffic.pubsub.PubSub.Event;
 import static edu.cs424.data.helper.AppConstants.*;
 
