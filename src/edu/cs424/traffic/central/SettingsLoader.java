@@ -30,7 +30,7 @@ public class SettingsLoader
 		{
 			dir = new File(".").getCanonicalPath();
 
-			if (dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase("/lib")   || dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase("/bin")) 
+			if (dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase("lib")   || dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase("bin")) 
 			{
 				dir = dir.substring(0, dir.length() - 4);
 			}
