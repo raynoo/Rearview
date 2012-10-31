@@ -2,13 +2,9 @@ package edu.cs424.traffic.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PVector;
 
 import com.modestmaps.InteractiveMap;
@@ -19,6 +15,7 @@ import com.modestmaps.providers.Microsoft;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.SettingsLoader;
+import edu.cs424.traffic.map.dataset.DataPoint;
 import edu.cs424.traffic.map.dataset.StateLatLon;
 import edu.cs424.traffic.map.utils.Point;
 import edu.cs424.traffic.pubsub.PubSub.Event;
@@ -33,6 +30,9 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	static InteractiveMap map;
 	PVector mapSize;
 	PVector mapOffset;
+	
+	float lat0, lat1, lat2, lat3, lon0, lon1, lon2, lon3;
+	Location loc00, loc01, loc02, loc10, loc11, loc12, loc13, loc20, loc21, loc22, loc23, loc31, loc32, loc33;
 
 	public MapPanel(float x0, float y0, float width, float height,
 			float parentX0, float parentY0) 
@@ -54,13 +54,13 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 
 	HashMap<Integer,Point> touchList;
 	int touchID1,touchID2;
-	
-	// buttons take x,y and width,height:
-		Button out, in, aerial, hybrid, road;
 
-		// all the buttons in one place, for looping:
-		ArrayList<Button> buttons = new ArrayList<Button>();
-	
+	// buttons take x,y and width,height:
+	Button out, in, aerial, hybrid, road;
+
+	// all the buttons in one place, for looping:
+	ArrayList<Button> buttons = new ArrayList<Button>();
+
 	Location locationUSA = new Location(38.962f, -93.928f);
 
 	public boolean touch(int ID,float x, float y, MouseMovements event) {
@@ -71,8 +71,9 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 				if(MouseMovements.MOUSEDOWN == event)
 				{
 					//check if xy is on the buttons
-					if(in.containsPoint(x, y))
+					if(in.containsPoint(x, y)) {
 						map.zoomIn();
+					}
 					
 					else if(out.containsPoint(x, y))
 						map.zoomOut();
@@ -169,8 +170,8 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		initTouchPos2 = new PVector();
 		
 		//initialize map buttons
-		in = new Button(10, 200, 20, 20, x0, y0, "+", true);
-		out = new Button(10, 215, 20, 20, x0, y0, "-", true);
+		in = new Button(mapControlPanelX+55, mapControlPanelHeight-80, 20, 20, x0, y0, "+", true);
+		out = new Button(mapControlPanelX+55, mapControlPanelHeight-55, 20, 20, x0, y0, "-", true);
 		road = new Button(mapControlPanelX+30, mapControlPanelHeight-30, 20, 20, x0, y0, "R", true);
 		hybrid = new Button(mapControlPanelX+55, mapControlPanelHeight-30, 20, 20, x0, y0, "H", true);
 		aerial = new Button(mapControlPanelX+80, mapControlPanelHeight-30, 20, 20, x0, y0, "A", true);
@@ -191,6 +192,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		
 		//create control panel
 		drawMapControlPanel();
+		drawMapButtons();
 	}
 	
 	void drawMapControlPanel() {
@@ -199,9 +201,6 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		noStroke();
 		rect(mapControlPanelX, mapControlPanelY, mapControlPanelWidth, mapControlPanelHeight);
 		popStyle();
-		
-		for(Button b:buttons)
-			b.draw();
 		
 	}
 	
@@ -218,11 +217,13 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			System.out.println("MapPanel.draw()" + "map re drawn");
 			background(EnumColor.SOMERANDOM);
 			map.draw();
+			drawMapOffset();
 			
 			//get lat-long from map-offset boundary
-			PVector[] xy = getBoundary();
-			HashMap<Location, Integer> states = getDataPoints(xy[0].x, xy[0].y, xy[1].x, xy[1].y);
-			drawPointsForStates(states);
+			Location[] latlong = getBoundaryLatLong();
+			HashMap<Location, Integer> states = getDataPoints(latlong[0].lat, latlong[0].lon, latlong[1].lat, latlong[1].lon);
+//			drawPointsForStates(states, xy);
+			cluster(states, latlong);
 
 			drawMapControlPanel();
 			needRedraw = false;
@@ -235,9 +236,9 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		return new StateLatLon().getStates();
 	}
 
-	void drawPointsForStates(HashMap<Location, Integer> states) {
+	void drawPointsForStates(HashMap<Location, Integer> states, PVector[] boundary) {
 		int pointSize = 2;
-
+		
 		for(Entry<Location, Integer> entry : states.entrySet())  {
 			Point2f p = map.locationPoint(entry.getKey());
 			int crashcount = entry.getValue();
@@ -246,24 +247,152 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			pushStyle();
 			strokeWeight(1.5f);
 			stroke(EnumColor.DARK_GRAY);
-			fill(EnumColor.LIGHT_RED, 60);
+			fill(EnumColor.RED, 60);
 			ellipse(p.x, p.y, pointSize, pointSize);
 			popStyle();
 		}
 	}
+	
+	//9grids
+	void cluster(HashMap<Location, Integer> states, Location[] latlong) {
+		ArrayList<DataPoint> data = new ArrayList<DataPoint>();
+		
+		//convert states to list
+		//TODO:remove this when we get actual data
+		for(Entry<Location, Integer> entry : states.entrySet()) {
+			DataPoint d = new DataPoint();
+			d.setLocation(entry.getKey());
+			d.setCrashCount(entry.getValue());
+			data.add(d);
+		}
+		
+		lat0 = latlong[0].lat;
+		lat3 = latlong[1].lat;
+		lat1 = lat0 - ((lat0 - lat3) / 3);
+		lat2 = lat0 - ((lat0 - lat3) / 3 * 2);
+		
+		lon0 = latlong[0].lon;
+		lon3 = latlong[1].lon;
+		lon1 = lon0 - ((lon0 - lon3) / 3);
+		lon2 = lon0 - ((lon0 - lon3) / 3 * 2);
+		
+		loc00 = new Location(lat0, lon0);
+		loc01 = new Location(lat0, lon1);
+		loc02 = new Location(lat0, lon2);
+		
+		loc10 = new Location(lat1, lon0);
+		loc11 = new Location(lat1, lon1);
+		loc12 = new Location(lat1, lon2);
+		loc13 = new Location(lat1, lon3);
+		
+		loc20 = new Location(lat2, lon0);
+		loc21 = new Location(lat2, lon1);
+		loc22 = new Location(lat2, lon2);
+		loc23 = new Location(lat2, lon3);
+		
+		loc31 = new Location(lat3, lon1);
+		loc32 = new Location(lat3, lon2);
+		loc33 = new Location(lat3, lon3);
+		
+		drawGridLines();
+		
+		drawCluster(createCluster(data, 0, 0, loc00, loc11));
+		drawCluster(createCluster(data, 0, 1, loc10, loc21));
+		drawCluster(createCluster(data, 0, 2, loc20, loc31));
+		
+		drawCluster(createCluster(data, 1, 0, loc01, loc21));
+		drawCluster(createCluster(data, 1, 1, loc11, loc22));
+		drawCluster(createCluster(data, 1, 2, loc21, loc32));
+		
+		drawCluster(createCluster(data, 2, 0, loc02, loc13));
+		drawCluster(createCluster(data, 2, 1, loc12, loc23));
+		drawCluster(createCluster(data, 2, 2, loc22, loc33));
+		
+	}
+	
+	void drawGridLines() {
+		//draw grid lines
+		pushStyle();
+		strokeWeight(1.5f);
+		stroke(EnumColor.DARK_GRAY);
+		line(map.locationPoint(loc10).x,map.locationPoint(loc10).y, map.locationPoint(loc13).x,map.locationPoint(loc13).y);
+		line(map.locationPoint(loc20).x,map.locationPoint(loc20).y, map.locationPoint(loc23).x,map.locationPoint(loc23).y);
+		line(map.locationPoint(loc01).x,map.locationPoint(loc01).y, map.locationPoint(loc31).x,map.locationPoint(loc31).y);
+		line(map.locationPoint(loc02).x,map.locationPoint(loc02).y, map.locationPoint(loc32).x,map.locationPoint(loc32).y);
+		popStyle();
+	}
+	
+	void drawMapOffset() {
+		//draw grid lines
+		pushStyle();
+		strokeWeight(1.5f);
+		stroke(EnumColor.DARK_GRAY);
+		noFill();
+		rect(mapOffsetX, mapOffsetY, mapSize.x, mapSize.y);
+		popStyle();
+	}
+	
+	DataPoint createCluster(ArrayList<DataPoint> data,
+			int row, int col, Location topLeft, Location bottomRight) {
 
-	PVector[] getBoundary() {
+		DataPoint cluster = new DataPoint();
+		cluster.setLocation(new Location(topLeft.lat - ((topLeft.lat - bottomRight.lat)/2),
+				bottomRight.lon + ((topLeft.lon - bottomRight.lon)/2)));
+
+		for(DataPoint d : data) {
+			
+			if(d.getLocation().lat <= topLeft.lat && d.getLocation().lat >= bottomRight.lat
+					&& d.getLocation().lon >= topLeft.lon && d.getLocation().lon <= bottomRight.lon) {
+				
+				cluster.setCrashCount(cluster.getCrashCount() + d.getCrashCount());
+			}
+		}
+		return cluster;
+	}
+	
+	
+	void drawCluster(DataPoint cluster) {
+		int pointSize = (int) (0.05 * (float)cluster.getCrashCount());
+
+		pushStyle();
+		strokeWeight(1.5f);
+		stroke(EnumColor.DARK_GRAY);
+		fill(EnumColor.RED, 60);
+		ellipse(map.locationPoint(cluster.getLocation()).x, map.locationPoint(cluster.getLocation()).y, 
+				pointSize, pointSize);
+		popStyle();
+	}
+	
+	//return the xy coordinates of offset area's top left and bottom right points
+	Point2f[] getBoundaryXY() {
+		Location centerLocation = map.getCenter();
+		float leftX = (map.locationPoint(centerLocation).x - mapSize.x/2);
+		float rightX = (map.locationPoint(centerLocation).x + mapSize.x/2);
+		float topY = (map.locationPoint(centerLocation).y - mapSize.y/2);
+		float bottomY = (map.locationPoint(centerLocation).y + mapSize.y/2);
+		
+		Point2f topLeft = new Point2f(leftX, topY);
+		Point2f bottomRight = new Point2f(rightX, bottomY);
+		
+		Point2f[] points = {topLeft, bottomRight};
+		return points;
+	}
+
+	//return the lat-longs of offset area's top left and bottom right points
+	Location[] getBoundaryLatLong() {
+		//TODO:or is it easier to calculate from offsetX and size?
 		Location centerLocation = map.getCenter();
 		float leftX = (map.locationPoint(centerLocation).x - mapSize.x/2);
 		float rightX = (map.locationPoint(centerLocation).x + mapSize.x/2);
 		float topY = (map.locationPoint(centerLocation).y - mapSize.y/2);
 		float bottomY = (map.locationPoint(centerLocation).y + mapSize.y/2);
 
-		PVector topLeft = new PVector(leftX, topY);
-		PVector bottomRight = new PVector(rightX, bottomY);
+		Location topLeft = map.pointLocation(leftX, topY);
+		Location bottomRight = map.pointLocation(rightX, bottomY);
 
-		PVector[] xy = {topLeft, bottomRight};
-		return xy;
+		Location[] loc = {topLeft, bottomRight};
+		
+		return loc;
 	}
 
 	public void forceRedrawAllComponents()
