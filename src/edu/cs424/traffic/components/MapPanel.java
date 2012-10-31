@@ -161,39 +161,53 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	@Override
 	public void setup() 
 	{
+		//initialize touch position variables
 		touchList = new HashMap<Integer, Point>();
 		lastTouchPos = new PVector();
 		lastTouchPos2 = new PVector();
 		initTouchPos = new PVector();
 		initTouchPos2 = new PVector();
 		
-		in = new Button(10, 200, 15, 15, x0, y0, "+", true);
-		out = new Button(10, 215, 15, 15, x0, y0, "-", true);
-		road = new Button(10, 230, 15, 15, x0, y0, "R", true);
-		hybrid = new Button(10, 245, 15, 15, x0, y0, "H", true);
-		aerial = new Button(10, 260, 15, 15, x0, y0, "A", true);
+		//initialize map buttons
+		in = new Button(10, 200, 20, 20, x0, y0, "+", true);
+		out = new Button(10, 215, 20, 20, x0, y0, "-", true);
+		road = new Button(mapControlPanelX+30, mapControlPanelHeight-30, 20, 20, x0, y0, "R", true);
+		hybrid = new Button(mapControlPanelX+55, mapControlPanelHeight-30, 20, 20, x0, y0, "H", true);
+		aerial = new Button(mapControlPanelX+80, mapControlPanelHeight-30, 20, 20, x0, y0, "A", true);
+		
 		buttons.add(in);
 		buttons.add(out);
 		buttons.add(road);
 		buttons.add(hybrid);
 		buttons.add(aerial);
 		
-
-		mapSize = createPvector(mapPanelWidth - 2*mapOffsetX, mapPanelHeight - 2*mapOfffsetY);
-		mapOffset = createPvector(mapOffsetX, mapOfffsetY);
-		map = new InteractiveMap(SettingsLoader.papp, new Microsoft.RoadProvider(), mapOffset.x, mapOffset.y, mapSize.x, mapSize.y );
+		//initialize map
+		mapSize = createPvector(mapOffsetWidth, mapOffsetHeight);
+		mapOffset = createPvector(mapOffsetX, mapOffsetY);
+		map = new InteractiveMap(SettingsLoader.papp, new Microsoft.RoadProvider(), 
+				mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
 		map.MAX_IMAGES_TO_KEEP = 80;
-		setMapProvider(0);
 		map.setCenterZoom(locationUSA, 4);
 		
+		//create control panel
+		drawMapControlPanel();
+	}
+	
+	void drawMapControlPanel() {
+		pushStyle();
+		fill(EnumColor.DARK_GRAY, 95);
+		noStroke();
+		rect(mapControlPanelX, mapControlPanelY, mapControlPanelWidth, mapControlPanelHeight);
+		popStyle();
+		
+		for(Button b:buttons)
+			b.draw();
 		
 	}
 	
 	void drawMapButtons() {
-		for(Button b:buttons) {
+		for(Button b:buttons)
 			b.draw();
-		}
-		
 	}
 
 	@Override
@@ -205,69 +219,58 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			background(EnumColor.SOMERANDOM);
 			map.draw();
 			
-			float[] xy = getBoundary();
-			HashMap<Location, Integer> states = getDataPoints(xy[0], xy[1], xy[2], xy[3]);
-//			if(map.getZoom() > 6)
-				drawPointsForStates(states);
-//			else
-//				;
-			drawMapButtons();
+			//get lat-long from map-offset boundary
+			PVector[] xy = getBoundary();
+			HashMap<Location, Integer> states = getDataPoints(xy[0].x, xy[0].y, xy[1].x, xy[1].y);
+			drawPointsForStates(states);
+
+			drawMapControlPanel();
 			needRedraw = false;
 		}
 	}
 
-	//supposed to be inside db querying class
-		HashMap<Location, Integer> getDataPoints(float lat1, float lon1, float lat2, float lon2) {
-			return new StateLatLon().getStates();
-		}
+	//supposed to be inside db-querying class
+	HashMap<Location, Integer> getDataPoints(float lat1, float lon1, float lat2, float lon2) {
 		
-		void drawPointsForStates(HashMap<Location, Integer> states) {
-			int pointSize = 2;
-			
-			for(Entry<Location, Integer> entry : states.entrySet())  {
-				Point2f p = map.locationPoint(entry.getKey());
-				int crashcount = entry.getValue();
-				pointSize = (int) (0.08 * (float)crashcount);
-				
-				pushStyle();
-				strokeWeight(1.5f);
-				stroke(EnumColor.DARK_GRAY);//dark red
-				fill(EnumColor.LIGHT_RED, 60);//light red
-				ellipse(p.x, p.y, pointSize, pointSize);
-				popStyle();
-				System.out.println(p.x + ", " + p.y + ", " + crashcount);
-			}
-		}
+		return new StateLatLon().getStates();
+	}
 
-		float[] getBoundary() {
-			Location centerLocation = map.getCenter();
-			float leftX = (map.locationPoint(centerLocation).x - mapSize.x/2);
-			float rightX = (map.locationPoint(centerLocation).x + mapSize.x/2);
-			float topY = (map.locationPoint(centerLocation).y - mapSize.y/2);
-			float bottomY = (map.locationPoint(centerLocation).y + mapSize.y/2);
-			
-//			Location a = map.pointLocation(leftX, topY);
-//			Location b = map.pointLocation(rightX, bottomY);
-			
-//			strokeWeight(1.5f);
-//			stroke(EnumColor.DARK_GRAY);
-//			fill(255,153,204);
-//			ellipse(leftX, topY, 10, 10);
-//			ellipse(rightX, bottomY, 10, 10);
-//			noFill();
-			
-			float[] xy = {leftX, topY, rightX, bottomY};
-			return xy;
+	void drawPointsForStates(HashMap<Location, Integer> states) {
+		int pointSize = 2;
+
+		for(Entry<Location, Integer> entry : states.entrySet())  {
+			Point2f p = map.locationPoint(entry.getKey());
+			int crashcount = entry.getValue();
+			pointSize = (int) (0.08 * (float)crashcount);
+
+			pushStyle();
+			strokeWeight(1.5f);
+			stroke(EnumColor.DARK_GRAY);
+			fill(EnumColor.LIGHT_RED, 60);
+			ellipse(p.x, p.y, pointSize, pointSize);
+			popStyle();
 		}
-	
+	}
+
+	PVector[] getBoundary() {
+		Location centerLocation = map.getCenter();
+		float leftX = (map.locationPoint(centerLocation).x - mapSize.x/2);
+		float rightX = (map.locationPoint(centerLocation).x + mapSize.x/2);
+		float topY = (map.locationPoint(centerLocation).y - mapSize.y/2);
+		float bottomY = (map.locationPoint(centerLocation).y + mapSize.y/2);
+
+		PVector topLeft = new PVector(leftX, topY);
+		PVector bottomRight = new PVector(rightX, bottomY);
+
+		PVector[] xy = {topLeft, bottomRight};
+		return xy;
+	}
+
 	public void forceRedrawAllComponents()
 	{
-		in.setReDraw();
-		out.setReDraw();
-		road.setReDraw();
-		aerial.setReDraw();
-		hybrid.setReDraw();
-		
+		for(Button b:buttons)
+			b.setReDraw();
+
 		needRedraw = true;
 	}
 
@@ -276,9 +279,9 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		System.out.println("MapPanel.touch()" + "NOT IMPLEMENTED");
 		return false;
 	}
-	
-	void setMapProvider(int newProviderID){
-		switch( newProviderID ){
+
+	void setMapProvider(int newProviderID) {
+		switch( newProviderID ) {
 		case 0: map.setMapProvider( new Microsoft.RoadProvider() ); break;
 		case 1: map.setMapProvider( new Microsoft.HybridProvider() ); break;
 		case 2: map.setMapProvider( new Microsoft.AerialProvider() ); break;

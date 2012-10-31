@@ -1,10 +1,13 @@
 package edu.cs424.data.helper;
 
+import static edu.cs424.data.helper.AppConstants.mapOffsetWidth;
+import static edu.cs424.data.helper.AppConstants.mapOffsetX;
+import static edu.cs424.data.helper.AppConstants.mapPanelWidth;
+
 public class AppConstants {
     
 	public static int fullScreenWidth = 1360;
 	public static int fullScreenHeight = 384;
-	
 	
 	//Main Title
 	public static int titleFontSize = 24;
@@ -22,8 +25,16 @@ public class AppConstants {
 	public static int mapPanelWidth = 650;
 	public static int mapPanelHeight = 384;
 	
-	public static int mapOffsetX = 30;
-	public static int mapOfffsetY = 30;
+	public static int mapOffsetX = 20;
+	public static int mapOffsetY = 50;
+	public static int mapOffsetWidth = 480;
+	public static int mapOffsetHeight = 314;
+	
+	public static int mapControlPanelX = 500;
+	public static int mapControlPanelY = 0;
+	public static int mapControlPanelWidth = mapPanelWidth-(mapOffsetX+mapOffsetWidth);
+	public static int mapControlPanelHeight = 384;
+	
 	
 	//Graph(1) panel
 	public static int graph1X = 660;
