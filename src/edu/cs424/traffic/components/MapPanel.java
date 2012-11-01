@@ -66,6 +66,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	ArrayList<Marker> markers = new ArrayList<Marker>();
 	
 	boolean firstIter = true;
+	boolean clusterGridMode = true;
 	ArrayList<DataPoint> points;
 	
 	Location locationUSA = new Location(38.962f, -93.928f);
@@ -235,10 +236,13 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			map.draw();
 			drawMapOffset();
 			
-			//get lat-long from map-offset boundary
-			Location[] latlong = getBoundaryLatLong();
-			cluster(points, latlong);
-			
+			if(clusterGridMode) {
+				//get lat-long from map-offset boundary
+				Location[] latlong = getBoundaryLatLong();
+				cluster(points, latlong);
+			} else {
+				//draw indi points
+			}
 			drawMapControlPanel();
 			drawMapButtons();
 			
@@ -307,16 +311,17 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		
 		drawGridLines();
 		
+		//row 1
 		drawCluster(createCluster(data, loc00, loc11));
-		drawCluster(createCluster(data, loc10, loc21));
-		drawCluster(createCluster(data, loc20, loc31));
-		
-		drawCluster(createCluster(data, loc01, loc21));
-		drawCluster(createCluster(data, loc11, loc22));
-		drawCluster(createCluster(data, loc21, loc32));
-		
+		drawCluster(createCluster(data, loc01, loc12));//wasnt displaying
 		drawCluster(createCluster(data, loc02, loc13));
+		//row 2
+		drawCluster(createCluster(data, loc10, loc21));
+		drawCluster(createCluster(data, loc11, loc22));
 		drawCluster(createCluster(data, loc12, loc23));
+		//row 3
+		drawCluster(createCluster(data, loc20, loc31));
+		drawCluster(createCluster(data, loc21, loc32));
 		drawCluster(createCluster(data, loc22, loc33));
 		
 	}
