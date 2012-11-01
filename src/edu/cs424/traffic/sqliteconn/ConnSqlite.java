@@ -20,47 +20,65 @@ public class ConnSqlite {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection( sqliteDB );
 		}
-		catch ( ClassNotFoundException e){
+		catch ( ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		catch(SQLException e){
+		catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static String getCrashes(FilterData filterData) {
+	public static String getCrashByState(FilterData filterData) {
+
+		return appendFilters(filterData, "SELECT latitude, longitude, istatenum FROM f2");
+	}
+	
+	public static String getCrashByYear(FilterData filterData) {
+
+		return appendFilters(filterData, "SELECT latitude, longitude, Year, iaccmon, dayofweek FROM f2");
+	}
+	
+	static String appendFilters(FilterData filterData, String query) {
+		
 		HashMap<String, ArrayList<Integer>> values = filterData.getSelectedValues();
 		
-		String query = "select latitude, longitude from f2";
-		String append = "";
+		StringBuffer append = new StringBuffer("");
 		boolean first1 = true;
 		
 		if(! values.isEmpty()) {
-			append += " where ";
+			append.append(" where ");
 
 			for(Entry<String, ArrayList<Integer>> filter : values.entrySet()) {
 
 				boolean first2 = true;
-				if( !first1 ){
-					append += " and ";
-				}
+				if( !first1 )
+					append.append(" and ");
+				
 				first1 = false;
-				append += filter.getKey();
-				append += " in ( ";				
+				append.append(filter.getKey());
+				append.append(" in ( ");				
+				
 				for(Integer num : filter.getValue()) {				
-					if ( !first2 ){
-						append += ", ";
-					}
+					if ( !first2 )
+						append.append(", ");
+					
 					first2 = false;
-					append += num;				
+					append.append(num);				
 				}
-				append += ")";
+				append.append(")");
 			}
 		}
-		append += ";";
-		query += append;
-		System.out.println("This is the query " + query);
-		return ( query );
+		append.append(";");
+		query += append.toString();
+		
+		System.out.println("Query: " + query);
+		
+		return query;
+	}
+	
+	public static String getLocations(FilterData filterData) {
+		
+		return appendFilters(filterData, "SELECT latitude, longitude FROM f2");
 	}
 	
 	public static ArrayList<DataPoint> executeQuery(String query) {
@@ -72,7 +90,6 @@ public class ConnSqlite {
 			stat = conn.createStatement();
 			res = stat.executeQuery(query);
 			
-			int i = 0;
 			while( res.next() ){
 				DataPoint dp = new DataPoint(res.getDouble("latitude"), res.getDouble("longitude"), 1, false);
 				points.add(dp);

@@ -12,6 +12,16 @@ public class FilterData {
 	}
 
 	public HashMap<String, ArrayList<Integer>> getSelectedValues() {
+		ArrayList<Integer> values = new ArrayList<Integer>();
+		values.add(10);
+		values.add(3);
+		values.add(4);
+		ArrayList<Integer> sexValue = new ArrayList<Integer>();
+		sexValue.add(2);
+		sexValue.add(1);
+		selectedValues.put("iholiday", values);
+		selectedValues.put("isex", sexValue);
+	
 		return selectedValues;
 	}
 

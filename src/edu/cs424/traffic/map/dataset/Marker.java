@@ -5,6 +5,7 @@ import com.modestmaps.InteractiveMap;
 import processing.core.PShape;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
+import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
 public class Marker extends Panel {
 	
@@ -67,5 +68,13 @@ public class Marker extends Panel {
 			return true;
 		
 		return false;
+	}
+	
+	public boolean touch(int ID, float x, float y, MouseMovements event) {
+
+		if(this.containsPoint(x, y)) {
+			
+		}
+		return true;
 	}
 }

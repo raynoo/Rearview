@@ -26,16 +26,4 @@ public class Cluster {
 		
 	}
 	
-	//lat longs shud be of the grids'
-//	DataPoint clusterPoints(ArrayList<DataPoint> data, float leftLon, float rightLon,
-//			float topLat, float bottomLat) {
-//		
-//		//divide visible area into grids
-//		//num of grids CAN depend on zoom level -> so that higher zooms can have higher num of grids/clusters
-//		
-//		for(DataPoint d : data) {
-//			
-//		}
-//		return null;
-//	}
 }
