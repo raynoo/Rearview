@@ -16,10 +16,13 @@ import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.SettingsLoader;
 import edu.cs424.traffic.map.dataset.DataPoint;
+import edu.cs424.traffic.map.dataset.Marker;
 import edu.cs424.traffic.map.dataset.StateLatLon;
 import edu.cs424.traffic.map.utils.Point;
 import edu.cs424.traffic.pubsub.PubSub.Event;
 import edu.cs424.traffic.pubsub.Suscribe;
+import edu.cs424.traffic.sqliteconn.ConnSqlite;
+import edu.cs424.traffic.sqliteconn.FilterData;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
@@ -31,8 +34,10 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	PVector mapSize;
 	PVector mapOffset;
 	
+	//for clusters and grids
 	float lat0, lat1, lat2, lat3, lon0, lon1, lon2, lon3;
 	Location loc00, loc01, loc02, loc10, loc11, loc12, loc13, loc20, loc21, loc22, loc23, loc31, loc32, loc33;
+	public static Location[] loc;
 
 	public MapPanel(float x0, float y0, float width, float height,
 			float parentX0, float parentY0) 
@@ -51,16 +56,18 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	PVector lastTouchPos2;
 	PVector initTouchPos;
 	PVector initTouchPos2;
-
+	
 	HashMap<Integer,Point> touchList;
 	int touchID1,touchID2;
-
-	// buttons take x,y and width,height:
+	
 	Button out, in, aerial, hybrid, road;
-
-	// all the buttons in one place, for looping:
+	
 	ArrayList<Button> buttons = new ArrayList<Button>();
-
+	ArrayList<Marker> markers = new ArrayList<Marker>();
+	
+	boolean firstIter = true;
+	ArrayList<DataPoint> points;
+	
 	Location locationUSA = new Location(38.962f, -93.928f);
 
 	public boolean touch(int ID,float x, float y, MouseMovements event) {
@@ -86,8 +93,11 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 					
 					else if(road.containsPoint(x, y))
 						map.setMapProvider( new Microsoft.RoadProvider() );
-
-					else {
+					
+					
+					//else xy is on the map
+					else if (x > mapOffsetX && x < mapOffsetX+mapOffsetWidth 
+							&& y > mapOffsetY && y < mapOffsetY+mapOffsetHeight) {
 						lastTouchPos.x = x;
 						lastTouchPos.y = y;				
 						Point p = new Point(ID,x, y);
@@ -111,7 +121,8 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 				{
 					touchList.remove(ID);
 				}
-				else 
+				else if (x > mapOffsetX && x < mapOffsetX+mapOffsetWidth 
+						&& y > mapOffsetY && y < mapOffsetY+mapOffsetHeight)
 				{
 					if(touchList.size() < 2)
 					{
@@ -212,6 +223,11 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	@Override
 	public void draw() 
 	{
+		if(firstIter == true) {
+			points = getData();
+			firstIter = false;
+		}
+		
 		if(needRedraw)
 		{
 			System.out.println("MapPanel.draw()" + "map re drawn");
@@ -221,12 +237,13 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			
 			//get lat-long from map-offset boundary
 			Location[] latlong = getBoundaryLatLong();
-			HashMap<Location, Integer> states = getDataPoints(latlong[0].lat, latlong[0].lon, latlong[1].lat, latlong[1].lon);
-//			drawPointsForStates(states, xy);
-			cluster(states, latlong);
-
+			cluster(points, latlong);
+			
 			drawMapControlPanel();
 			drawMapButtons();
+			
+			System.out.println(map.getZoom());
+			
 			needRedraw = false;
 		}
 	}
@@ -235,6 +252,10 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	HashMap<Location, Integer> getDataPoints(float lat1, float lon1, float lat2, float lon2) {
 		
 		return new StateLatLon().getStates();
+	}
+	
+	ArrayList<DataPoint> getData() {
+		return ConnSqlite.executeQuery(ConnSqlite.getCrashes(new FilterData()));
 	}
 
 	void drawPointsForStates(HashMap<Location, Integer> states, PVector[] boundary) {
@@ -254,18 +275,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		}
 	}
 	
-	//9grids
-	void cluster(HashMap<Location, Integer> states, Location[] latlong) {
-		ArrayList<DataPoint> data = new ArrayList<DataPoint>();
-		
-		//convert states to list
-		//TODO:remove this when we get actual data
-		for(Entry<Location, Integer> entry : states.entrySet()) {
-			DataPoint d = new DataPoint();
-			d.setLocation(entry.getKey());
-			d.setCrashCount(entry.getValue());
-			data.add(d);
-		}
+	void cluster(ArrayList<DataPoint> data, Location[] latlong) {
 		
 		lat0 = latlong[0].lat;
 		lat3 = latlong[1].lat;
@@ -350,23 +360,11 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		return cluster;
 	}
 	
-	
 	void drawCluster(DataPoint cluster) {
-		float factor = 0.03f;
-		if(map.getZoom() == 4)
-			factor = 0.01f;
-		if(map.getZoom() > 6)
-			factor = 0.06f;
 		
-		int pointSize = (int) (factor * (float)cluster.getCrashCount() * map.getZoom());
-
-		pushStyle();
-		strokeWeight(1.5f);
-		stroke(EnumColor.DARK_GRAY);
-		fill(EnumColor.RED, 60);
-		ellipse(map.locationPoint(cluster.getLocation()).x, map.locationPoint(cluster.getLocation()).y, 
-				pointSize, pointSize);
-		popStyle();
+		Marker m = new Marker(0, 0, 0, 0, x0, y0, null, cluster, map);
+		m.draw();
+		markers.add(m);
 	}
 	
 	//return the xy coordinates of offset area's top left and bottom right points
@@ -396,7 +394,9 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		Location topLeft = map.pointLocation(leftX, topY);
 		Location bottomRight = map.pointLocation(rightX, bottomY);
 
-		Location[] loc = {topLeft, bottomRight};
+		loc = new Location[2];
+		loc[0] = topLeft;
+		loc[1] = bottomRight;
 		
 		return loc;
 	}
@@ -405,6 +405,8 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	{
 		for(Button b:buttons)
 			b.setReDraw();
+		for(Marker m : markers)
+			m.setReDraw();
 		needRedraw = true;
 	}
 

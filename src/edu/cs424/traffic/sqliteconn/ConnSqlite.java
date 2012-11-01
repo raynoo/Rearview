@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.modestmaps.geo.Location;
+
+import edu.cs424.traffic.components.MapPanel;
 import edu.cs424.traffic.map.dataset.DataPoint;
 
 public class ConnSqlite {
 
 	static Connection conn;
 	
-	public static void setup() {
-		String sqliteDB = "jdbc:sqlite:RearView2.sqlite";
+	static {
+		String sqliteDB = "jdbc:sqlite:../RearView2.sqlite";
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection( sqliteDB );
@@ -28,26 +31,31 @@ public class ConnSqlite {
 	public static String getCrashes(FilterData filterData) {
 		HashMap<String, ArrayList<Integer>> values = filterData.getSelectedValues();
 		
-		String query = "select latitude, longitude from f2 where ";
+		String query = "select latitude, longitude from f2";
 		String append = "";
 		boolean first1 = true;
 		
-		for(Entry<String, ArrayList<Integer>> filter : values.entrySet()) {
-			boolean first2 = true;
-			if( !first1 ){
-				append += " and ";
-			}
-			first1 = false;
-			append += filter.getKey();
-			append += " in ( ";				
-			for(Integer num : filter.getValue()) {				
-				if ( !first2 ){
-					append += ", ";
+		if(! values.isEmpty()) {
+			append += " where ";
+
+			for(Entry<String, ArrayList<Integer>> filter : values.entrySet()) {
+
+				boolean first2 = true;
+				if( !first1 ){
+					append += " and ";
 				}
-				first2 = false;
-				append += num;				
+				first1 = false;
+				append += filter.getKey();
+				append += " in ( ";				
+				for(Integer num : filter.getValue()) {				
+					if ( !first2 ){
+						append += ", ";
+					}
+					first2 = false;
+					append += num;				
+				}
+				append += ")";
 			}
-			append += ")";
 		}
 		append += ";";
 		query += append;
@@ -66,9 +74,6 @@ public class ConnSqlite {
 			
 			int i = 0;
 			while( res.next() ){
-//				System.out.println("Query Result " 
-//									+ res.getDouble("latitude") + " " +
-//									  res.getDouble("longitude") ); 
 				DataPoint dp = new DataPoint(res.getDouble("latitude"), res.getDouble("longitude"), 1, false);
 				points.add(dp);
 			}
@@ -77,20 +82,6 @@ public class ConnSqlite {
 			e.printStackTrace();
 		}
 		return points;
-	}
-	
-	public static void main(String[] args) {
-			Statement stat;
-			ResultSet res;
-			FilterData fData = new FilterData();
-			fData.getSelectedValues();
-			
-			setup();
-			String s = getCrashes( fData );
-			executeQuery(s);
-			
-			cleanup();
-			
 	}
 	
 	public static void cleanup() {
