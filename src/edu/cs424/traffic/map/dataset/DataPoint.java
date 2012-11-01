@@ -19,8 +19,8 @@ public class DataPoint {
 	}
 	
 	//isCluster = false at all times. it is used only during creation of clusters.
-	public DataPoint(Location location, int count, boolean isCluster) {
-		this.location = location;
+	public DataPoint(double lat, double lon, int count, boolean isCluster) {
+		this.location = new Location((float)lat, (float)lon);
 		this.crashCount = count;
 		this.isCluster = isCluster;
 	}
