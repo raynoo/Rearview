@@ -45,11 +45,11 @@ public abstract class Panel
 	
 	public abstract void setup();
 
-	protected float s(float x) {
+	public static float s(float x) {
 		return x * SettingsLoader.getConfigValueAsInt(EnumConfig.SCALEFACTOR);
 	}
 
-	protected int s(int x) {
+	public static int s(int x) {
 		return x * SettingsLoader.getConfigValueAsInt(EnumConfig.SCALEFACTOR);
 	}
 
