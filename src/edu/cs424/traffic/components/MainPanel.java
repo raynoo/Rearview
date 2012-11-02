@@ -53,7 +53,15 @@ public class MainPanel extends Panel implements TouchEnabled
 				label3.setPressed(false);
 				isTab1 = false;
 				isTab2 = true;
-			}			
+			}	
+			else if(graph1.containsPoint(x, y))
+			{
+				graph1.touch(x, y, event);
+			}
+			else if(graph2.containsPoint(x, y))
+			{
+				graph2.touch(x, y, event);
+			}
 		}		
 
 		if(mapPanel.containsPoint(x, y))
@@ -73,6 +81,8 @@ public class MainPanel extends Panel implements TouchEnabled
 			tab2.touch(x, y, event);
 			tab2.forceRedrawAllComponents();
 		}
+		
+		
 
 		label1.forceRedrawAllComponents();
 		label2.forceRedrawAllComponents();
