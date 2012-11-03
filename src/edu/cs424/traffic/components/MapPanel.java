@@ -15,9 +15,9 @@ import com.modestmaps.providers.Microsoft;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.SettingsLoader;
+import edu.cs424.traffic.map.dataset.Cluster;
 import edu.cs424.traffic.map.dataset.DataPoint;
 import edu.cs424.traffic.map.dataset.Marker;
-import edu.cs424.traffic.map.dataset.StateLatLon;
 import edu.cs424.traffic.map.utils.Point;
 import edu.cs424.traffic.pubsub.PubSub.Event;
 import edu.cs424.traffic.pubsub.Suscribe;
@@ -28,30 +28,17 @@ import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
 import static edu.cs424.data.helper.AppConstants.*;
 
-public class MapPanel extends Panel implements TouchEnabled,Suscribe
-{
-	static InteractiveMap map;
+public class MapPanel extends Panel implements TouchEnabled, Suscribe {
+	
+	public static InteractiveMap map;
 	PVector mapSize;
 	PVector mapOffset;
 	
 	//for clusters and grids
-	float lat0, lat1, lat2, lat3, lon0, lon1, lon2, lon3;
-	Location loc00, loc01, loc02, loc10, loc11, loc12, loc13, loc20, loc21, loc22, loc23, loc31, loc32, loc33;
-	public static Location[] loc;
-
-	public MapPanel(float x0, float y0, float width, float height,
-			float parentX0, float parentY0) 
-	{
-		super(x0, y0, width, height, parentX0, parentY0);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void receiveNotification(Event eventName, Object... object) {
-		// TODO Auto-generated method stub
-
-	}
-
+	int gridSize = 4;
+	Location[][] gridLocations = new Location[gridSize+1][gridSize+1];
+	HashMap<Integer, Cluster> gridClusters;
+	
 	PVector lastTouchPos;
 	PVector lastTouchPos2;
 	PVector initTouchPos;
@@ -63,7 +50,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	Button out, in, aerial, hybrid, road;
 	Button clusterByGrid, clusterByState;
 	
-	boolean clusterGridMode = false, clusterStateMode = false;
+	boolean clusterGridMode = true, clusterStateMode = false;
 	
 	ArrayList<Button> buttons = new ArrayList<Button>();
 	ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -73,11 +60,20 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 	
 	Location locationUSA = new Location(38.962f, -93.928f);
 
+	public MapPanel(float x0, float y0, float width, float height,
+			float parentX0, float parentY0) {
+		super(x0, y0, width, height, parentX0, parentY0);
+	}
+
+	@Override
+	public void receiveNotification(Event eventName, Object... object) {
+		// TODO Auto-generated method stub
+	}
+
 	public boolean touch(int ID, float x, float y, MouseMovements event) {
 
 		if(this.containsPoint(x, y))
 		{
-			
 				if(MouseMovements.MOUSEDOWN == event)
 				{
 					//check if xy is on the buttons
@@ -117,6 +113,13 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 						clusterStateMode = false;
 						clusterByState.isPressed = false;
 					}
+					
+					//touch on marker
+					for(Marker m : markers)
+						if(m.containsPoint(x, y)) {// && m.getCluster().getCrashCount() == 1) {
+							drawClusterInfo(m.getCluster());
+							break;
+						}
 					
 					//else xy is on the map
 					else if (x > mapOffsetX && x < mapOffsetX+mapOffsetWidth 
@@ -232,6 +235,9 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		//create control panel
 		drawMapControlPanel();
 		drawMapButtons();
+		
+		//get lat-long from map-offset boundary
+		getBoundaryLatLong();
 	}
 	
 	void drawMapControlPanel() {
@@ -255,6 +261,11 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			b.draw();
 	}
 
+	void drawClusterInfo(Cluster c) {
+		System.out.println("clicked! " + c.getDataID());
+	}
+	
+	
 	@Override
 	public void draw() 
 	{
@@ -263,33 +274,26 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 			firstIter = false;
 		}
 		
-		if(needRedraw)
-		{
-			System.out.println("MapPanel.draw()" + "map re drawn");
+		if(needRedraw) {
 			background(EnumColor.SOMERANDOM);
 			map.draw();
 			drawMapOffset();
+			drawMapControlPanel();
+			drawMapButtons();
 			
 			if(clusterGridMode) {
-				//get lat-long from map-offset boundary
-				Location[] latlong = getBoundaryLatLong();
-				cluster(points, latlong);
+				cluster(points, getBoundaryLatLong());
+				drawClusters();
 				drawGridLines();
 				
 			} else {
 				//draw indi points
 			}
-			drawMapControlPanel();
-			drawMapButtons();
 			
 			System.out.println(map.getZoom());
 			
 			needRedraw = false;
 		}
-	}
-
-	HashMap<Integer, Location> getDataPoints(float lat1, float lon1, float lat2, float lon2) {
-		return new StateLatLon().getStates();
 	}
 	
 	ArrayList<DataPoint> getData() {
@@ -313,60 +317,93 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		}
 	}
 	
+	void initializeGrid(Location[] latlong) {
+		float[] lat = new float[gridSize+1];
+		float[] lon = new float[gridSize+1];
+		
+		lat[0] = latlong[0].lat; lat[gridSize] = latlong[1].lat;
+		lon[0] = latlong[0].lon; lon[gridSize] = latlong[1].lon;
+		
+		for(int i = 1; i < gridSize; i++) {
+			lat[i] = lat[i-1] - ((lat[0] - lat[gridSize])/gridSize);
+			lon[i] = lon[i-1] - ((lon[0] - lon[gridSize])/gridSize);
+		}
+		
+		for(int i = 0; i <= gridSize; i++)
+			for(int j = 0; j <= gridSize; j++)
+				gridLocations[i][j] = new Location(lat[i], lon[j]);
+	}
+	
 	void cluster(ArrayList<DataPoint> data, Location[] latlong) {
 		
-		lat0 = latlong[0].lat;
-		lat3 = latlong[1].lat;
-		lat1 = lat0 - ((lat0 - lat3) / 3);
-		lat2 = lat0 - ((lat0 - lat3) / 3 * 2);
+		initializeGrid(latlong);
 		
-		lon0 = latlong[0].lon;
-		lon3 = latlong[1].lon;
-		lon1 = lon0 - ((lon0 - lon3) / 3);
-		lon2 = lon0 - ((lon0 - lon3) / 3 * 2);
+		gridClusters = new HashMap<Integer, Cluster>();
 		
-		loc00 = new Location(lat0, lon0);
-		loc01 = new Location(lat0, lon1);
-		loc02 = new Location(lat0, lon2);
-		
-		loc10 = new Location(lat1, lon0);
-		loc11 = new Location(lat1, lon1);
-		loc12 = new Location(lat1, lon2);
-		loc13 = new Location(lat1, lon3);
-		
-		loc20 = new Location(lat2, lon0);
-		loc21 = new Location(lat2, lon1);
-		loc22 = new Location(lat2, lon2);
-		loc23 = new Location(lat2, lon3);
-		
-		loc31 = new Location(lat3, lon1);
-		loc32 = new Location(lat3, lon2);
-		loc33 = new Location(lat3, lon3);
-		
-		//row 1
-		drawCluster(createCluster(data, loc00, loc11));
-		drawCluster(createCluster(data, loc01, loc12));//wasnt displaying
-		drawCluster(createCluster(data, loc02, loc13));
-		//row 2
-		drawCluster(createCluster(data, loc10, loc21));
-		drawCluster(createCluster(data, loc11, loc22));
-		drawCluster(createCluster(data, loc12, loc23));
-		//row 3
-		drawCluster(createCluster(data, loc20, loc31));
-		drawCluster(createCluster(data, loc21, loc32));
-		drawCluster(createCluster(data, loc22, loc33));
-		
+		long start = System.currentTimeMillis();
+		for(DataPoint d : data) {
+			boolean addedToCluster = false;
+			
+			for(int i = 0; i < gridSize; i++) {
+				for(int j = 0; j < gridSize; j++) {
+					
+					if(d.getLocation().lat <= gridLocations[i][j].lat 
+							&& d.getLocation().lat >= gridLocations[i+1][j+1].lat 
+							&& d.getLocation().lon >= gridLocations[i][j].lon 
+							&& d.getLocation().lon <= gridLocations[i+1][j+1].lon) {
+						
+						addedToCluster = true;
+						int mapKey = (i*gridSize)+j;
+						Cluster c;
+						
+						if(gridClusters.get(mapKey) != null) {
+							c = gridClusters.get(mapKey);
+							c.addDataPoint(d);
+						}
+						else {
+							c = new Cluster(i, j, gridLocations[i][j], gridLocations[i+1][j+1], 0);
+						}
+						gridClusters.put(mapKey, c);
+						
+						break;
+					}
+				}
+				if(addedToCluster)
+					break;
+			}
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("\nDone clustering in " + (end - start) + "ms\n");
+	}
+	
+	void drawClusters() {
+		for(Cluster c: gridClusters.values()) {
+			Marker m = new Marker(c, null);
+			m.draw();
+			markers.add(m);
+		}
 	}
 	
 	void drawGridLines() {
-		//draw grid lines
 		pushStyle();
-		strokeWeight(1.5f);
+		strokeWeight(1f);
 		stroke(EnumColor.DARK_GRAY);
-		line(map.locationPoint(loc10).x,map.locationPoint(loc10).y, map.locationPoint(loc13).x,map.locationPoint(loc13).y);
-		line(map.locationPoint(loc20).x,map.locationPoint(loc20).y, map.locationPoint(loc23).x,map.locationPoint(loc23).y);
-		line(map.locationPoint(loc01).x,map.locationPoint(loc01).y, map.locationPoint(loc31).x,map.locationPoint(loc31).y);
-		line(map.locationPoint(loc02).x,map.locationPoint(loc02).y, map.locationPoint(loc32).x,map.locationPoint(loc32).y);
+//		line(map.locationPoint(gridLocations[1][0]).x, map.locationPoint(gridLocations[1][0]).y, 
+//				map.locationPoint(gridLocations[1][3]).x,map.locationPoint(gridLocations[1][3]).y);
+//		line(map.locationPoint(gridLocations[2][0]).x, map.locationPoint(gridLocations[2][0]).y,
+//				map.locationPoint(gridLocations[2][3]).x, map.locationPoint(gridLocations[2][3]).y);
+//		line(map.locationPoint(gridLocations[0][1]).x, map.locationPoint(gridLocations[0][1]).y, 
+//				map.locationPoint(gridLocations[3][1]).x,map.locationPoint(gridLocations[3][1]).y);
+//		line(map.locationPoint(gridLocations[0][2]).x, map.locationPoint(gridLocations[0][2]).y, 
+//				map.locationPoint(gridLocations[3][2]).x,map.locationPoint(gridLocations[3][2]).y);
+		
+		for(int i = 1; i < gridSize; i++) {
+			line(map.locationPoint(gridLocations[i][0]).x, map.locationPoint(gridLocations[i][0]).y, 
+					map.locationPoint(gridLocations[i][gridSize]).x,map.locationPoint(gridLocations[i][gridSize]).y);
+			line(map.locationPoint(gridLocations[0][i]).x, map.locationPoint(gridLocations[0][i]).y, 
+					map.locationPoint(gridLocations[gridSize][i]).x,map.locationPoint(gridLocations[gridSize][i]).y);
+		}
+		
 		popStyle();
 	}
 	
@@ -376,35 +413,8 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		strokeWeight(1.5f);
 		stroke(EnumColor.DARK_GRAY);
 		noFill();
-		rect(mapOffsetX, mapOffsetY, mapSize.x, mapSize.y);
+		rect(mapOffsetX, mapOffsetY, mapOffsetWidth, mapOffsetWidth);
 		popStyle();
-	}
-	
-	DataPoint createCluster(ArrayList<DataPoint> data, Location topLeft, Location bottomRight) {
-
-		DataPoint cluster = new DataPoint();
-		cluster.setLocation(new Location(topLeft.lat - ((topLeft.lat - bottomRight.lat)/2),
-				bottomRight.lon + ((topLeft.lon - bottomRight.lon)/2)));
-
-		for(DataPoint d : data) {
-			
-			if(d.getLocation().lat <= topLeft.lat && d.getLocation().lat >= bottomRight.lat
-					&& d.getLocation().lon >= topLeft.lon && d.getLocation().lon <= bottomRight.lon) {
-				
-				cluster.setCrashCount(cluster.getCrashCount() + d.getCrashCount());
-			}
-		}
-		return cluster;
-	}
-	
-	void drawCluster(DataPoint cluster) {
-		Marker m = new Marker(0, 0, 0, 0, x0, y0, null, cluster, map);
-		m.draw();
-		markers.add(m);
-	}
-	
-	float scale(float i) {
-		return i * SettingsLoader.scaleFactor;
 	}
 	
 	//return the xy coordinates of offset area's top left and bottom right points
@@ -424,12 +434,14 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 
 	//return the lat-longs of offset area's top left and bottom right points
 	Location[] getBoundaryLatLong() {
-		//TODO:or is it easier to calculate from offsetX and size?
+		Location[] loc;
+		
+		//TODO: is it easier to calculate from offsetX and size?
 		Location centerLocation = map.getCenter();
-		float leftX = (map.locationPoint(centerLocation).x - mapSize.x/2);
-		float rightX = (map.locationPoint(centerLocation).x + mapSize.x/2);
-		float topY = (map.locationPoint(centerLocation).y - mapSize.y/2);
-		float bottomY = (map.locationPoint(centerLocation).y + mapSize.y/2);
+		float leftX = ((map.locationPoint(centerLocation).x) - mapSize.x/2);
+		float rightX = ((map.locationPoint(centerLocation).x) + mapSize.x/2);
+		float topY = ((map.locationPoint(centerLocation).y) - mapSize.y/2);
+		float bottomY = ((map.locationPoint(centerLocation).y) + mapSize.y/2);
 
 		Location topLeft = map.pointLocation(leftX, topY);
 		Location bottomRight = map.pointLocation(rightX, bottomY);
@@ -441,8 +453,7 @@ public class MapPanel extends Panel implements TouchEnabled,Suscribe
 		return loc;
 	}
 
-	public void forceRedrawAllComponents()
-	{
+	public void forceRedrawAllComponents() {
 		for(Button b:buttons)
 			b.setReDraw();
 		for(Marker m : markers)

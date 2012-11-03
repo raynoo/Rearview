@@ -21,7 +21,7 @@ public class SettingsLoader
 	public static PApplet papp;
 	private static PFont helvetica;
 	public static int scaleFactor;
-	private String dir;
+	public static String dir;
 
 	private SettingsLoader(PApplet papp) 
 	{
