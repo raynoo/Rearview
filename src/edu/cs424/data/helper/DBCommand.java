@@ -34,7 +34,8 @@ public class DBCommand
 	BarGraph bar1,bar2;
 	MapPanel map;
 	MainPanel mainPanel;
-	Location topLeft,bottomRight;
+	Location topLeft = new Location(47.992f, -115.022f);
+	Location bottomRight = new Location(32.401f, -74.592f);
 
 	// singleton for no apparent reasons
 	private DBCommand(MainPanel mainPanel)

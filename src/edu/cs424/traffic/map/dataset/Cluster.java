@@ -1,14 +1,14 @@
 package edu.cs424.traffic.map.dataset;
 
+import processing.core.PVector;
+
 import com.modestmaps.geo.Location;
 
 public class Cluster {
 
-	Location location;
+//	Location location;
+	PVector locationxy;
 	int crashCount;
-	
-	int row, column;
-	Location topLeft, bottomRight;
 	
 	int dataID;
 	
@@ -16,22 +16,18 @@ public class Cluster {
 		
 	}
 	
-	public Cluster(int row, int column, Location topLeft, Location bottomRight, int dataID) {
-		this.row = row;
-		this.column = column;
-		this.topLeft = topLeft;
-		this.bottomRight = bottomRight;
-		this.setLocation(new Location(topLeft.lat - ((topLeft.lat - bottomRight.lat)/2),
-				bottomRight.lon + ((topLeft.lon - bottomRight.lon)/2)));
+	public Cluster(float x, float y, int dataID) {
+		this.setLocationXY(x, y);
 		this.crashCount = 1;
+		this.dataID = dataID;
 	}
 	
 	public void addDataPoint(DataPoint dp) {
-		this.crashCount ++;
+		this.crashCount++;
 	}
 	
 	public String toString() {
-		return "Grid cell: " + row + ", " + column + " Crashes: " + crashCount;
+		return "Cluster " + dataID + ", Crashes: " + crashCount;
 	}
 	
 	public int getCrashCount() {
@@ -41,23 +37,23 @@ public class Cluster {
 	public void setCrashCount(int count) {
 		this.crashCount = count;
 	}
-
-	public void setLocation(Location loc) {
-		this.location = loc;
+	
+	public void setLocationXY(float x, float y) {
+		this.locationxy = new PVector(x, y);
 	}
 	
-	public Location getLocation() {
-		return this.location;
-	}
-	
-	public int getRow() {
-		return this.row;
-	}
-	
-	public int getColumn() {
-		return this.column;
+	public PVector getLocationXY() {
+		return this.locationxy;
 	}
 
+//	public void setLocation(Location loc) {
+//		this.location = loc;
+//	}
+//	
+//	public Location getLocation() {
+//		return this.location;
+//	}
+	
 	public int getDataID() {
 		return dataID;
 	}
