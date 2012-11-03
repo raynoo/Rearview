@@ -2,13 +2,11 @@ package edu.cs424.traffic.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import processing.core.PApplet;
 import processing.core.PVector;
 
 import com.modestmaps.InteractiveMap;
-import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
 
@@ -23,8 +21,6 @@ import edu.cs424.traffic.map.dataset.Marker;
 import edu.cs424.traffic.map.utils.Point;
 import edu.cs424.traffic.pubsub.PubSub.Event;
 import edu.cs424.traffic.pubsub.Suscribe;
-import edu.cs424.traffic.sqliteconn.ConnSqlite;
-import edu.cs424.traffic.sqliteconn.FilterData;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
@@ -57,9 +53,9 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	ArrayList<Marker> markers = new ArrayList<Marker>();
 
 	boolean firstIter = true;
-	ArrayList<DataPoint> points;
+	ArrayList<DataPoint> points = new ArrayList<DataPoint>();
 	
-	HashMap<String, ArrayList<DataPoint>> graph1Data,graph2Data;
+	HashMap<String, ArrayList<DataPoint>> graph1Data, graph2Data;
 
 	Location locationUSA = new Location(38.962f, -93.928f);
 
@@ -107,11 +103,11 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 
 				//touch on marker
-				for(Marker m : markers)
-					if(m.containsPoint(x, y)) {// && m.getCluster().getCrashCount() == 1) {
-						drawClusterInfo(m.getCluster());
-						break;
-					}
+//				for(Marker m : markers)
+//					if(m.containsPoint(x, y)) {// && m.getCluster().getCrashCount() == 1) {
+//						drawClusterInfo(m.getCluster());
+//						break;
+//					}
 
 				//else xy is on the map
 				else if (x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
@@ -133,6 +129,9 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 						initTouchPos2.x = x;
 						initTouchPos2.y = y;
 					}
+					//update visible lat longs
+					Location[] loc = getBoundaryLatLong();
+					DBCommand.getInstance().updateVisibleCoordinate(loc[0], loc[1]);
 				}
 			}
 			else if(MouseMovements.MOUSEUP == event)
@@ -233,19 +232,20 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	@Override
 	public void draw() 
 	{
-		if(firstIter == true) {
-			points = getData();
-			firstIter = false;
-		}
-
 		if(needRedraw) {
 			background(EnumColor.SOMERANDOM);
 			map.draw();
 			drawMapOffsetArea();
 			drawMapControlPanel();
 
+			//get data points
+			this.getData();
+			for(ArrayList<DataPoint> d : graph1Data.values()) {
+				points.addAll(d);
+			}
+			
 			if(clusterGridMode) {
-				PVector[] p = getBoundaryLatLong();
+				PVector[] p = getBoundaryXY();
 				grid = new Grid(p[0], p[1], gridSize);
 				grid.clusterData(points);
 				drawClusters(grid.getMarkers());
@@ -277,12 +277,12 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		drawMapButtons();
 	}
 	
-
-	
 	public void getData()
 	{
 		graph1Data = DBCommand.getInstance().getGraphData(Event.CHANGE_FILTER_GRAPH1);
 		graph2Data = DBCommand.getInstance().getGraphData(Event.CHANGE_FILTER_GRAPH2);
+		System.out.println("Graph1 " + graph1Data.toString());
+		System.out.println("Graph2 " + graph2Data.toString());
 	}
 
 	void drawClusters(ArrayList<Marker> markers) {
@@ -320,7 +320,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	}
 
 	//return the xy-coordinates of offset area's top left and bottom right points
-	public static PVector[] getBoundaryLatLong() {
+	public static PVector[] getBoundaryXY() {
 		PVector[] p;
 
 		float leftX = mapOffsetX;
@@ -332,6 +332,21 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		p[0] = new PVector(leftX, topY);
 		p[1] = new PVector(rightX, bottomY);
 		return p;
+	}
+
+	//return the lat-longs of offset area's top left and bottom right points
+	public static Location[] getBoundaryLatLong() {
+		Location[] loc;
+
+		float leftX = mapOffsetX;
+		float rightX = mapOffsetX + mapOffsetWidth;
+		float topY = mapOffsetY;
+		float bottomY = mapOffsetY + mapOffsetHeight;
+
+		loc = new Location[2];
+		loc[0] = map.pointLocation(leftX, topY);
+		loc[1] = map.pointLocation(rightX, bottomY);
+		return loc;
 	}
 	
 	void setMapProvider(int newProviderID) {
