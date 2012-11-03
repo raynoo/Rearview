@@ -1,5 +1,6 @@
 package edu.cs424.traffic.sqliteconn;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Map.Entry;
 
 import com.modestmaps.geo.Location;
 
+import edu.cs424.traffic.central.SettingsLoader;
 import edu.cs424.traffic.components.MapPanel;
 import edu.cs424.traffic.map.dataset.DataPoint;
 
@@ -15,7 +17,7 @@ public class ConnSqlite {
 	static Connection conn;
 	
 	static {
-		String sqliteDB = "jdbc:sqlite:../RearView2.sqlite";
+		String sqliteDB = "jdbc:sqlite:" + SettingsLoader.dir + File.separator + "RearView2.sqlite";
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection( sqliteDB );

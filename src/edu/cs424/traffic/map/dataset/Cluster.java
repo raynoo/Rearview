@@ -1,29 +1,65 @@
 package edu.cs424.traffic.map.dataset;
 
-import java.util.ArrayList;
-
-import processing.core.PVector;
-
 import com.modestmaps.geo.Location;
 
 public class Cluster {
 
-	static DataPoint cluster = new DataPoint();
+	Location location;
+	int crashCount;
+	
 	int row, column;
+	Location topLeft, bottomRight;
+	
+	int dataID;
 	
 	public Cluster() {
 		
 	}
 	
-	public static void drawCluster(ArrayList<DataPoint> data, Location center,
-			int row, int col, PVector topLeft, PVector bottomRight) {
+	public Cluster(int row, int column, Location topLeft, Location bottomRight, int dataID) {
+		this.row = row;
+		this.column = column;
+		this.topLeft = topLeft;
+		this.bottomRight = bottomRight;
+		this.setLocation(new Location(topLeft.lat - ((topLeft.lat - bottomRight.lat)/2),
+				bottomRight.lon + ((topLeft.lon - bottomRight.lon)/2)));
+		this.crashCount = 1;
+	}
+	
+	public void addDataPoint(DataPoint dp) {
+		this.crashCount += dp.getCrashCount();
+	}
+	
+	public String toString() {
+		return "Grid cell: " + row + ", " + column + " Crashes: " + crashCount;
+	}
+	
+	public int getCrashCount() {
+		return this.crashCount;
+	}
+	
+	public void setCrashCount(int count) {
+		this.crashCount = count;
+	}
 
-		cluster.setLocation(center);
+	public void setLocation(Location loc) {
+		this.location = loc;
+	}
+	
+	public Location getLocation() {
+		return this.location;
+	}
+	
+	public int getRow() {
+		return this.row;
+	}
+	
+	public int getColumn() {
+		return this.column;
+	}
 
-		for(DataPoint d : data) {
-			cluster.setCrashCount(cluster.getCrashCount() + d.getCrashCount());
-		}
-		
+	public int getDataID() {
+		return dataID;
 	}
 	
 }
