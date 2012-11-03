@@ -42,7 +42,7 @@ public class ButtonData
 		months.add("June");
 		months.add("July");
 		months.add("Aug");
-		months.add("Sepy");
+		months.add("Sept");
 		months.add("Oct");
 		months.add("Nov");
 		months.add("Dec");			
@@ -56,6 +56,7 @@ public class ButtonData
 		days.add("Friday");
 		days.add("Saturday");
 		days.add("Sunday");
+		days.add("No Loc. Data");
 		buttonValues.put("Days", days);
 		
 		ArrayList<String> time = new ArrayList<String>();
@@ -66,6 +67,7 @@ public class ButtonData
 		time.add("Night");
 		time.add("Late Night");
 		time.add("No Data");
+		time.add("No Loc. Data");
 		buttonValues.put("Time", time);
 		
 		ArrayList<String> hitrun = new ArrayList<String>();
@@ -74,6 +76,7 @@ public class ButtonData
 		hitrun.add("Pedestrian");
 		hitrun.add("Parked Vehicle");
 		hitrun.add("No Data");
+		hitrun.add("No Loc. Data");
 		buttonValues.put("Hit & Run", hitrun);
 		
 		ArrayList<String> holiday =  new ArrayList<String>();
@@ -89,6 +92,7 @@ public class ButtonData
 		holiday.add("Christmas");
 		holiday.add("New Year's Eve");
 		holiday.add("No Data");
+		holiday.add("No Loc. Data");
 		buttonValues.put("Holiday", holiday);
 		
 //		ArrayList<String> collision =  new ArrayList<String>();
@@ -104,6 +108,7 @@ public class ButtonData
 		highway.add("Not on NH");
 		highway.add("On NH");
 		highway.add("No Data");
+		highway.add("No Loc Data");
 		buttonValues.put("Highway", highway);
 		
 		ArrayList<String> fatality =  new ArrayList<String>();
@@ -113,15 +118,25 @@ public class ButtonData
 		fatality.add("5-10 Deaths");
 		fatality.add("> 10 Deaths");
 		fatality.add("No Data");
+		fatality.add("No Loc Data");
 		buttonValues.put("No. of Deaths", fatality);
 		
-		ArrayList<String> spdlim =  new ArrayList<String>();
-		spdlim.add("< 25mph");
-		spdlim.add("26 - 50 mph");
-		spdlim.add("51 - 75 mph");
-		spdlim.add("76 - 100 mph");
-		spdlim.add("No Data");
-		buttonValues.put("Speed Limit", spdlim);
+//		ArrayList<String> spdlim =  new ArrayList<String>();
+//		spdlim.add("< 25mph");
+//		spdlim.add("26 - 50 mph");
+//		spdlim.add("51 - 75 mph");
+//		spdlim.add("76 - 100 mph");
+//		spdlim.add("No Data");
+//		buttonValues.put("Speed Limit", spdlim);
+		
+		ArrayList<String> manncol = new ArrayList<String>();
+		manncol.add("No Collision");
+		manncol.add("Rear-End");
+		manncol.add("Head On");
+		manncol.add("Angled");
+		manncol.add("Sideswipe");
+		manncol.add("No Data");
+		manncol.add("No Loc Data");
 		
 		ArrayList<String> age =  new ArrayList<String>();
 		age.add("< 16");
@@ -130,12 +145,14 @@ public class ButtonData
 		age.add("51 - 75");
 		age.add("> 75");
 		age.add("No Data");
+		age.add("No Loc Data");
 		buttonValues.put("Driver Age", age);
 		
 		ArrayList<String> sex =  new ArrayList<String>();
 		sex.add("Male");
 		sex.add("Female");
 		sex.add("No Data");
+		sex.add("No Loc Data");
 		buttonValues.put("Driver Sex", sex);
 		
 		ArrayList<String> prevdwi =  new ArrayList<String>();
@@ -144,6 +161,7 @@ public class ButtonData
 		prevdwi.add("2");
 		prevdwi.add("> 2");
 		prevdwi.add("No Data");
+		prevdwi.add("No Loc Data");
 		buttonValues.put("Previous DWI", prevdwi);
 
 		ArrayList<String> btype =  new ArrayList<String>();
@@ -157,12 +175,14 @@ public class ButtonData
 		btype.add("Utility Vehicle");
 		btype.add("Other");
 		btype.add("No Data");
+		btype.add("No Loc Data");
 		buttonValues.put("Body Type", btype);
 		
 		ArrayList<String> speeding =  new ArrayList<String>();
 		speeding.add("Yes");
 		speeding.add("No");
 		speeding.add("No Data");
+		speeding.add("No Loc Data");
 		buttonValues.put("Speeding", speeding);
 		
 		ArrayList<String> flow =  new ArrayList<String>();
@@ -172,6 +192,7 @@ public class ButtonData
 		flow.add("One Way");
 		flow.add("Ramp");
 		flow.add("No Data");
+		flow.add("No Loc Data");
 		buttonValues.put("Traffic Flow", flow);
 		
 		ArrayList<String> alcohol =  new ArrayList<String>();
@@ -183,6 +204,7 @@ public class ButtonData
 		alcohol.add("0.4-0.5 BAC");
 		alcohol.add("> 5.0 BAC");
 		alcohol.add("No Data");
+		alcohol.add("No Loc Data");
 		buttonValues.put("Alcohol", alcohol);
 		
 		return buttonValues;		
@@ -329,27 +351,27 @@ public class ButtonData
 		dbMap.put( "No Data", "9" );
 		dbMap.put( "No Loc Data", "13" );
 
-		dbMap.put( "Yes", "2001" );
-		dbMap.put( "No", "2001" );
-		dbMap.put( "No Data", "2001" );
-		dbMap.put( "No Loc Data", "2001" );
+		dbMap.put( "Yes", "1" );
+		dbMap.put( "No", "2" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
 
-		dbMap.put( "Not Divided", "2001" );
-		dbMap.put( "Traffic Barrier", "2001" );
-		dbMap.put( "W/O Traffic Barrier", "2001" );
-		dbMap.put( "One Way", "2001" );
-		dbMap.put( "Ramp", "2001" );
-		dbMap.put( "No Data", "2001" );
+		dbMap.put( "Not Divided", "1" );
+		dbMap.put( "Traffic Barrier", "2" );
+		dbMap.put( "W/O Traffic Barrier", "3" );
+		dbMap.put( "One Way", "4" );
+		dbMap.put( "Ramp", "5" );
+		dbMap.put( "No Data", "9" );
 
-		dbMap.put( "No BAC", "2001" );
-		dbMap.put( "0.0-1.0 BAC", "2001" );
-		dbMap.put( "0.1-0.2 BAC", "2001" );
-		dbMap.put( "0.2-0.3 BAC", "2001" );
-		dbMap.put( "0.3-0.4 BAC", "2001" );
-		dbMap.put( "0.4-0.5 BAC", "2001" );
-		dbMap.put( "> 0.5 BAC", "2001" );
-		dbMap.put( "No Data", "2001" );
-		dbMap.put( "No Loc Data", "2001" );
+		dbMap.put( "No BAC", "0" );
+		dbMap.put( "0.0-1.0 BAC", "1" );
+		dbMap.put( "0.1-0.2 BAC", "2" );
+		dbMap.put( "0.2-0.3 BAC", "3" );
+		dbMap.put( "0.3-0.4 BAC", "4" );
+		dbMap.put( "0.4-0.5 BAC", "5" );
+		dbMap.put( "> 0.5 BAC", "6" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
 		
 		return dbMap;
 	}
