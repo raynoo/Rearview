@@ -7,15 +7,13 @@ public class FilterData {
 
 	HashMap<String, ArrayList<Integer>> selectedValues;
 	
-	public FilterData() {
-		selectedValues = new HashMap<String, ArrayList<Integer>>();
+	public FilterData(HashMap<String, ArrayList<Integer>> selectedValues) 
+	{
+		this.selectedValues = selectedValues;
 	}
 
 	public HashMap<String, ArrayList<Integer>> getSelectedValues() {
 		return selectedValues;
 	}
 
-	public void setSelectedValues(HashMap<String, ArrayList<Integer>> selectedValues) {
-		this.selectedValues = selectedValues;
-	}
 }

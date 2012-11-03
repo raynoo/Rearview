@@ -3,14 +3,12 @@ package edu.cs424.traffic.central;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Properties;
-
-import com.carinov.commons.aider.sql.DBAider;
-
 
 import processing.core.PApplet;
 import processing.core.PFont;
+
+import com.carinov.commons.aider.sql.DBAider;
 
 public class SettingsLoader 
 {
@@ -29,7 +27,7 @@ public class SettingsLoader
 		try 
 		{
 			dir = new File(".").getCanonicalPath();
-
+			System.out.println("SettingsLoader.SettingsLoader() " + dir);
 			if (dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase(File.separator +"lib")   || dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase(File.separator +"bin")) 
 			{
 				dir = dir.substring(0, dir.length() - 4);

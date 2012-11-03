@@ -2,7 +2,6 @@ package edu.cs424.traffic.pubsub;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class PubSub 
 {

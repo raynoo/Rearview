@@ -2,8 +2,6 @@ package edu.cs424.data.helper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ButtonData 
 {
@@ -193,8 +191,166 @@ public class ButtonData
 
 
 
-	private static HashMap<String, String> getDBMapping() {
-		// TODO Auto-generated method stub
-		return null;
+	private static HashMap<String, String> getDBMapping() 
+	{
+		
+		HashMap<String, String> dbMap = new HashMap<String, String>();
+
+		dbMap.put( "Years", "Year" );
+		dbMap.put( "Months", "iaccmon" );
+		dbMap.put( "Days", "dayofweek" );
+		dbMap.put( "Time", "sacctime" );
+		dbMap.put( "Hit & Run", "ihitrun" );
+		dbMap.put( "Holiday", "iholiday" );
+		dbMap.put( "Highway", "iholiday" );
+		dbMap.put( "No. of Deaths", "numfatal" );
+		dbMap.put( "Speed Limit", "spdlim" );
+		dbMap.put( "Driver Age", "iage" );
+		dbMap.put( "Driver Sex", "isex" );
+		dbMap.put( "Previous DWI", "iprevdwi" );
+		dbMap.put( "Body Type", "ibody" );
+		dbMap.put( "Speeding", "speeding" );
+		dbMap.put( "Alcohol", "ialcres" );
+
+		dbMap.put( "2001", "2001" );
+		dbMap.put( "2002", "2002" );
+		dbMap.put( "2003", "2003" );
+		dbMap.put( "2004", "2004" );
+		dbMap.put( "2005", "2005" );
+		dbMap.put( "2006", "2006" );
+		dbMap.put( "2007", "2007" );
+		dbMap.put( "2008", "2008" );
+		dbMap.put( "2009", "2009" );
+		dbMap.put( "2010", "2010" );
+
+		dbMap.put( "Jan", "1" );
+		dbMap.put( "Feb", "2" );
+		dbMap.put( "March", "3" );
+		dbMap.put( "April", "4" );
+		dbMap.put( "May", "5" );
+		dbMap.put( "June", "6" );
+		dbMap.put( "July", "7" );
+		dbMap.put( "Aug", "8" );
+		dbMap.put( "Sept", "9" );
+		dbMap.put( "Oct", "10" );
+		dbMap.put( "Nov", "11" );
+		dbMap.put( "Dec", "12" );
+
+		dbMap.put( "Sunday", "1" );
+		dbMap.put( "Monday", "2" );
+		dbMap.put( "Tuesday", "3" );
+		dbMap.put( "Wednesday", "4" );
+		dbMap.put( "Thursday", "5" );
+		dbMap.put( "Friday", "6" );
+		dbMap.put( "Saturday", "7" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc. Data", "13" );
+
+		dbMap.put( "Early Morn", "2" );
+		dbMap.put( "Morning", "3" );
+		dbMap.put( "Afternoon", "4" );
+		dbMap.put( "Evening", "5" );
+		dbMap.put( "Night", "6" );
+		dbMap.put( "Late Night", "1" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc. Data", "13" );
+
+		dbMap.put( "No Hit-Run", "0" );
+		dbMap.put( "Motor Vehicle", "1" );
+		dbMap.put( "Pedestrian", "2" );
+		dbMap.put( "Parked Vehicle", "3" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc. Data", "13" );
+
+		dbMap.put( "Not a Holiday", "0" );
+		dbMap.put( "New Year's Day", "1" );
+		dbMap.put( "MLK Day", "2" );
+		dbMap.put( "President's Day", "3" );
+		dbMap.put( "Memorial Day", "4" );
+		dbMap.put( "Independence Day", "5" );
+		dbMap.put( "Labor Day", "6" );
+		dbMap.put( "Columbus Day", "7" );
+		dbMap.put( "Thanksgiving", "8" );
+		dbMap.put( "Christmas", "11" );
+		dbMap.put( "New Year's Eve", "10" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
+
+		dbMap.put( "No Collision", "0" );
+		dbMap.put( "Rear-End", "1" );
+		dbMap.put( "Head On", "2" );
+		dbMap.put( "Angled", "4" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "Sideswipe", "5" );
+		dbMap.put( "No Loc Data", "13" );
+
+		dbMap.put( "Not on NH", "0" );
+		dbMap.put( "On NH", "1" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
+
+		dbMap.put( "Single Death", "1" );
+		dbMap.put( "2 Deaths", "2" );
+		dbMap.put( "3-5 Deaths", "3" );
+		dbMap.put( "5-10 Deaths", "4" );
+		dbMap.put( "> 10 Deaths", "5" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "2001" );
+
+		dbMap.put( "< 16", "1" );
+		dbMap.put( "16 - 24", "2" );
+		dbMap.put( "25 - 50", "3" );
+		dbMap.put( "51 - 75", "4" );
+		dbMap.put( "> 75", "5" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
+
+		dbMap.put( "Male", "1" );
+		dbMap.put( "Female", "2" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
+
+		dbMap.put( "0", "0" );
+		dbMap.put( "1", "1" );
+		dbMap.put( "2", "2" );
+		dbMap.put( "> 2", "3" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
+
+		dbMap.put( "Car", "1" );
+		dbMap.put( "Motorcycle", "2" );
+		dbMap.put( "Van", "3" );
+		dbMap.put( "Bus", "4" );
+		dbMap.put( "Truck", "5" );
+		dbMap.put( "Pickup Truck", "6" );
+		dbMap.put( "Light Vehicle", "7" );
+		dbMap.put( "Utility Vehicle", "8" );
+		dbMap.put( "Other", "10" );
+		dbMap.put( "No Data", "9" );
+		dbMap.put( "No Loc Data", "13" );
+
+		dbMap.put( "Yes", "2001" );
+		dbMap.put( "No", "2001" );
+		dbMap.put( "No Data", "2001" );
+		dbMap.put( "No Loc Data", "2001" );
+
+		dbMap.put( "Not Divided", "2001" );
+		dbMap.put( "Traffic Barrier", "2001" );
+		dbMap.put( "W/O Traffic Barrier", "2001" );
+		dbMap.put( "One Way", "2001" );
+		dbMap.put( "Ramp", "2001" );
+		dbMap.put( "No Data", "2001" );
+
+		dbMap.put( "No BAC", "2001" );
+		dbMap.put( "0.0-1.0 BAC", "2001" );
+		dbMap.put( "0.1-0.2 BAC", "2001" );
+		dbMap.put( "0.2-0.3 BAC", "2001" );
+		dbMap.put( "0.3-0.4 BAC", "2001" );
+		dbMap.put( "0.4-0.5 BAC", "2001" );
+		dbMap.put( "> 0.5 BAC", "2001" );
+		dbMap.put( "No Data", "2001" );
+		dbMap.put( "No Loc Data", "2001" );
+		
+		return dbMap;
 	}
 }

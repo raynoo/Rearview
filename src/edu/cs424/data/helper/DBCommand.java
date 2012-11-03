@@ -2,11 +2,13 @@ package edu.cs424.data.helper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.modestmaps.geo.Location;
 
 import edu.cs424.traffic.components.BarGraph;
+import edu.cs424.traffic.components.BarGraph.Type;
 import edu.cs424.traffic.components.MainPanel;
 import edu.cs424.traffic.components.MapPanel;
 import edu.cs424.traffic.map.dataset.DataPoint;
@@ -41,10 +43,15 @@ public class DBCommand
 		this.map = mainPanel.mapPanel;
 		this.bar1 = mainPanel.graph1;
 		this.bar2 = mainPanel.graph2;
+		
+		filteredData1 = new HashMap<String, ArrayList<DataPoint>>();
+		filteredData2 = new HashMap<String, ArrayList<DataPoint>>();
+		unFilteredData1 = new HashMap<String, ArrayList<DataPoint>>();
+		unFilteredData2 = new HashMap<String, ArrayList<DataPoint>>();
 
 	}
 
-	// used when main panel in inited.. so stupid
+	// used when main panel in intiated.. so stupid
 	public static DBCommand getInstance(MainPanel mainPanel)
 	{
 		if( instance == null )
@@ -145,22 +152,87 @@ public class DBCommand
 		mainPanel.forceRedrawAllComponents();
 	}
 	
-	public void notifyTimeFilterChange(Event event)
+	
+	
+	public void notifyTimeFilterChange(Event event,Type type,String yearValue , String monthValue)
 	{
 		if( event == Event.CHANGE_FILTER_GRAPH1 )
 		{
-			updateFilter(filterSelection1, event);
+			FilterData data = convertShitForDrillDown( filterSelection1 ,type , yearValue , monthValue);
+			unFilteredData1 = ConnSqlite.getCrashData(data, type);
+			
+			filterData(filteredData1, unFilteredData1);
 		}
 		else if( event == Event.CHANGE_FILTER_GRAPH2 )
 		{
-			updateFilter(filterSelection2, event);
-		}		
+			FilterData data = convertShitForDrillDown( filterSelection2 ,type , yearValue , monthValue);
+			unFilteredData2 = ConnSqlite.getCrashData(data, type);
+			
+			filterData(filteredData2, unFilteredData2);
+		}
+		
+		mainPanel.forceRedrawAllComponents();		
 	}	
+	
+	
+	
+	private FilterData convertShitForDrillDown( HashMap<String, Set<String>> filters , Type type , String yearValue , String monthValue)
+	{
+		if(type == Type.Year)
+		{
+			return convertShit(filters);
+		}
+		else if ( type == Type.Month )
+		{
+			HashMap<String, Set<String>> duplicate = new HashMap<String, Set<String>>(filters);			
+			duplicate.remove("Years");
+			Set<String> temp = new HashSet<String>();
+			temp.add(yearValue);
+			duplicate.put("Years", temp);
+			
+			return convertShit(duplicate);
+		}
+		else
+		{		
+			HashMap<String, Set<String>> duplicate = new HashMap<String, Set<String>>(filters);	
+			duplicate.remove("Years");
+			Set<String> temp = new HashSet<String>();
+			temp.add(yearValue);
+			duplicate.put("Years", temp);
+			
+			duplicate.remove("Months");
+			Set<String> temp1 = new HashSet<String>();
+			temp1.add(monthValue);
+			duplicate.put("Months", temp1);
+			
+			return convertShit(duplicate);
+		}
+	}
 	
 	// from button shit to db shit
 	private FilterData convertShit(  HashMap<String, Set<String>> filterData )
 	{
-		return null;
+		HashMap<String, ArrayList<Integer>> selectedValues = new HashMap<String, ArrayList<Integer>>();
+		
+		for(String key : filterData.keySet() )
+		{
+			Set<String> temp = filterData.get(key);
+			
+			if( temp != null && temp.size() > 0 )
+			{
+				String columnName = ButtonData.buttonValueDBMapping.get(key);
+				ArrayList<Integer> columnValues = new ArrayList<Integer>();
+				
+				for(String val : temp)
+				{
+					columnValues.add(new Integer(ButtonData.buttonValueDBMapping.get(val)));
+				}
+				
+				selectedValues.put(columnName, columnValues);
+			}
+		}
+		
+		return new FilterData(selectedValues);
 	}
 
 

@@ -2,14 +2,10 @@ package edu.cs424.traffic.components;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
-
-import sun.security.pkcs11.Secmod.DbMode;
 
 import edu.cs424.data.helper.ButtonData;
 import edu.cs424.data.helper.DBCommand;
-import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
@@ -139,6 +135,7 @@ public class FilterPanel extends Panel implements TouchEnabled
 	
 	public void updateFilter(Event event)
 	{
+		PubSub.publishEvent(event, null);
 		DBCommand.getInstance().updateFilter(selectedButtonList, event);
 	}
 

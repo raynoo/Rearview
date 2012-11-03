@@ -1,13 +1,15 @@
 package edu.cs424.traffic.components;
 
+import static edu.cs424.data.helper.AppConstants.updateButtonHeight;
+import static edu.cs424.data.helper.AppConstants.updateButtonWidth;
+import static edu.cs424.data.helper.AppConstants.updateButtonX;
+import static edu.cs424.data.helper.AppConstants.updateButtonY;
 import edu.cs424.data.helper.AppConstants;
-import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
 import edu.cs424.traffic.pubsub.PubSub.Event;
-import static edu.cs424.data.helper.AppConstants.*;
 
 public class FilterHolder extends Panel implements TouchEnabled
 {
@@ -24,6 +26,7 @@ public class FilterHolder extends Panel implements TouchEnabled
 		super(x0, y0, width, height, parentX0, parentY0);
 	
 		this.tab = tab;
+		this.toPublish = toPublish;
 		// TODO Auto-generated constructor stub
 	}
 	@Override
