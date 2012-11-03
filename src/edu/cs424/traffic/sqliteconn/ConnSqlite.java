@@ -1,19 +1,19 @@
 package edu.cs424.traffic.sqliteconn;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.modestmaps.geo.Location;
 
-<<<<<<< HEAD
-import edu.cs424.traffic.components.BarGraph.Type;
-=======
 import edu.cs424.traffic.central.SettingsLoader;
->>>>>>> 5ff2be740d5e738d51ceefbe1fac06aaf269376b
-import edu.cs424.traffic.components.MapPanel;
+import edu.cs424.traffic.components.BarGraph.Type;
 import edu.cs424.traffic.map.dataset.DataPoint;
 
 public class ConnSqlite {

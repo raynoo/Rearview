@@ -27,7 +27,7 @@ public class Cluster {
 	}
 	
 	public void addDataPoint(DataPoint dp) {
-		this.crashCount += dp.getCrashCount();
+		this.crashCount ++;
 	}
 	
 	public String toString() {

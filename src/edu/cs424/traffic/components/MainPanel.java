@@ -1,13 +1,30 @@
 package edu.cs424.traffic.components;
 
-import processing.core.PApplet;
-import edu.cs424.data.helper.AppConstants;
+import static edu.cs424.data.helper.AppConstants.controlPanelHeight;
+import static edu.cs424.data.helper.AppConstants.controlPanelWidth;
+import static edu.cs424.data.helper.AppConstants.controlPanelX;
+import static edu.cs424.data.helper.AppConstants.controlPanelY;
+import static edu.cs424.data.helper.AppConstants.fullScreenHeight;
+import static edu.cs424.data.helper.AppConstants.fullScreenWidth;
+import static edu.cs424.data.helper.AppConstants.graph1Height;
+import static edu.cs424.data.helper.AppConstants.graph1Width;
+import static edu.cs424.data.helper.AppConstants.graph1X;
+import static edu.cs424.data.helper.AppConstants.graph1Y;
+import static edu.cs424.data.helper.AppConstants.graph2Height;
+import static edu.cs424.data.helper.AppConstants.graph2Width;
+import static edu.cs424.data.helper.AppConstants.graph2X;
+import static edu.cs424.data.helper.AppConstants.graph2Y;
+import static edu.cs424.data.helper.AppConstants.mapPanelHeight;
+import static edu.cs424.data.helper.AppConstants.mapPanelWidth;
+import static edu.cs424.data.helper.AppConstants.mapPanelX;
+import static edu.cs424.data.helper.AppConstants.mapPanelY;
+import static edu.cs424.data.helper.AppConstants.tabPanelHeight;
+import edu.cs424.data.helper.DBCommand;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.gui.Label;
 import edu.cs424.traffic.pubsub.PubSub.Event;
-import static edu.cs424.data.helper.AppConstants.*;
 
 public class MainPanel extends Panel implements TouchEnabled
 {	
@@ -37,52 +54,59 @@ public class MainPanel extends Panel implements TouchEnabled
 	public boolean touch(int ID,float x, float y, MouseMovements event)
 	{
 		// handle the stuff that should happen on touch
-		if(event == MouseMovements.MOUSEDOWN)
-		{
-			if(label1.containsPoint(x, y) && !label1.isPressed)
-			{
-				label1.setPressed(true);
-				label2.setPressed(false);
-				label3.setPressed(false);
-				isTab1 = true;
-				isTab2 = false;
-			}
-			else if(label2.containsPoint(x, y) && !label2.isPressed)
-			{
-				label2.setPressed(true);
-				label1.setPressed(false);
-				label3.setPressed(false);
-				isTab1 = false;
-				isTab2 = true;
-			}	
-			else if(graph1.containsPoint(x, y))
-			{
-				graph1.touch(x, y, event);
-			}
-			else if(graph2.containsPoint(x, y))
-			{
-				graph2.touch(x, y, event);
-			}
-		}		
+				if(event == MouseMovements.MOUSEDOWN)
+				{
+					if(label1.containsPoint(x, y) && !label1.isPressed)
+					{
+						label1.setPressed(true);
+						label2.setPressed(false);
+						label3.setPressed(false);
+						isTab1 = true;
+						isTab2 = false;
+					}
+					else if(label2.containsPoint(x, y) && !label2.isPressed)
+					{
+						label2.setPressed(true);
+						label1.setPressed(false);
+						label3.setPressed(false);
+						isTab1 = false;
+						isTab2 = true;
+					}	
+					else if(graph1.containsPoint(x, y))
+					{
+						graph1.touch(x, y, event);
+					}
+					else if(graph2.containsPoint(x, y))
+					{
+						graph2.touch(x, y, event);
+					}
+				}		
 
-		if(mapPanel.containsPoint(x, y))
-		{
-			mapPanel.touch(ID,x, y, event);
-		}
+				if(mapPanel.containsPoint(x, y))
+				{
+					mapPanel.touch(ID,x, y, event);
+				}
 
-		// after touch has been handled redraw 
-		mapPanel.forceRedrawAllComponents();
-		if(isTab1)
-		{
-			tab1.touch(x, y, event);
-			tab1.forceRedrawAllComponents();
-		}
-		else if(isTab2)
-		{
-			tab2.touch(x, y, event);
-			tab2.forceRedrawAllComponents();
-		}
-		return false;
+				// after touch has been handled redraw 
+				mapPanel.forceRedrawAllComponents();
+				if(isTab1)
+				{
+					tab1.touch(x, y, event);
+					tab1.forceRedrawAllComponents();
+				}
+				else if(isTab2)
+				{
+					tab2.touch(x, y, event);
+					tab2.forceRedrawAllComponents();
+				}
+				
+				label1.forceRedrawAllComponents();
+				label2.forceRedrawAllComponents();
+				label3.forceRedrawAllComponents();
+				graph1.forceRedrawAllComponents();
+				graph2.forceRedrawAllComponents();
+				needRedraw = true;
+				return false;
 	}
 
 	@Override
@@ -93,6 +117,8 @@ public class MainPanel extends Panel implements TouchEnabled
 
 	public void setup() 
 	{	
+		
+		
 		tab1 = new Tab1(controlPanelX, controlPanelY, controlPanelWidth, controlPanelHeight, x0, y0);
 		tab1.setup();
 		addTouchSubscriber(tab1);
@@ -116,15 +142,19 @@ public class MainPanel extends Panel implements TouchEnabled
 
 		mapPanel = new MapPanel(mapPanelX, mapPanelY, mapPanelWidth, mapPanelHeight, x0, y0);
 		mapPanel.setup();
+		DBCommand.getInstance(this);
 	}
 	
 	public void forceRedrawAllComponents()
 	{
+		mapPanel.forceRedrawAllComponents();
 		label1.forceRedrawAllComponents();
 		label2.forceRedrawAllComponents();
 		label3.forceRedrawAllComponents();
 		graph1.forceRedrawAllComponents();
 		graph2.forceRedrawAllComponents();
+		
+		
 		needRedraw = true;
 	}
 

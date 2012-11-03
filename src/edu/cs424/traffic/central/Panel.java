@@ -1,18 +1,14 @@
 package edu.cs424.traffic.central;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-import edu.cs424.traffic.components.MainPanel.MouseMovements;
-
-
 
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PShape;
 import processing.core.PVector;
+import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
 public abstract class Panel 
 {

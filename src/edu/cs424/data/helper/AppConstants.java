@@ -1,8 +1,5 @@
 package edu.cs424.data.helper;
 
-import static edu.cs424.data.helper.AppConstants.mapOffsetWidth;
-import static edu.cs424.data.helper.AppConstants.mapOffsetX;
-import static edu.cs424.data.helper.AppConstants.mapPanelWidth;
 
 public class AppConstants {
     

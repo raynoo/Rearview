@@ -2,7 +2,6 @@ package edu.cs424.traffic.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import edu.cs424.data.helper.ButtonData;
 import edu.cs424.traffic.central.EnumColor;
@@ -25,6 +24,7 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 	@Override
 	public boolean touch(float x, float y, MouseMovements event) 
 	{
+		System.out.println("FilterValuePanel.touch()");
 		propagateTouch(x, y, event);
 		return false;
 	}

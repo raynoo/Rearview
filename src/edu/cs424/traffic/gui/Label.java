@@ -2,9 +2,6 @@ package edu.cs424.traffic.gui;
 
 import processing.core.PApplet;
 import edu.cs424.traffic.central.EnumColor;
-import edu.cs424.traffic.central.Panel;
-import edu.cs424.traffic.central.TouchEnabled;
-import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
 public class Label extends Button
 {

@@ -1,11 +1,12 @@
 package edu.cs424.traffic.central;
 
-import edu.cs424.traffic.components.MainPanel;
-import edu.cs424.traffic.components.MainPanel.MouseMovements;
+import static edu.cs424.data.helper.AppConstants.fullScreenHeight;
+import static edu.cs424.data.helper.AppConstants.fullScreenWidth;
 import omicronAPI.OmicronAPI;
 import omicronAPI.OmicronTouchListener;
 import processing.core.PApplet;
-import static edu.cs424.data.helper.AppConstants.*;
+import edu.cs424.traffic.components.MainPanel;
+import edu.cs424.traffic.components.MainPanel.MouseMovements;
 
 public class Main extends PApplet implements OmicronTouchListener
 {

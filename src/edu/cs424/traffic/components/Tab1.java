@@ -1,5 +1,17 @@
 package edu.cs424.traffic.components;
 
+import static edu.cs424.data.helper.AppConstants.filterHolderHeight;
+import static edu.cs424.data.helper.AppConstants.filterHolderWidth;
+import static edu.cs424.data.helper.AppConstants.filterHolderX;
+import static edu.cs424.data.helper.AppConstants.filterHolderY;
+import static edu.cs424.data.helper.AppConstants.filterValuesX;
+import static edu.cs424.data.helper.AppConstants.graph1ButtonX;
+import static edu.cs424.data.helper.AppConstants.graph1ButtonY;
+import static edu.cs424.data.helper.AppConstants.graph2ButtonX;
+import static edu.cs424.data.helper.AppConstants.graph2ButtonY;
+import static edu.cs424.data.helper.AppConstants.graphButtonHeight;
+import static edu.cs424.data.helper.AppConstants.graphButtonWidth;
+import static edu.cs424.data.helper.AppConstants.selectedValuesX;
 import processing.core.PConstants;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
@@ -7,8 +19,6 @@ import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
 import edu.cs424.traffic.pubsub.PubSub.Event;
-
-import static edu.cs424.data.helper.AppConstants.*;
 
 public class Tab1 extends Panel implements TouchEnabled
 {
@@ -49,9 +59,9 @@ public class Tab1 extends Panel implements TouchEnabled
 			else
 			{
 				if(isHolder1)
-					filterHolder1.propagateTouch(x, y, event);
+					filterHolder1.touch(x, y, event);
 				else
-					filterHolder2.propagateTouch(x, y, event);
+					filterHolder2.touch(x, y, event);
 			}
 		}
 
