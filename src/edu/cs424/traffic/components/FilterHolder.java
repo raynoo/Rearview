@@ -5,6 +5,7 @@ import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
+import edu.cs424.traffic.gui.Button;
 import edu.cs424.traffic.pubsub.PubSub.Event;
 import static edu.cs424.data.helper.AppConstants.*;
 
@@ -14,24 +15,33 @@ public class FilterHolder extends Panel implements TouchEnabled
 	public FilterValuePanel filterValues;
 	public ShowSelectedAttribute showSelected;
 	public Tab1 tab;
+	Button updateButton;
+
 	Event toPublish;
 
 	public FilterHolder(float x0, float y0, float width, float height,
 			float parentX0, float parentY0,Tab1 tab,Event toPublish) {
 		super(x0, y0, width, height, parentX0, parentY0);
-		this.toPublish = toPublish;
+	
 		this.tab = tab;
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public boolean touch(float x, float y, MouseMovements event) {
-		propagateTouch(x, y, event);
+
+		if ( updateButton.containsPoint(x, y) )
+		{
+			filter.updateFilter(toPublish);
+		}
+		else
+			propagateTouch(x, y, event);
+		
 		return false;
 	}
 
 	public void setup() 
 	{
-		filter = new FilterPanel(AppConstants.filterButtonX, AppConstants.filterButtonY, 255, 95, x0, y0,this,toPublish);
+		filter = new FilterPanel(AppConstants.filterButtonX, AppConstants.filterButtonY, 255, 95, x0, y0,this);
 		filter.setup();
 		addTouchSubscriber(filter);
 
@@ -45,6 +55,8 @@ public class FilterHolder extends Panel implements TouchEnabled
 		showSelected.setup();
 		addTouchSubscriber(showSelected);
 
+		updateButton = new Button(updateButtonX, updateButtonY, updateButtonWidth, updateButtonHeight, x0, y0, "Apply", true);
+		updateButton.setup();
 	}
 
 	@Override
@@ -58,16 +70,17 @@ public class FilterHolder extends Panel implements TouchEnabled
 			filter.draw();
 			filterValues.draw();
 			showSelected.draw();
+			updateButton.draw();
 			needRedraw = false;
 		}
 	}
 
 	public void forceRedraw()
 	{
-
 		filter.forceRedrawAllComponents();
 		filterValues.forceRedrawAllComponents();
 		showSelected.forceRedrawAllComponents();
+		updateButton.setReDraw();
 		needRedraw = true;
 	}
 

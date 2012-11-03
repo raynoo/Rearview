@@ -4,42 +4,37 @@ import com.modestmaps.geo.Location;
 
 public class DataPoint {
 	
-	private Location location;
-	private int crashCount;
-	private boolean isCluster;
+	String uid;
+	private Location d;
+	String when;  // it can have a year/month/day of week
 	
-	public DataPoint() {
-		
-	}
 	
-	//isCluster = false at all times. it is used only during creation of clusters.
-	public DataPoint(double lat, double lon, int count, boolean isCluster) {
-		this.location = new Location((float)lat, (float)lon);
-		this.crashCount = count;
-		this.isCluster = isCluster;
-	}
-	
-	public String toString() {
-		return "Location: " + this.location + ", Crash count: " + this.crashCount;
-	}
-	
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-	
-	public Location getLocation() {
-		return location;
-	}
-	
-	public int getCrashCount() {
-		return crashCount;
-	}
-	
-	public void setCrashCount(int count) {
-		this.crashCount = count;
+	public DataPoint(String uid , Location d,String when) 
+	{
+		this.uid = uid;
+		this.when = when;
+		this.d = d;
 	}
 
-	public boolean isCluster() {
-		return isCluster;
+
+	public Location getLocation() {
+		return d;
 	}
+
+	public String getWhen() {
+		return when;
+	}
+
+	public boolean isInside(Location topLeft,Location bottomRight)
+	{
+		if(d.lat <= topLeft.lat && d.lat >= bottomRight.lat
+				&& d.lon >= topLeft.lon && d.lon <= bottomRight.lon) 
+		{
+			return true;
+		}
+		else
+			return false;
+	}
+	
 }
+

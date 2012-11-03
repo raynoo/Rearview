@@ -1,0 +1,167 @@
+package edu.cs424.data.helper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
+import com.modestmaps.geo.Location;
+
+import edu.cs424.traffic.components.BarGraph;
+import edu.cs424.traffic.components.MainPanel;
+import edu.cs424.traffic.components.MapPanel;
+import edu.cs424.traffic.map.dataset.DataPoint;
+import edu.cs424.traffic.pubsub.PubSub.Event;
+import edu.cs424.traffic.sqliteconn.ConnSqlite;
+import edu.cs424.traffic.sqliteconn.FilterData;
+
+public class DBCommand 
+{
+	static DBCommand instance = null;
+
+	private HashMap<String, ArrayList<DataPoint>> unFilteredData1;
+	private HashMap<String, ArrayList<DataPoint>> unFilteredData2;
+	
+	private HashMap<String, ArrayList<DataPoint>> filteredData1;
+	private HashMap<String, ArrayList<DataPoint>> filteredData2;
+	
+	// storing the filter selection
+	// so that when we switch from year/month.day we can use this
+	HashMap<String, Set<String>>filterSelection1;
+	HashMap<String, Set<String>>filterSelection2;
+
+	BarGraph bar1,bar2;
+	MapPanel map;
+	MainPanel mainPanel;
+	Location topLeft,bottomRight;
+
+	// singleton for no apparent reasons
+	private DBCommand(MainPanel mainPanel)
+	{
+		this.mainPanel = mainPanel;
+		this.map = mainPanel.mapPanel;
+		this.bar1 = mainPanel.graph1;
+		this.bar2 = mainPanel.graph2;
+
+	}
+
+	// used when main panel in inited.. so stupid
+	public static DBCommand getInstance(MainPanel mainPanel)
+	{
+		if( instance == null )
+		{
+			instance = new DBCommand(mainPanel);
+		}		
+		return instance;
+	}
+	// for all the other time
+	public static DBCommand getInstance()
+	{
+		if(instance == null)
+		{
+			System.out.println("DBCommand.getInstance()" + "This should be called before the other get instance");
+			System.exit(1);
+		}
+		
+		return instance;
+	}
+
+	public void updateFilter( HashMap<String, Set<String>>filterSelection , Event event)
+	{
+		// getting the new data
+		if(event == Event.CHANGE_FILTER_GRAPH1)
+		{
+			filterSelection1 = filterSelection;
+			unFilteredData1 = ConnSqlite.getCrashData( convertShit( filterSelection ), bar1.currentType);
+		}
+		else if(event == Event.CHANGE_FILTER_GRAPH2)
+		{
+			filterSelection2 = filterSelection;
+			unFilteredData2 = ConnSqlite.getCrashData( convertShit( filterSelection ), bar2.currentType);
+		}
+		else
+		{
+			System.out.println("DBCommand.updateFilter()" + " MAJOR ERROR");
+		}
+		
+		// after getting the data filter data will have only those points that is within the coordinate
+
+		if(event == event.CHANGE_FILTER_GRAPH1)
+		{			
+			filterData(filteredData1, unFilteredData1);
+		}
+		else
+		{			
+			filterData(filteredData2, unFilteredData2);
+		}		
+		
+		mainPanel.forceRedrawAllComponents();
+	}
+
+	private void filterData( HashMap<String, ArrayList<DataPoint>> filteredData , HashMap<String, ArrayList<DataPoint>> unFilteredData)
+	{	
+		filteredData.clear();
+		for(String key : unFilteredData.keySet())
+		{
+			ArrayList<DataPoint> toStore = new ArrayList<DataPoint>();
+			ArrayList<DataPoint> temp = unFilteredData.get(key);
+			
+			for(DataPoint dp : temp)
+			{
+				if(dp.isInside(topLeft, bottomRight))
+				{
+					toStore.add(dp);
+				}
+			}
+			
+			filteredData.put(key, toStore);
+		}		
+	}
+
+	public HashMap<String, ArrayList<DataPoint>> getGraphData(Event event)
+	{
+		if( event == Event.CHANGE_FILTER_GRAPH1 )
+		{
+			return filteredData1;
+		}
+		else if( event == Event.CHANGE_FILTER_GRAPH2 )
+		{
+			return filteredData2;
+		}
+		else
+		{
+			System.out.println("DBCommand.getGraphData()" + "exception is here");
+			return null;			
+		}
+	}
+
+	public  void updateVisibleCoordinate(Location topLeft, Location bottomRight)
+	{
+		this.topLeft = topLeft;
+		this.bottomRight = bottomRight;
+		
+		filterData(filteredData1, unFilteredData1);
+		filterData(filteredData2, unFilteredData2);
+		
+		mainPanel.forceRedrawAllComponents();
+	}
+	
+	public void notifyTimeFilterChange(Event event)
+	{
+		if( event == Event.CHANGE_FILTER_GRAPH1 )
+		{
+			updateFilter(filterSelection1, event);
+		}
+		else if( event == Event.CHANGE_FILTER_GRAPH2 )
+		{
+			updateFilter(filterSelection2, event);
+		}		
+	}	
+	
+	// from button shit to db shit
+	private FilterData convertShit(  HashMap<String, Set<String>> filterData )
+	{
+		return null;
+	}
+
+
+}

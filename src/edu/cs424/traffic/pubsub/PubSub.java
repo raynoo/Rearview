@@ -7,8 +7,8 @@ import java.util.HashSet;
 public class PubSub 
 {
 	public enum Event{
-		ATTRIBUTE_SELECT_DESELECT_GRAPH1,
-		ATTRIBUTE_SELECT_DESELECT_GRAPH2;
+		CHANGE_FILTER_GRAPH1,
+		CHANGE_FILTER_GRAPH2
 	}
 	
 	private static HashMap<Event , ArrayList<Suscribe> > listners = new HashMap<Event, ArrayList<Suscribe>>();

@@ -8,20 +8,19 @@ import java.util.Set;
 public class ButtonData 
 {
 	public static HashMap<String,ArrayList<String>> buttonValues;
+	public static HashMap<String,String> buttonValueDBMapping;
 
 	static 
 	{
 		buttonValues = getButtonData();
+		buttonValueDBMapping = getDBMapping();
 	}
 
+	
+	
 	private static HashMap<String,ArrayList<String>> getButtonData()
 	{
 		HashMap<String,ArrayList<String>> buttonValues = new HashMap<String, ArrayList<String>>();
-
-//		for(int i = 0 ; i <  14 ; i++)
-//		{
-//			buttonValues.put("text " +i, new ArrayList<String>());
-//		}
 		
 		ArrayList<String> years = new ArrayList<String>();
 		years.add("2001");
@@ -190,5 +189,12 @@ public class ButtonData
 		
 		return buttonValues;		
 
+	}
+
+
+
+	private static HashMap<String, String> getDBMapping() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

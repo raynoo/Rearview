@@ -5,7 +5,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import sun.security.pkcs11.Secmod.DbMode;
+
 import edu.cs424.data.helper.ButtonData;
+import edu.cs424.data.helper.DBCommand;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
@@ -21,14 +24,13 @@ public class FilterPanel extends Panel implements TouchEnabled
 	HashMap<String,FilterButton> filterButtons;
 	public HashMap<String, Set<String>> selectedButtonList;
 	String currentFilter;
-	Event toPublish;
+	
 
 	public FilterPanel(float x0, float y0, float width, float height,
-			float parentX0, float parentY0,FilterHolder filterHolder,Event toPublish)
+			float parentX0, float parentY0,FilterHolder filterHolder)
 	{
 		super(x0, y0, width, height, parentX0, parentY0);		
-		this.filterHolder = filterHolder;
-		this.toPublish = toPublish;
+		this.filterHolder = filterHolder;	
 	}
 
 
@@ -108,9 +110,7 @@ public class FilterPanel extends Panel implements TouchEnabled
 		else
 		{
 			selectedButtonList.get(currentFilter).remove(buttontext);
-		}
-		PubSub.publishEvent(toPublish, selectedButtonList);
-		
+		}		
 	}
 
 	public void selectDeselectbutton(String parent,String subvalue,boolean isPressed)
@@ -125,7 +125,6 @@ public class FilterPanel extends Panel implements TouchEnabled
 		}
 		
 		filterHolder.filterValues.selectDeselectbutton(parent,subvalue,isPressed);
-		PubSub.publishEvent(toPublish, selectedButtonList);		
 		setReDraw();
 	}
 	
@@ -135,8 +134,12 @@ public class FilterPanel extends Panel implements TouchEnabled
 		{
 			button.setReDraw();
 		}
-		setReDraw();
-		
+		setReDraw();		
+	}
+	
+	public void updateFilter(Event event)
+	{
+		DBCommand.getInstance().updateFilter(selectedButtonList, event);
 	}
 
 }

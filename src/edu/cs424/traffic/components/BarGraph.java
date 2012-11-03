@@ -33,9 +33,10 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 	float highest = 100;
 	public HashMap<String, Set<String>> selectedButtonList;
 	Event suscribed;
-	Type currentType = Type.Year;
+	public Type currentType = Type.Year;
 	Button backButton;
 	ArrayList<Rectangle> currentRectList;
+	String yearVal,monthVal;
 
 	public BarGraph(float x0, float y0, float width, float height,
 			float parentX0, float parentY0,Event toSuscribe) 
@@ -115,6 +116,11 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 		public boolean containsPoint(float x, float y) {
 			return x > x1 && x < x1 + width && y > y1 && y < y1 + height;
 		}
+		
+		public String getValue()
+		{
+			return value;
+		}
 	}
 
 	@Override
@@ -127,12 +133,11 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 				if(currentType == Type.Month)
 				{
 					currentType = Type.Year;
-					setReDraw();
+					
 				}
 				else if(currentType == Type.Day)
 				{
-					currentType = Type.Month;
-					setReDraw();
+					currentType = Type.Month;					
 				}
 			}
 			else
@@ -141,7 +146,22 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 				{
 					if(temp.containsPoint(x, y))
 					{
-						System.out.println("BarGraph.touch()" + " ****");
+						if( currentType == Type.Year )
+						{
+							yearVal = temp.getValue();
+							monthVal = null;
+							currentType = Type.Month;
+							break;
+						}
+						else if( currentType == Type.Month )
+						{
+							monthVal = temp.getValue();
+							break;
+						}
+						else
+						{
+							// if it is a day dont do anything
+						}
 					}
 				}
 			}

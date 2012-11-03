@@ -12,12 +12,13 @@ import static edu.cs424.data.helper.AppConstants.*;
 public class MainPanel extends Panel implements TouchEnabled
 {	
 	public BarGraph graph1,graph2;
+	public MapPanel mapPanel;
 	Label label1,label2,label3;
 
 	boolean isTab1 = true,isTab2 = false;
 	Tab1 tab1;
 	Tab2 tab2;
-	MapPanel mapPanel;
+	
 
 	public enum MouseMovements{
 		MOUSEUP,
@@ -81,15 +82,6 @@ public class MainPanel extends Panel implements TouchEnabled
 			tab2.touch(x, y, event);
 			tab2.forceRedrawAllComponents();
 		}
-		
-		
-
-		label1.forceRedrawAllComponents();
-		label2.forceRedrawAllComponents();
-		label3.forceRedrawAllComponents();
-		graph1.forceRedrawAllComponents();
-		graph2.forceRedrawAllComponents();
-		needRedraw = true;
 		return false;
 	}
 
@@ -116,14 +108,24 @@ public class MainPanel extends Panel implements TouchEnabled
 		label3 = new Label(890, 225, 100, tabPanelHeight, x0, y0, "Search",false);	
 		label3.setup();
 
-		graph1  = new BarGraph(graph1X, graph1Y, graph1Width, graph1Height, x0, y0,Event.ATTRIBUTE_SELECT_DESELECT_GRAPH1);
+		graph1  = new BarGraph(graph1X, graph1Y, graph1Width, graph1Height, x0, y0,Event.CHANGE_FILTER_GRAPH1);
 		graph1.setup();
 
-		graph2  = new BarGraph(graph2X, graph2Y, graph2Width, graph2Height, x0, y0,Event.ATTRIBUTE_SELECT_DESELECT_GRAPH2);	
+		graph2  = new BarGraph(graph2X, graph2Y, graph2Width, graph2Height, x0, y0,Event.CHANGE_FILTER_GRAPH2);	
 		graph2.setup();
 
 		mapPanel = new MapPanel(mapPanelX, mapPanelY, mapPanelWidth, mapPanelHeight, x0, y0);
 		mapPanel.setup();
+	}
+	
+	public void forceRedrawAllComponents()
+	{
+		label1.forceRedrawAllComponents();
+		label2.forceRedrawAllComponents();
+		label3.forceRedrawAllComponents();
+		graph1.forceRedrawAllComponents();
+		graph2.forceRedrawAllComponents();
+		needRedraw = true;
 	}
 
 

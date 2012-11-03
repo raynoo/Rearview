@@ -128,6 +128,14 @@ public class AppConstants {
 	public static int selectedValuesWidth = 100;
 	public static int selectedValuesHeight = 100;	
 	
+	// update button in the filter
+	public static int updateButtonX = 585;
+	public static int updateButtonY = 105;
+	public static int updateButtonWidth = 33;
+	public static int updateButtonHeight = 10;	
+	
+	
+	
 	
 	//Buttons
 	public static String buttonSelectedColor = "#015744";

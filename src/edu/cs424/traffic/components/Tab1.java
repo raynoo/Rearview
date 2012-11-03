@@ -67,9 +67,9 @@ public class Tab1 extends Panel implements TouchEnabled
 		graph2Button.setup();
 		graph1Button.setPressed(true);
 
-		filterHolder1 = new FilterHolder(filterHolderX, filterHolderY, filterHolderWidth, filterHolderHeight, x0, y0,this,Event.ATTRIBUTE_SELECT_DESELECT_GRAPH1);
+		filterHolder1 = new FilterHolder(filterHolderX, filterHolderY, filterHolderWidth, filterHolderHeight, x0, y0,this,Event.CHANGE_FILTER_GRAPH1);
 		filterHolder1.setup();
-		filterHolder2 = new FilterHolder(filterHolderX, filterHolderY, filterHolderWidth, filterHolderHeight, x0, y0,this,Event.ATTRIBUTE_SELECT_DESELECT_GRAPH2);
+		filterHolder2 = new FilterHolder(filterHolderX, filterHolderY, filterHolderWidth, filterHolderHeight, x0, y0,this,Event.CHANGE_FILTER_GRAPH2);
 		filterHolder2.setup();
 	}
 
