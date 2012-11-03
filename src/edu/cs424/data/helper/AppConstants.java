@@ -1,5 +1,8 @@
 package edu.cs424.data.helper;
 
+import static edu.cs424.data.helper.AppConstants.mapOffsetWidth;
+import static edu.cs424.data.helper.AppConstants.mapOffsetX;
+import static edu.cs424.data.helper.AppConstants.mapPanelWidth;
 
 public class AppConstants {
     
@@ -25,9 +28,9 @@ public class AppConstants {
 	public static int mapOffsetX = 20;
 	public static int mapOffsetY = 50;
 	public static int mapOffsetWidth = 480;
-	public static int mapOffsetHeight = 314;
+	public static int mapOffsetHeight = mapPanelHeight - (2*mapOffsetY);
 	
-	public static int mapControlPanelX = 500;
+	public static int mapControlPanelX = (mapOffsetX+mapOffsetWidth);//500;
 	public static int mapControlPanelY = 0;
 	public static int mapControlPanelWidth = mapPanelWidth-(mapOffsetX+mapOffsetWidth);
 	public static int mapControlPanelHeight = 384;

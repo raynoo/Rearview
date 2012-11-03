@@ -34,3 +34,6 @@ preferences.txt
 
 # Config file
 data/config.json
+
+# not keeping the database anymore
+.sqlite

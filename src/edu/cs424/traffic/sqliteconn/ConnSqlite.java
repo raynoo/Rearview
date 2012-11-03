@@ -36,7 +36,7 @@ public class ConnSqlite {
 
 	public static String getCrashByState(FilterData filterData) {
 
-		return appendFilters(filterData, "SELECT latitude, longitude, istatenum FROM f2");
+		return appendFilters(filterData, "SELECT latitude, longitude, istatenum FROM crash1");
 	}
 
 	public static HashMap<String, ArrayList<DataPoint>> getCrashData( FilterData filterData,Type type) 
@@ -44,15 +44,15 @@ public class ConnSqlite {
 		String query;
 		if ( type == type.Year )
 		{
-			query =  appendFilters(filterData, "SELECT UID, latitude, longitude, Year FROM f2");
+			query =  appendFilters(filterData, "SELECT UID, latitude, longitude, Year FROM crash1");
 		}
 		else if (type == type.Month )
 		{
-			query =  appendFilters(filterData, "SELECT UID, latitude, longitude, iaccmon FROM f2");
+			query =  appendFilters(filterData, "SELECT UID, latitude, longitude, iaccmon FROM crash1");
 		}
 		else
 		{
-			query =  appendFilters(filterData, "SELECT UID, latitude, longitude, dayofweek FROM f2");
+			query =  appendFilters(filterData, "SELECT UID, latitude, longitude, dayofweek FROM crash1");
 		}
 
 		return executeFilterQuery(query, type);
