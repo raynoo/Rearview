@@ -176,11 +176,11 @@ public class ButtonData
 		
 		ArrayList<String> alcohol =  new ArrayList<String>();
 		alcohol.add("No BAC");
-		alcohol.add("0.0 - 0.1 BAC");
-		alcohol.add("0.1 - 0.2 BAC");
-		alcohol.add("0.2 - 0.3 BAC");
-		alcohol.add("0.3 - 0.4 BAC");
-		alcohol.add("0.4 - 0.5 BAC");
+		alcohol.add("0.0-0.1 BAC");
+		alcohol.add("0.1-0.2 BAC");
+		alcohol.add("0.2-0.3 BAC");
+		alcohol.add("0.3-0.4 BAC");
+		alcohol.add("0.4-0.5 BAC");
 		alcohol.add("> 5.0 BAC");
 		alcohol.add("No Data");
 		buttonValues.put("Alcohol", alcohol);
