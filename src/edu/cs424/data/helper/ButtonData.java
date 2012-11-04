@@ -137,6 +137,7 @@ public class ButtonData
 		manncol.add("Sideswipe");
 		manncol.add("No Data");
 		manncol.add("No Loc Data");
+		buttonValues.put("Collision", manncol);
 		
 		ArrayList<String> age =  new ArrayList<String>();
 		age.add("< 16");
@@ -245,28 +246,28 @@ public class ButtonData
 		dbMap.put( "2009", "2009" );
 		dbMap.put( "2010", "2010" );
 
-		dbMap.put( "Jan", "1" );
-		dbMap.put( "Feb", "2" );
-		dbMap.put( "March", "3" );
-		dbMap.put( "April", "4" );
-		dbMap.put( "May", "5" );
-		dbMap.put( "June", "6" );
-		dbMap.put( "July", "7" );
-		dbMap.put( "Aug", "8" );
-		dbMap.put( "Sept", "9" );
-		dbMap.put( "Oct", "10" );
-		dbMap.put( "Nov", "11" );
-		dbMap.put( "Dec", "12" );
+		dbMap.put( "Jan", "Jan" );
+		dbMap.put( "Feb", "Feb" );
+		dbMap.put( "March", "March" );
+		dbMap.put( "April", "April" );
+		dbMap.put( "May", "May" );
+		dbMap.put( "June", "June" );
+		dbMap.put( "July", "July" );
+		dbMap.put( "Aug", "Aug" );
+		dbMap.put( "Sept", "Sept" );
+		dbMap.put( "Oct", "Oct" );
+		dbMap.put( "Nov", "Nov" );
+		dbMap.put( "Dec", "Dec" );
 
-		dbMap.put( "Sunday", "1" );
-		dbMap.put( "Monday", "2" );
-		dbMap.put( "Tuesday", "3" );
-		dbMap.put( "Wednesday", "4" );
-		dbMap.put( "Thursday", "5" );
-		dbMap.put( "Friday", "6" );
-		dbMap.put( "Saturday", "7" );
+		dbMap.put( "Sunday", "Sunday" );
+		dbMap.put( "Monday", "Monday" );
+		dbMap.put( "Tuesday", "Tuesday" );
+		dbMap.put( "Wednesday", "Wednesday" );
+		dbMap.put( "Thursday", "Thursday" );
+		dbMap.put( "Friday", "Friday" );
+		dbMap.put( "Saturday", "Saturday" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc. Data", "13" );
+		dbMap.put( "No Loc. Data", "99" );
 
 		dbMap.put( "Early Morn", "2" );
 		dbMap.put( "Morning", "3" );
@@ -275,14 +276,14 @@ public class ButtonData
 		dbMap.put( "Night", "6" );
 		dbMap.put( "Late Night", "1" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc. Data", "13" );
+		dbMap.put( "No Loc. Data", "99" );
 
 		dbMap.put( "No Hit-Run", "0" );
 		dbMap.put( "Motor Vehicle", "1" );
 		dbMap.put( "Pedestrian", "2" );
 		dbMap.put( "Parked Vehicle", "3" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc. Data", "13" );
+		dbMap.put( "No Loc. Data", "99" );
 
 		dbMap.put( "Not a Holiday", "0" );
 		dbMap.put( "New Year's Day", "1" );
@@ -296,7 +297,7 @@ public class ButtonData
 		dbMap.put( "Christmas", "11" );
 		dbMap.put( "New Year's Eve", "10" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 
 		dbMap.put( "No Collision", "0" );
 		dbMap.put( "Rear-End", "1" );
@@ -309,7 +310,7 @@ public class ButtonData
 		dbMap.put( "Not on NH", "0" );
 		dbMap.put( "On NH", "1" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 
 		dbMap.put( "Single Death", "1" );
 		dbMap.put( "2 Deaths", "2" );
@@ -325,19 +326,19 @@ public class ButtonData
 		dbMap.put( "51 - 75", "4" );
 		dbMap.put( "> 75", "5" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 
 		dbMap.put( "Male", "1" );
 		dbMap.put( "Female", "2" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 
 		dbMap.put( "0", "0" );
 		dbMap.put( "1", "1" );
 		dbMap.put( "2", "2" );
 		dbMap.put( "> 2", "3" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 
 		dbMap.put( "Car", "1" );
 		dbMap.put( "Motorcycle", "2" );
@@ -349,12 +350,12 @@ public class ButtonData
 		dbMap.put( "Utility Vehicle", "8" );
 		dbMap.put( "Other", "10" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 
 		dbMap.put( "Yes", "1" );
 		dbMap.put( "No", "2" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 
 		dbMap.put( "Not Divided", "1" );
 		dbMap.put( "Traffic Barrier", "2" );
@@ -371,7 +372,7 @@ public class ButtonData
 		dbMap.put( "0.4-0.5 BAC", "5" );
 		dbMap.put( "> 0.5 BAC", "6" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "13" );
+		dbMap.put( "No Loc Data", "99" );
 		
 		return dbMap;
 	}
