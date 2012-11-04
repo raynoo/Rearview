@@ -81,7 +81,7 @@ public class ButtonData
 		
 		ArrayList<String> holiday =  new ArrayList<String>();
 		holiday.add("Not a Holiday");
-		holiday.add("New Year's day");
+		holiday.add("New Year's Day");
 		holiday.add("MLK Day");
 		holiday.add("President's Day");
 		holiday.add("Memorial Day");

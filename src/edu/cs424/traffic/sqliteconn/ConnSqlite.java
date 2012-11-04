@@ -145,8 +145,6 @@ public class ConnSqlite {
 		return result;
 	}
 
-
-
 	public static void cleanup() {
 		try {
 			conn.close();
