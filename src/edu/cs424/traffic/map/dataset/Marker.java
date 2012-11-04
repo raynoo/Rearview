@@ -38,7 +38,10 @@ public class Marker {
 		if(MapPanel.map.getZoom() >= 13)
 			factor = 0.1f;
 		
-		this.radius = (int) ((float)cluster.getCrashCount() * factor * SettingsLoader.scaleFactor);
+		if(cluster.getCrashCount() == 1)
+			this.radius = SettingsLoader.scaleFactor * 3;
+		else
+			this.radius = (int) ((float)cluster.getCrashCount() * factor * (float)SettingsLoader.scaleFactor);
 	}
 	
 	public void draw() {
@@ -56,8 +59,9 @@ public class Marker {
 		float centerx = cluster.getLocationXY().x;
 		float centery = cluster.getLocationXY().y;
 		
-		if((Math.pow(Math.abs(centerx - (SettingsLoader.scaleFactor*x)), 2) + 
-				Math.pow(Math.abs(centery - (SettingsLoader.scaleFactor*x)), 2)) <= Math.pow(radius, 2))
+		if((Math.pow(Math.abs((SettingsLoader.scaleFactor*centerx) - (SettingsLoader.scaleFactor*x)), 2) + 
+				Math.pow(Math.abs((SettingsLoader.scaleFactor*centery) - (SettingsLoader.scaleFactor*x)), 2)) 
+				<= Math.pow(radius, 2))
 			return true;
 		
 		return false;

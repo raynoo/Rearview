@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import processing.core.PApplet;
 import processing.core.PVector;
+import processing.event.MouseEvent;
 
 import com.modestmaps.InteractiveMap;
 import com.modestmaps.geo.Location;
@@ -28,57 +29,64 @@ import static edu.cs424.data.helper.AppConstants.*;
 
 public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
+	//for map
 	public static InteractiveMap map;
 	PVector mapSize;
 	PVector mapOffset;
+	Location locationUSA = new Location(38.962f, -93.928f);
 
-	//for clusters and grids
-	int gridSize = 3;
-	Grid grid;
-
+	
+	//for touch
 	PVector lastTouchPos;
 	PVector lastTouchPos2;
 	PVector initTouchPos;
 	PVector initTouchPos2;
 
 	HashMap<Integer,Point> touchList;
-	int touchID1,touchID2;
+	int touchID1, touchID2;
 
-	Button out, in, aerial, hybrid, road;
-	Button clusterByGrid, clusterByState, graph1Button, graph2Button;
-
-	public static boolean clusterGridMode = true, clusterStateMode = false;
-
-	ArrayList<Button> buttons = new ArrayList<Button>();
-	ArrayList<Marker> markers = new ArrayList<Marker>();
-
-	boolean firstIter = true;
-	ArrayList<DataPoint> points = new ArrayList<DataPoint>();
 	
-	boolean isGraph1 = false, isGraph2 = false;
+	//for cluster and grids
+	int gridSize = 3;
+	Grid grid;
+	public static boolean clusterGridMode = true, clusterStateMode = false;
+	
+	ArrayList<Marker> markers = new ArrayList<Marker>();
+	Marker selectedMarker;
 	
 	HashMap<String, ArrayList<DataPoint>> graph1Data, graph2Data;
+	ArrayList<DataPoint> points = new ArrayList<DataPoint>();
+	boolean isGraph1 = false, isGraph2 = false;
+	
 
-	Location locationUSA = new Location(38.962f, -93.928f);
+	//for buttons
+	Button out, in, aerial, hybrid, road;
+	Button clusterByGrid, clusterByState, graph1Button, graph2Button;
+	ArrayList<Button> buttons = new ArrayList<Button>();
 
+	boolean firstIter = true;
+
+	
 	public MapPanel(float x0, float y0, float width, float height,
 			float parentX0, float parentY0) {
 		super(x0, y0, width, height, parentX0, parentY0);
 	}
 
+	//TODO: FIX IT!!
 	public boolean touch(int ID, float x, float y, MouseMovements event) {
 		if(this.containsPoint(x, y))
 		{
 			if(MouseMovements.MOUSEDOWN == event)
 			{
-				//check if xy is on the buttons
+				//if xy is on the buttons
 				if(isOnButton(x, y))
 					return false;
 				
-				if(isOnMarker(x, y))
+				//if xy is on the circles
+				if(isOnMarker(x, y, event))
 					return false;
 
-				//else xy is on the map
+				//else xy is on the active part of map (offset area)
 				else if (x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
 						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight)) {
 					
@@ -99,22 +107,33 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 							initTouchPos2.x = x;
 							initTouchPos2.y = y;
 						}
+						
+						return false;
 				}
-				//update visible lat longs
-				Location[] loc = getBoundaryLatLong();
-				DBCommand.getInstance().updateVisibleCoordinate(loc[0], loc[1]);
 			}
 			else if(MouseMovements.MOUSEUP == event)
 			{
+				//else xy is on the active part of map (offset area)
 				if (x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
-						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight))
+						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight)) {
+
+					//if xy is on the circles
+					if(isOnMarker(x, y, event))
+						return false;
+
+					//update visible lat longs
+					Location[] loc = getBoundaryLatLong();
+					DBCommand.getInstance().updateVisibleCoordinate(loc[0], loc[1]);
+					
 					touchList.remove(ID);
-				return false;
+					return false;
+				}
 			}
 			else if(MouseMovements.MOUSEMOVE == event)
 			{
 				if(x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
 						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight)) {
+					
 					if(touchList.size() < 2)
 					{
 						map.tx += (x - lastTouchPos.x)/map.sc;
@@ -213,11 +232,12 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		return false;
 	}
 	
-	boolean isOnMarker(float x, float y) {
+	boolean isOnMarker(float x, float y, MouseMovements event) {
 		//touch on marker
 		for(Marker m : markers) {
 			if(m.containsPoint(x, y)) {
-				drawClusterInfo(m.getCluster());
+				if(event == MouseMovements.MOUSEDOWN)
+					selectedMarker = m;
 				return true;
 			}
 		}
@@ -295,7 +315,6 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 				grid.clusterData(points);
 				drawMarkers(grid.getMarkers());
 				
-
 			} else {
 				drawRawData(points);
 			}
@@ -306,6 +325,9 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			ellipse(map.locationPoint(pv[0]).x, map.locationPoint(pv[0]).y, 10, 10);
 			ellipse(map.locationPoint(pv[1]).x, map.locationPoint(pv[1]).y, 10, 10);
 			popStyle();
+			
+			if(selectedMarker != null)
+				drawClusterInfo(selectedMarker);
 			
 			needRedraw = false;
 		}
@@ -355,16 +377,17 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		}
 	}
 	
-	void drawClusterInfo(Cluster c) {
-		System.out.println("clicked! " + c.getDataID());
+	void drawClusterInfo(Marker m) {
+		System.out.println("clicked! " + m.getCluster().getDataID());
 		
 		pushStyle();
 		noFill();
 		strokeWeight(2);
 		fill(EnumColor.BLACK);
 		textSize(18);
-		text("Info:", mapControlPanelX+30, mapOffsetY);
-		text(Integer.toString(c.getCrashCount()), mapControlPanelX+30, mapOffsetY+30);
+		text("Details:", mapControlPanelX+30, mapOffsetY);
+		textSize(12);
+		text(Integer.toString(m.getCluster().getCrashCount()), mapControlPanelX+30, mapOffsetY+30);
 		popStyle();
 	}
 
