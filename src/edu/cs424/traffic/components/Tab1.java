@@ -12,6 +12,10 @@ import static edu.cs424.data.helper.AppConstants.graph2ButtonY;
 import static edu.cs424.data.helper.AppConstants.graphButtonHeight;
 import static edu.cs424.data.helper.AppConstants.graphButtonWidth;
 import static edu.cs424.data.helper.AppConstants.selectedValuesX;
+import static edu.cs424.data.helper.AppConstants.updateButtonHeight;
+import static edu.cs424.data.helper.AppConstants.updateButtonWidth;
+import static edu.cs424.data.helper.AppConstants.updateButtonX;
+import static edu.cs424.data.helper.AppConstants.updateButtonY;
 import processing.core.PConstants;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
@@ -23,7 +27,7 @@ import edu.cs424.traffic.pubsub.PubSub.Event;
 public class Tab1 extends Panel implements TouchEnabled
 {
 	public FilterHolder filterHolder1,filterHolder2;
-	Button graph1Button,graph2Button;
+	Button graph1Button,graph2Button,updateButton;
 
 	BarGraph bar1,bar2;
 
@@ -56,6 +60,19 @@ public class Tab1 extends Panel implements TouchEnabled
 				isHolder1 = false;
 				forceRedrawAllComponents();
 			}
+			
+			else if(updateButton.containsPoint(x, y))
+			{
+				if(isHolder1)
+				{
+					filterHolder1.updateFilter(Event.CHANGE_FILTER_GRAPH1);
+				}
+				else
+				{
+					filterHolder2.updateFilter(Event.CHANGE_FILTER_GRAPH2);
+				}
+			}
+			
 			else
 			{
 				if(isHolder1)
@@ -64,7 +81,6 @@ public class Tab1 extends Panel implements TouchEnabled
 					filterHolder2.touch(x, y, event);
 			}
 		}
-
 		return false;
 	}
 
@@ -76,6 +92,9 @@ public class Tab1 extends Panel implements TouchEnabled
 		graph2Button = new Button(graph2ButtonX,graph2ButtonY,graphButtonWidth,graphButtonHeight,x0,y0,"graph 2",true);
 		graph2Button.setup();
 		graph1Button.setPressed(true);
+		
+		updateButton = new Button(updateButtonX, updateButtonY, updateButtonWidth, updateButtonHeight, x0, y0, "Apply", true);
+		updateButton.setup();
 
 		filterHolder1 = new FilterHolder(filterHolderX, filterHolderY, filterHolderWidth, filterHolderHeight, x0, y0,this,Event.CHANGE_FILTER_GRAPH1);
 		filterHolder1.setup();
@@ -103,8 +122,7 @@ public class Tab1 extends Panel implements TouchEnabled
 
 			graph1Button.draw();
 			graph2Button.draw();
-		
-
+			updateButton.draw();
 
 			if(isHolder1)
 				filterHolder1.draw();
@@ -119,6 +137,7 @@ public class Tab1 extends Panel implements TouchEnabled
 	{
 		graph1Button.setReDraw();
 		graph2Button.setReDraw();
+		updateButton.setReDraw();
 
 		if(isHolder1)
 			filterHolder1.forceRedraw();

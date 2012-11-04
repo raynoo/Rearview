@@ -99,6 +99,13 @@ public class AppConstants {
 	public static int graphButtonHeight = 20;
 	public static int graphButtonWidth = 60;
 	
+	// update button in the filter
+	public static int updateButtonX = 0;
+	public static int updateButtonY = 107;
+	public static int updateButtonWidth = 60;
+	public static int updateButtonHeight = 20;	
+	
+	
 	public static int filterHolderX = 80 ;
 	public static int filterHolderY = 15;
 	public static int filterHolderHeight = 115;
@@ -128,15 +135,7 @@ public class AppConstants {
 	public static int selectedValuesWidth = 100;
 	public static int selectedValuesHeight = 100;	
 	
-	// update button in the filter
-	public static int updateButtonX = 585;
-	public static int updateButtonY = 105;
-	public static int updateButtonWidth = 33;
-	public static int updateButtonHeight = 10;	
-	
-	
-	
-	
+
 	//Buttons
 	public static String buttonSelectedColor = "#015744";
 	public static String buttonUnselectedColor = "#052E25";

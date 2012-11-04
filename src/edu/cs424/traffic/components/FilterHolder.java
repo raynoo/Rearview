@@ -17,29 +17,25 @@ public class FilterHolder extends Panel implements TouchEnabled
 	public FilterValuePanel filterValues;
 	public ShowSelectedAttribute showSelected;
 	public Tab1 tab;
-	Button updateButton;
 
-	Event toPublish;
 
 	public FilterHolder(float x0, float y0, float width, float height,
 			float parentX0, float parentY0,Tab1 tab,Event toPublish) {
 		super(x0, y0, width, height, parentX0, parentY0);
-	
+
 		this.tab = tab;
-		this.toPublish = toPublish;
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public boolean touch(float x, float y, MouseMovements event) {
 
-		if ( updateButton.containsPoint(x, y) )
-		{
-			filter.updateFilter(toPublish);
-		}
-		else
-			propagateTouch(x, y, event);
-		
+		propagateTouch(x, y, event);		
 		return false;
+	}
+
+	public void  updateFilter(Event event)
+	{
+		filter.updateFilter(event);
 	}
 
 	public void setup() 
@@ -57,10 +53,7 @@ public class FilterHolder extends Panel implements TouchEnabled
 				AppConstants.selectedValuesWidth, AppConstants.selectedValuesHeight, x0, y0 , filterValues,filter);
 		showSelected.setup();
 		addTouchSubscriber(showSelected);
-
-		updateButton = new Button(updateButtonX, updateButtonY, updateButtonWidth, updateButtonHeight, x0, y0, "Apply", true);
-		updateButton.setup();
-	}
+}
 
 	@Override
 	/*
@@ -72,8 +65,7 @@ public class FilterHolder extends Panel implements TouchEnabled
 		{
 			filter.draw();
 			filterValues.draw();
-			showSelected.draw();
-			updateButton.draw();
+			showSelected.draw();			
 			needRedraw = false;
 		}
 	}
@@ -83,7 +75,6 @@ public class FilterHolder extends Panel implements TouchEnabled
 		filter.forceRedrawAllComponents();
 		filterValues.forceRedrawAllComponents();
 		showSelected.forceRedrawAllComponents();
-		updateButton.setReDraw();
 		needRedraw = true;
 	}
 
