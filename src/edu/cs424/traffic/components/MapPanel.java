@@ -129,10 +129,10 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 						initTouchPos2.x = x;
 						initTouchPos2.y = y;
 					}
-					//update visible lat longs
-					Location[] loc = getBoundaryLatLong();
-					DBCommand.getInstance().updateVisibleCoordinate(loc[0], loc[1]);
 				}
+				//update visible lat longs
+				Location[] loc = getBoundaryLatLong();
+				DBCommand.getInstance().updateVisibleCoordinate(loc[0], loc[1]);
 			}
 			else if(MouseMovements.MOUSEUP == event)
 			{
