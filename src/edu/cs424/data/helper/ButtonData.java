@@ -196,13 +196,13 @@ public class ButtonData
 		buttonValues.put("Traffic Flow", flow);
 		
 		ArrayList<String> alcohol =  new ArrayList<String>();
-		alcohol.add("No BAC");
+		alcohol.add("Not Drunk");
 		alcohol.add("0.0-0.1 BAC");
 		alcohol.add("0.1-0.2 BAC");
 		alcohol.add("0.2-0.3 BAC");
 		alcohol.add("0.3-0.4 BAC");
 		alcohol.add("0.4-0.5 BAC");
-		alcohol.add("> 5.0 BAC");
+		alcohol.add("> 0.5 BAC");
 		alcohol.add("No Data");
 		alcohol.add("No Loc Data");
 		buttonValues.put("Alcohol", alcohol);
@@ -363,8 +363,8 @@ public class ButtonData
 		dbMap.put( "Ramp", "5" );
 		dbMap.put( "No Data", "9" );
 
-		dbMap.put( "No BAC", "0" );
-		dbMap.put( "0.0-1.0 BAC", "1" );
+		dbMap.put( "Not Drunk", "0" );
+		dbMap.put( "0.0-0.1 BAC", "1" );
 		dbMap.put( "0.1-0.2 BAC", "2" );
 		dbMap.put( "0.2-0.3 BAC", "3" );
 		dbMap.put( "0.3-0.4 BAC", "4" );
