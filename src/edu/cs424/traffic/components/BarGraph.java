@@ -35,7 +35,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 		}
 	}
 
-	float highest = 100;
+	float highest = 30000;
 	public HashMap<String, Set<String>> selectedButtonList;
 	Event suscribed;
 	public Type currentType = Type.Year;
