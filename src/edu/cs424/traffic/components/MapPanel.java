@@ -45,7 +45,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	int touchID1,touchID2;
 
 	Button out, in, aerial, hybrid, road;
-	Button clusterByGrid, clusterByState;
+	Button clusterByGrid, clusterByState, graph1Button, graph2Button;
 
 	public static boolean clusterGridMode = true, clusterStateMode = false;
 
@@ -54,6 +54,10 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 	boolean firstIter = true;
 	ArrayList<DataPoint> points = new ArrayList<DataPoint>();
+	
+//	ArrayList<DataPoint> graph1 = new ArrayList<DataPoint>();
+//	ArrayList<DataPoint> graph2 = new ArrayList<DataPoint>();
+	boolean isGraph1 = false, isGraph2 = false;
 	
 	HashMap<String, ArrayList<DataPoint>> graph1Data, graph2Data;
 
@@ -100,14 +104,20 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					clusterGridMode = false;
 					clusterByGrid.setPressed(false);
 				}
-
-
-				//touch on marker
-//				for(Marker m : markers)
-//					if(m.containsPoint(x, y)) {// && m.getCluster().getCrashCount() == 1) {
-//						drawClusterInfo(m.getCluster());
-//						break;
-//					}
+				
+				//select graph
+				else if(graph1Button.containsPoint(x, y) && graph1Button.isPressed == false) {
+					graph1Button.setPressed(true);
+					isGraph1 = true;
+					isGraph2 = false;
+					graph2Button.setPressed(false);
+				}
+				else if(graph2Button.containsPoint(x, y) && graph2Button.isPressed == false) {
+					graph2Button.setPressed(true);
+					isGraph2 = true;
+					isGraph1 = false;
+					graph1Button.setPressed(false);
+				}
 
 				//else xy is on the map
 				else if (x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
@@ -128,6 +138,13 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 						touchID2 = ID;
 						initTouchPos2.x = x;
 						initTouchPos2.y = y;
+					}
+				}
+				//touch on marker
+				for(Marker m : markers) {
+					if(m.containsPoint(x, y)) {
+						drawClusterInfo(m.getCluster());
+						break;
 					}
 				}
 				//update visible lat longs
@@ -209,9 +226,13 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		hybrid = new Button(mapControlPanelX+55, mapControlPanelHeight-30, 20, 20, x0, y0, "H", true);
 		aerial = new Button(mapControlPanelX+80, mapControlPanelHeight-30, 20, 20, x0, y0, "A", true);
 
-		//control buttons //add cluster by state, cluster by grid
+		//control buttons
 		clusterByGrid = new Button(mapControlPanelX+30, mapControlPanelHeight-125, 40, 20, x0, y0, "Grid", true);
 		clusterByState = new Button(mapControlPanelX+75, mapControlPanelHeight-125, 40, 20, x0, y0, "State", true);
+		
+		//select graph
+		graph1Button = new Button(mapControlPanelX+30, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 1", true);
+		graph2Button = new Button(mapControlPanelX+75, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 2", true);
 
 		buttons.add(in);
 		buttons.add(out);
@@ -220,6 +241,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		buttons.add(aerial);
 		buttons.add(clusterByGrid);
 		buttons.add(clusterByState);
+		buttons.add(graph1Button);
+		buttons.add(graph2Button);
 
 		initializeMap();
 	}
@@ -241,11 +264,15 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			//get data points
 			this.getData();
 			points.clear();
-			for(ArrayList<DataPoint> d : graph1Data.values()) {
-				points.addAll(d);
-			}
 			
-			System.out.println("Graph1 " + points.size());
+			if(isGraph1)
+				for(ArrayList<DataPoint> d : graph1Data.values())
+					points.addAll(d);
+			else if(isGraph2)
+				for(ArrayList<DataPoint> d : graph2Data.values())
+					points.addAll(d);
+			
+			System.out.println("Graph points " + points.size());
 			
 			if(clusterGridMode) {
 				PVector[] p = getBoundaryXY();
