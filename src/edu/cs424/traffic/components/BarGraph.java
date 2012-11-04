@@ -151,11 +151,13 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 				if(currentType == Type.Month)
 				{
 					currentType = Type.Year;
+					DBCommand.getInstance().notifyTimeFilterChange(suscribed, currentType, yearValue, monthValue);
 
 				}
 				else if(currentType == Type.Day)
 				{
-					currentType = Type.Month;					
+					currentType = Type.Month;
+					DBCommand.getInstance().notifyTimeFilterChange(suscribed, currentType, yearValue, monthValue);
 				}
 			}
 			else
