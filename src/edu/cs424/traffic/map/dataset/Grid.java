@@ -98,6 +98,9 @@ public class Grid extends Panel {
 			c.createCluster();
 			markers.add(c.getDataMarker());
 		}
+		if(MapPanel.clusterGridMode) //it HAS to be true at this point anyways. but just in case.
+			drawClusterGridLines();
+		
 		return markers;
 	}
 	

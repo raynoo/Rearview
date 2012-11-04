@@ -3,6 +3,7 @@ package edu.cs424.traffic.map.dataset;
 import processing.core.PShape;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
+import edu.cs424.traffic.central.SettingsLoader;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.components.MapPanel;
 
@@ -17,6 +18,12 @@ public class Marker extends Panel {
 	public Marker(Cluster cluster) {
 		this(0, 0, 0, 0, 0, 0);
 		this.cluster = cluster;
+		calculateRadius();
+	}
+	
+	public Marker(DataPoint data) {
+		this(0, 0, 0, 0, 0, 0);
+		this.cluster = new Cluster(data);
 		calculateRadius();
 	}
 	
@@ -43,7 +50,7 @@ public class Marker extends Panel {
 		if(MapPanel.map.getZoom() >= 9)
 			factor = 0.05f;
 		
-		this.radius = (int) ((float)cluster.getCrashCount() * factor);
+		this.radius = (int) ((float)cluster.getCrashCount() * factor * SettingsLoader.scaleFactor);
 	}
 	
 	public void draw() {

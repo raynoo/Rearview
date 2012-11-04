@@ -33,7 +33,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	PVector mapOffset;
 
 	//for clusters and grids
-	int gridSize = 5;
+	int gridSize = 3;
 	Grid grid;
 
 	PVector lastTouchPos;
@@ -47,7 +47,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	Button out, in, aerial, hybrid, road;
 	Button clusterByGrid, clusterByState;
 
-	boolean clusterGridMode = true, clusterStateMode = false;
+	public static boolean clusterGridMode = true, clusterStateMode = false;
 
 	ArrayList<Button> buttons = new ArrayList<Button>();
 	ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -240,19 +240,22 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 			//get data points
 			this.getData();
+			points.clear();
 			for(ArrayList<DataPoint> d : graph1Data.values()) {
 				points.addAll(d);
 			}
+			
+			System.out.println("Graph1 " + points.size());
 			
 			if(clusterGridMode) {
 				PVector[] p = getBoundaryXY();
 				grid = new Grid(p[0], p[1], gridSize);
 				grid.clusterData(points);
-				drawClusters(grid.getMarkers());
+				drawMarkers(grid.getMarkers());
 				
 
 			} else {
-				//draw indi points
+				drawRawData(points);
 			}
 			needRedraw = false;
 		}
@@ -277,20 +280,25 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		drawMapButtons();
 	}
 	
-	public void getData()
-	{
+	public void getData() {
 		graph1Data = DBCommand.getInstance().getGraphData(Event.CHANGE_FILTER_GRAPH1);
 		graph2Data = DBCommand.getInstance().getGraphData(Event.CHANGE_FILTER_GRAPH2);
-		System.out.println("Graph1 " + graph1Data.toString());
-		System.out.println("Graph2 " + graph2Data.toString());
 	}
 
-	void drawClusters(ArrayList<Marker> markers) {
+	void drawRawData(ArrayList<DataPoint> data) {
+		ArrayList<Marker> ms = new ArrayList<Marker>();
+		
+		for(DataPoint d : data) {
+			ms.add(new Marker(d));
+		}
+		drawMarkers(ms);
+	}
+	
+	void drawMarkers(ArrayList<Marker> markers) {
 		if(this.markers.isEmpty())
 			this.markers = markers;
 		
 		if(! markers.isEmpty()) {
-			grid.drawClusterGridLines();
 			for(Marker m: markers) {
 				m.draw();
 			}

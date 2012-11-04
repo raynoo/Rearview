@@ -1,12 +1,10 @@
 package edu.cs424.traffic.map.dataset;
 
+import edu.cs424.traffic.components.MapPanel;
 import processing.core.PVector;
-
-import com.modestmaps.geo.Location;
 
 public class Cluster {
 
-//	Location location;
 	PVector locationxy;
 	int crashCount;
 	
@@ -14,6 +12,12 @@ public class Cluster {
 	
 	public Cluster() {
 		
+	}
+	
+	public Cluster(DataPoint point) {
+		this(MapPanel.map.locationPoint(point.getLocation()).x,
+				MapPanel.map.locationPoint(point.getLocation()).y, 
+				Integer.parseInt(point.uid));
 	}
 	
 	public Cluster(float x, float y, int dataID) {
@@ -46,14 +50,6 @@ public class Cluster {
 		return this.locationxy;
 	}
 
-//	public void setLocation(Location loc) {
-//		this.location = loc;
-//	}
-//	
-//	public Location getLocation() {
-//		return this.location;
-//	}
-	
 	public int getDataID() {
 		return dataID;
 	}
