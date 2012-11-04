@@ -76,16 +76,16 @@ public class ConnSqlite {
 
 				first1 = false;
 				append.append(filter.getKey());
-				append.append(" in ( ");				
+				append.append(" in ('");				
 
 				for(String num : filter.getValue()) {				
 					if ( !first2 )
-						append.append(", ");
+						append.append("', '");
 
 					first2 = false;
 					append.append(num);				
 				}
-				append.append(")");
+				append.append("')");
 			}
 		}
 		append.append(";");
