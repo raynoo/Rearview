@@ -55,8 +55,6 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	boolean firstIter = true;
 	ArrayList<DataPoint> points = new ArrayList<DataPoint>();
 	
-//	ArrayList<DataPoint> graph1 = new ArrayList<DataPoint>();
-//	ArrayList<DataPoint> graph2 = new ArrayList<DataPoint>();
 	boolean isGraph1 = false, isGraph2 = false;
 	
 	HashMap<String, ArrayList<DataPoint>> graph1Data, graph2Data;
@@ -69,83 +67,38 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	}
 
 	public boolean touch(int ID, float x, float y, MouseMovements event) {
-
 		if(this.containsPoint(x, y))
 		{
 			if(MouseMovements.MOUSEDOWN == event)
 			{
 				//check if xy is on the buttons
-				if(in.containsPoint(x, y))
-					map.zoomIn();
-
-				else if(out.containsPoint(x, y))
-					map.zoomOut();
-
-				else if(aerial.containsPoint(x, y))
-					map.setMapProvider( new Microsoft.AerialProvider() );
-
-				else if(hybrid.containsPoint(x, y))
-					map.setMapProvider( new Microsoft.HybridProvider() );
-
-				else if(road.containsPoint(x, y))
-					map.setMapProvider( new Microsoft.RoadProvider() );
-
-				//select and toggle between cluster modes
-				else if(clusterByGrid.containsPoint(x, y) && clusterByGrid.isPressed == false) {
-					clusterGridMode = true;
-					clusterByGrid.setPressed(true);
-					clusterStateMode = false;
-					clusterByState.setPressed(false);
-				}
-
-				else if(clusterByState.containsPoint(x, y) && clusterByState.isPressed == false) {
-					clusterStateMode = true;
-					clusterByState.setPressed(true);
-					clusterGridMode = false;
-					clusterByGrid.setPressed(false);
-				}
+				if(isOnButton(x, y))
+					return false;
 				
-				//select graph
-				else if(graph1Button.containsPoint(x, y) && graph1Button.isPressed == false) {
-					graph1Button.setPressed(true);
-					isGraph1 = true;
-					isGraph2 = false;
-					graph2Button.setPressed(false);
-				}
-				else if(graph2Button.containsPoint(x, y) && graph2Button.isPressed == false) {
-					graph2Button.setPressed(true);
-					isGraph2 = true;
-					isGraph1 = false;
-					graph1Button.setPressed(false);
-				}
+				if(isOnMarker(x, y))
+					return false;
 
 				//else xy is on the map
 				else if (x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
 						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight)) {
-					lastTouchPos.x = x;
-					lastTouchPos.y = y;				
-					Point p = new Point(ID,x, y);
-					touchList.put(ID,p);
+					
+						lastTouchPos.x = x;
+						lastTouchPos.y = y;				
+						Point p = new Point(ID,x, y);
+						touchList.put(ID,p);
 
-					if(touchList.size() == 1)
-					{
-						touchID1 = ID;
-						initTouchPos.x = x;
-						initTouchPos.y = y;
-					}
-					else if(touchList.size() == 2 )
-					{
-						touchID2 = ID;
-						initTouchPos2.x = x;
-						initTouchPos2.y = y;
-					}
-				}
-				//touch on marker
-				for(Marker m : markers) {
-					if(m.containsPoint(x, y)) {
-						drawClusterInfo(m.getCluster());
-						break;
-					}
+						if(touchList.size() == 1)
+						{
+							touchID1 = ID;
+							initTouchPos.x = x;
+							initTouchPos.y = y;
+						}
+						else if(touchList.size() == 2 )
+						{
+							touchID2 = ID;
+							initTouchPos2.x = x;
+							initTouchPos2.y = y;
+						}
 				}
 				//update visible lat longs
 				Location[] loc = getBoundaryLatLong();
@@ -155,19 +108,17 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			{
 				if (x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
 						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight))
-
 					touchList.remove(ID);
+				return false;
 			}
 			else if(MouseMovements.MOUSEMOVE == event)
 			{
 				if(x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
-						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight)) 
-				{
+						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight)) {
 					if(touchList.size() < 2)
 					{
 						map.tx += (x - lastTouchPos.x)/map.sc;
 						map.ty += (y - lastTouchPos.y)/map.sc;					
-
 					}
 					else if(touchList.size() == 2)
 					{
@@ -184,12 +135,12 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 						map.ty -= my/map.sc;
 						map.sc *= sc;
 						map.tx += mx/map.sc;
-						map.ty += my/map.sc;					
+						map.ty += my/map.sc;
 					}
 					else if( touchList.size() >= 5 )
 					{
 						// Zoom to entire USA
-						map.setCenterZoom(locationUSA, 4);
+						map.setCenterZoom(locationUSA, 6);
 					}
 					// Update touch IDs 1 and 2
 					if( ID == touchID1 ){
@@ -199,16 +150,80 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 						lastTouchPos2.x = x;
 						lastTouchPos2.y = y;
 					}
-
 					// Update touch list
-					Point t = new Point( ID, x,y );
-					touchList.put(ID,t);
+					Point t = new Point(ID, x, y);
+					touchList.put(ID, t);
 				}
 			}
 		}
 		return false;
 	}
 
+	boolean isOnButton(float x, float y) {
+		if(in.containsPoint(x, y)) {
+			map.zoomIn();
+			return true;
+		}
+		else if(out.containsPoint(x, y)) {
+			map.zoomOut();
+			return true;
+		}
+		else if(aerial.containsPoint(x, y)) {
+			map.setMapProvider( new Microsoft.AerialProvider() );
+			return true;
+		}
+		else if(hybrid.containsPoint(x, y)) {
+			map.setMapProvider( new Microsoft.HybridProvider() );
+			return true;
+		}
+		else if(road.containsPoint(x, y)) {
+			map.setMapProvider( new Microsoft.RoadProvider() );
+			return true;
+		}
+		//select and toggle between cluster modes
+		else if(clusterByGrid.containsPoint(x, y) && clusterByGrid.isPressed == false) {
+			clusterGridMode = true;
+			clusterByGrid.setPressed(true);
+			clusterStateMode = false;
+			clusterByState.setPressed(false);
+			return true;
+		}
+		else if(clusterByState.containsPoint(x, y) && clusterByState.isPressed == false) {
+			clusterStateMode = true;
+			clusterByState.setPressed(true);
+			clusterGridMode = false;
+			clusterByGrid.setPressed(false);
+			return true;
+		}
+		//select graph
+		else if(graph1Button.containsPoint(x, y) && graph1Button.isPressed == false) {
+			graph1Button.setPressed(true);
+			isGraph1 = true;
+			isGraph2 = false;
+			graph2Button.setPressed(false);
+			return true;
+		}
+		else if(graph2Button.containsPoint(x, y) && graph2Button.isPressed == false) {
+			graph2Button.setPressed(true);
+			isGraph2 = true;
+			isGraph1 = false;
+			graph1Button.setPressed(false);
+			return true;
+		}
+		return false;
+	}
+	
+	boolean isOnMarker(float x, float y) {
+		//touch on marker
+		for(Marker m : markers) {
+			if(m.containsPoint(x, y)) {
+				drawClusterInfo(m.getCluster());
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public void setup() 
 	{
@@ -261,7 +276,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			drawMapOffsetArea();
 			drawMapControlPanel();
 
-			//get data points
+			//get data points from table
 			this.getData();
 			points.clear();
 			
@@ -272,7 +287,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 				for(ArrayList<DataPoint> d : graph2Data.values())
 					points.addAll(d);
 			
-			System.out.println("Graph points " + points.size());
+			System.out.println("MapPanel: Graph points " + points.size());
 			
 			if(clusterGridMode) {
 				PVector[] p = getBoundaryXY();
@@ -284,6 +299,14 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			} else {
 				drawRawData(points);
 			}
+			
+			Location[] pv = getBoundaryLatLong();
+			pushStyle();
+			fill(EnumColor.RED);
+			ellipse(map.locationPoint(pv[0]).x, map.locationPoint(pv[0]).y, 10, 10);
+			ellipse(map.locationPoint(pv[1]).x, map.locationPoint(pv[1]).y, 10, 10);
+			popStyle();
+			
 			needRedraw = false;
 		}
 	}
@@ -293,7 +316,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		mapOffset = createPvector(mapOffsetX, mapOffsetY);
 		map = new InteractiveMap(SettingsLoader.papp, new Microsoft.RoadProvider(), 
 				mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
-		map.MAX_IMAGES_TO_KEEP = 72;
+		map.MAX_IMAGES_TO_KEEP = 256;
 		map.setCenterZoom(locationUSA, 4);
 	}
 
@@ -364,8 +387,9 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		float bottomY = mapOffsetY + mapOffsetHeight;
 
 		p = new PVector[2];
-		p[0] = new PVector(leftX, topY);
-		p[1] = new PVector(rightX, bottomY);
+		p[0] = new PVector(s(leftX), s(topY));
+		p[1] = new PVector(s(rightX), s(bottomY));
+		
 		return p;
 	}
 
@@ -379,8 +403,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		float bottomY = mapOffsetY + mapOffsetHeight;
 
 		loc = new Location[2];
-		loc[0] = map.pointLocation(leftX, topY);
-		loc[1] = map.pointLocation(rightX, bottomY);
+		loc[0] = map.pointLocation(s(leftX), s(topY));
+		loc[1] = map.pointLocation(s(rightX), s(bottomY));
 		return loc;
 	}
 	

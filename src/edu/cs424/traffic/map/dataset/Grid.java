@@ -8,8 +8,10 @@ import com.modestmaps.geo.Location;
 
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
+import edu.cs424.traffic.central.SettingsLoader;
 import edu.cs424.traffic.components.MapPanel;
 
+import processing.core.PApplet;
 import processing.core.PVector;
 
 public class Grid extends Panel {
@@ -19,6 +21,8 @@ public class Grid extends Panel {
 	int gridSize;
 	HashMap<Integer, Cell> gridCellMap;
 	public static PVector[][] gridLocations;
+	
+	PApplet p;
 	
 	public Grid() {
 		super(0, 0, 0, 0, 0, 0);
@@ -105,18 +109,19 @@ public class Grid extends Panel {
 	}
 	
 	public void drawClusterGridLines() {
-		pushStyle();
-		strokeWeight(1f);
-		stroke(EnumColor.DARK_GRAY);
+		p = SettingsLoader.papp;
+		p.pushStyle();
+		p.strokeWeight(1f);
+		p.stroke(EnumColor.DARK_GRAY.getValue());
 
 		for(int i = 1; i < gridSize; i++) {
-			line(Grid.gridLocations[i][0].x, Grid.gridLocations[i][0].y, 
+			p.line(Grid.gridLocations[i][0].x, Grid.gridLocations[i][0].y, 
 					Grid.gridLocations[i][gridSize].x, Grid.gridLocations[i][gridSize].y);
-			line(Grid.gridLocations[0][i].x, Grid.gridLocations[0][i].y, 
+			p.line(Grid.gridLocations[0][i].x, Grid.gridLocations[0][i].y, 
 					Grid.gridLocations[gridSize][i].x, Grid.gridLocations[gridSize][i].y);
 		}
 
-		popStyle();
+		p.popStyle();
 	}
 
 	@Override

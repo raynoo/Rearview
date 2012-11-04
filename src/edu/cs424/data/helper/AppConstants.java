@@ -25,7 +25,7 @@ public class AppConstants {
 	public static int mapPanelWidth = 650;
 	public static int mapPanelHeight = 384;
 	
-	public static int mapOffsetX = 20;
+	public static int mapOffsetX = 50;
 	public static int mapOffsetY = 50;
 	public static int mapOffsetWidth = 480;
 	public static int mapOffsetHeight = mapPanelHeight - (2*mapOffsetY);

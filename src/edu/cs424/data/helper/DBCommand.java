@@ -100,7 +100,20 @@ public class DBCommand
 		else
 		{			
 			filterData(filteredData2, unFilteredData2);
-		}		
+		}
+		
+		ArrayList<DataPoint> d1 = new ArrayList<DataPoint>();
+		ArrayList<DataPoint> d2 = new ArrayList<DataPoint>();
+		
+		for(ArrayList<DataPoint> d:filteredData1.values()) {
+			d1.addAll(d);
+		}
+		for(ArrayList<DataPoint> d:filteredData2.values()) {
+			d2.addAll(d);
+		}
+		
+		System.out.println("DB: filtered 1: " + d1.size());
+		System.out.println("DB: filtered 2: " + d2.size());
 		
 		mainPanel.forceRedrawAllComponents();
 	}
