@@ -259,13 +259,13 @@ public class ButtonData
 		dbMap.put( "Nov", "Nov" );
 		dbMap.put( "Dec", "Dec" );
 
-		dbMap.put( "Sunday", "Sunday" );
-		dbMap.put( "Monday", "Monday" );
-		dbMap.put( "Tuesday", "Tuesday" );
-		dbMap.put( "Wednesday", "Wednesday" );
-		dbMap.put( "Thursday", "Thursday" );
-		dbMap.put( "Friday", "Friday" );
-		dbMap.put( "Saturday", "Saturday" );
+		dbMap.put( "Sunday", "Sun" );
+		dbMap.put( "Monday", "Mon" );
+		dbMap.put( "Tuesday", "Tues" );
+		dbMap.put( "Wednesday", "Wed" );
+		dbMap.put( "Thursday", "Thur" );
+		dbMap.put( "Friday", "Fri" );
+		dbMap.put( "Saturday", "Sat" );
 		dbMap.put( "No Data", "9" );
 		dbMap.put( "No Loc. Data", "99" );
 
