@@ -11,6 +11,7 @@ import java.util.Set;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import edu.cs424.data.helper.ButtonData;
 import edu.cs424.data.helper.DBCommand;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
@@ -24,6 +25,9 @@ import edu.cs424.traffic.pubsub.Suscribe;
 
 public class BarGraph extends Panel implements TouchEnabled,Suscribe
 {
+
+
+
 	public enum Type{
 		Month("Months",3609),Day("Days",748),Year("Years",39252);
 		private String value;
@@ -76,35 +80,42 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 
 			if(toPlot != null)
 			{
-				for( String key : toPlot.keySet() )
+				ArrayList<String> xLabels;
+
+				if( Type.Year == currentType)
+				{
+					xLabels = ButtonData.buttonValues.get("Years");
+				}
+				else if(Type.Month == currentType)
+				{
+					xLabels = ButtonData.buttonValues.get("Months");
+				}
+				else
+				{
+					xLabels = ButtonData.buttonValues.get("Days");
+				}
+
+				for( String key : xLabels )
 				{
 					textAlign(PConstants.CENTER, PConstants.CENTER);
 					float y;
+					if(toPlot.containsKey(key))
+					{
+						fill(EnumColor.SOMERANDOM);				
+						y = PApplet.map(toPlot.get(key).size() , 0 , currentType.getHighest() ,0,graphAxisHeight);
+						rect(graphAxisX + (i*25), graphAxisY + graphAxisHeight - y , 25-5, y);		
+						Rectangle rect = new Rectangle(x0 + graphAxisX + (i*25),y0 + graphAxisY + graphAxisHeight - y , 25-5, y,key);
+						currentRectList.add(rect);
 
-					//				fill(EnumColor.DARK_GRAY, 100);
-					//				float y = PApplet.map(totalList.get(i) , 0 , highest,0,graphAxisHeight);
-					//				rect(graphAxisX + (i*28), graphAxisY + graphAxisHeight - y , 28-5, y);
-					//
-					//				fill(EnumColor.BLACK);
-					//				textSize(8);
-					//				text("10.6%", graphAxisX + (i*28) + 14 , graphAxisHeight - y + 10);
+						textSize(8);				
+						fill(EnumColor.BLACK);
+						text(key, graphAxisX + (i*25) + 14 , graphAxisY + graphAxisHeight +10);
 
-					fill(EnumColor.SOMERANDOM);				
-					y = PApplet.map(toPlot.get(key).size() , 0 , currentType.getHighest() ,0,graphAxisHeight);
-					rect(graphAxisX + (i*28), graphAxisY + graphAxisHeight - y , 28-5, y);		
-					Rectangle rect = new Rectangle(x0 + graphAxisX + (i*28),y0 + graphAxisY + graphAxisHeight - y , 28-5, y,key);
-					currentRectList.add(rect);
+						needRedraw = false;
+						i++;
+					}
 
-					textSize(8);				
-					fill(EnumColor.BLACK);
-					text(key, graphAxisX + (i*28) + 14 , graphAxisY + graphAxisHeight +10);
 
-					needRedraw = false;
-					i++;
-					
-					//because i can plot only 10 bars :)
-					if(i >= 10)
-						break;
 				}
 			}
 

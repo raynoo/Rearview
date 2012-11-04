@@ -41,7 +41,7 @@ public class ShowSelectedAttribute extends Panel implements TouchEnabled
 			int i = 0;
 			buttonList.clear();
 			removeAllTouchSuscribers();
-			background(EnumColor.GOLD);
+			background(EnumColor.BLACK);
 
 			int count = 0;
 			for(String key : filterValuePanel.buttons.keySet())

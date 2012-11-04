@@ -66,10 +66,10 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 	public void draw()
 	{
 		if(needRedraw)
-		{
-			System.out.println("FilterValuePanel.draw()");
+		{			
 			populatePanel();
-			background(EnumColor.GOLD);			
+			background(EnumColor.BLACK);			
+			
 			for(String buttonKey : buttons.keySet())
 			{
 				ArrayList<FilterValueButton> list = buttons.get(buttonKey);

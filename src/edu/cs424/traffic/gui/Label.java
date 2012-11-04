@@ -14,34 +14,40 @@ public class Label extends Button
 		// TODO Auto-generated constructor stub
 	}
 	
-	@Override
-	public void draw()
-	{
-		if(needRedraw)
-		{	
-			background(EnumColor.BLACK,EnumColor.WHITE,5);
-			pushStyle();		
-			if(isPressed)
-			{	
-				fill(EnumColor.WHITE);
-			}
-			else
-			{					
-				fill(EnumColor.GRAY);
-			}	
-			
-			textSize(12);
-			textAlign(PApplet.CENTER, PApplet.CENTER);
-			text(text, width/2f, height/2f);			
-			needRedraw = false;
-			popStyle();
-		}
-		
-	}
+//	@Override
+//	public void draw()
+//	{
+//		if(needRedraw)
+//		{	
+//			background(EnumColor.DARK_GRAY,);
+//			pushStyle();		
+//			if(isPressed)
+//			{	
+//				fill(EnumColor.WHITE);
+//			}
+//			else
+//			{					
+//				fill(EnumColor.BLACK);
+//			}	
+//			
+//			textSize(12);
+//			textAlign(PApplet.CENTER, PApplet.CENTER);
+//			text(text, width/2f, height/2f);			
+//			needRedraw = false;
+//			popStyle();
+//		}
+//		
+//	}
 	
 	public void forceRedrawAllComponents()
 	{
 		needRedraw = true;
+	}
+	
+	@Override
+	public void setup() {
+		textSize = 12;
+		super.setup();
 	}
 	
 	

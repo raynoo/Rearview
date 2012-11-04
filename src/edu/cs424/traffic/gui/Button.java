@@ -14,6 +14,7 @@ public  class Button extends Panel implements TouchEnabled
 	int roundCorners = 5;
 	float alpha = 150;
 	public String text;
+	public int textSize = 8;
 
 	public Button(float x0, float y0, float width, float height,
 			float parentX0, float parentY0,String text,boolean isVisible) 
@@ -60,7 +61,7 @@ public  class Button extends Panel implements TouchEnabled
 				rect(0, 0, width, height, roundCorners, roundCorners, roundCorners, roundCorners);	
 				fill(EnumColor.BLACK);
 			}			
-			textSize(8);
+			textSize(textSize);
 			textAlign(PApplet.CENTER, PApplet.CENTER);
 			text(text, width/2f, height/2f);			
 			needRedraw = false;

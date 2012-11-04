@@ -49,13 +49,13 @@ public class ButtonData
 		buttonValues.put("Months", months);
 		
 		ArrayList<String> days = new ArrayList<String>();
-		days.add("Monday");
-		days.add("Tuesday");
-		days.add("Wednesday");
-		days.add("Thursday");
-		days.add("Friday");
-		days.add("Saturday");
-		days.add("Sunday");
+		days.add("Mon");
+		days.add("Tue");
+		days.add("Wed");
+		days.add("Thu");
+		days.add("Fri");
+		days.add("Sat");
+		days.add("Sun");
 		days.add("No Loc. Data");
 		buttonValues.put("Days", days);
 		
