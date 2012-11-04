@@ -246,26 +246,26 @@ public class ButtonData
 		dbMap.put( "2009", "2009" );
 		dbMap.put( "2010", "2010" );
 
-		dbMap.put( "Jan", "1" );
-		dbMap.put( "Feb", "2" );
-		dbMap.put( "March", "3" );
-		dbMap.put( "April", "4" );
-		dbMap.put( "May", "5" );
-		dbMap.put( "June", "6" );
-		dbMap.put( "July", "7" );
-		dbMap.put( "Aug", "8" );
-		dbMap.put( "Sept", "9" );
-		dbMap.put( "Oct", "10" );
-		dbMap.put( "Nov", "11" );
-		dbMap.put( "Dec", "12" );
+		dbMap.put( "Jan", "Jan" );
+		dbMap.put( "Feb", "Feb" );
+		dbMap.put( "March", "March" );
+		dbMap.put( "April", "April" );
+		dbMap.put( "May", "May" );
+		dbMap.put( "June", "June" );
+		dbMap.put( "July", "July" );
+		dbMap.put( "Aug", "Aug" );
+		dbMap.put( "Sept", "Sept" );
+		dbMap.put( "Oct", "Oct" );
+		dbMap.put( "Nov", "Nov" );
+		dbMap.put( "Dec", "Dec" );
 
-		dbMap.put( "Sunday", "1" );
-		dbMap.put( "Monday", "2" );
-		dbMap.put( "Tuesday", "3" );
-		dbMap.put( "Wednesday", "4" );
-		dbMap.put( "Thursday", "5" );
-		dbMap.put( "Friday", "6" );
-		dbMap.put( "Saturday", "7" );
+		dbMap.put( "Sunday", "Sunday" );
+		dbMap.put( "Monday", "Monday" );
+		dbMap.put( "Tuesday", "Tuesday" );
+		dbMap.put( "Wednesday", "Wednesday" );
+		dbMap.put( "Thursday", "Thursday" );
+		dbMap.put( "Friday", "Friday" );
+		dbMap.put( "Saturday", "Saturday" );
 		dbMap.put( "No Data", "9" );
 		dbMap.put( "No Loc. Data", "99" );
 
