@@ -56,7 +56,7 @@ public class ShowSelectedAttribute extends Panel implements TouchEnabled
 
 					if( button.isPressed && i < 5 && count >= startPoint)
 					{
-						SelectedAttrButton temp = new SelectedAttrButton(5, 3 + i*15, 82, 12, x0, y0,key + " = " + button.text,this);
+						SelectedAttrButton temp = new SelectedAttrButton(5, 3 + i*15, 112, 12, x0, y0,key + " = " + button.text,this);
 						addTouchSubscriber(temp);
 						temp.draw();
 						buttonList.add(temp);

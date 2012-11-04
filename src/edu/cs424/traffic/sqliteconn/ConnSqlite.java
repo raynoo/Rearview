@@ -60,7 +60,7 @@ public class ConnSqlite {
 
 	private static String appendFilters(FilterData filterData, String query) {
 
-		HashMap<String, ArrayList<Integer>> values = filterData.getSelectedValues();
+		HashMap<String, ArrayList<String>> values = filterData.getSelectedValues();
 
 		StringBuffer append = new StringBuffer("");
 		boolean first1 = true;
@@ -68,7 +68,7 @@ public class ConnSqlite {
 		if(! values.isEmpty()) {
 			append.append(" where ");
 
-			for(Entry<String, ArrayList<Integer>> filter : values.entrySet()) {
+			for(Entry<String, ArrayList<String>> filter : values.entrySet()) {
 
 				boolean first2 = true;
 				if( !first1 )
@@ -78,7 +78,7 @@ public class ConnSqlite {
 				append.append(filter.getKey());
 				append.append(" in ( ");				
 
-				for(Integer num : filter.getValue()) {				
+				for(String num : filter.getValue()) {				
 					if ( !first2 )
 						append.append(", ");
 

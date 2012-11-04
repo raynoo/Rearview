@@ -73,6 +73,8 @@ public class DBCommand
 		return instance;
 	}
 
+	// coming from the filter holder
+	// there is one more update filter thats coming from the graph
 	public void updateFilter( HashMap<String, Set<String>>filterSelection , Event event)
 	{
 		// getting the new data
@@ -122,7 +124,23 @@ public class DBCommand
 			}
 			
 			filteredData.put(key, toStore);
-		}		
+		}	
+		
+		int sum1 = 0;
+		int sum = 0;
+		
+		for (String key : filteredData.keySet() )
+		{
+			sum += filteredData.get(key).size();
+		}
+		
+		for ( String key : unFilteredData.keySet() )
+		{
+			sum1 += unFilteredData.get(key).size();
+		}
+		
+		System.out.println("DBCommand.filterData() filtered size " + sum);
+		System.out.println("DBCommand.filterData() unfiltered size " + sum1);
 	}
 
 	public HashMap<String, ArrayList<DataPoint>> getGraphData(Event event)
@@ -144,6 +162,7 @@ public class DBCommand
 
 	public  void updateVisibleCoordinate(Location topLeft, Location bottomRight)
 	{
+		System.out.println("DBCommand.updateVisibleCoordinate()");
 		this.topLeft = topLeft;
 		this.bottomRight = bottomRight;
 		
@@ -154,7 +173,7 @@ public class DBCommand
 	}
 	
 	
-	
+	// filter change coming from the data graph
 	public void notifyTimeFilterChange(Event event,Type type,String yearValue , String monthValue)
 	{
 		if( event == Event.CHANGE_FILTER_GRAPH1 )
@@ -213,7 +232,7 @@ public class DBCommand
 	// from button shit to db shit
 	private FilterData convertShit(  HashMap<String, Set<String>> filterData )
 	{
-		HashMap<String, ArrayList<Integer>> selectedValues = new HashMap<String, ArrayList<Integer>>();
+		HashMap<String, ArrayList<String>> selectedValues = new HashMap<String, ArrayList<String>>();
 		
 		for(String key : filterData.keySet() )
 		{
@@ -222,11 +241,11 @@ public class DBCommand
 			if( temp != null && temp.size() > 0 )
 			{
 				String columnName = ButtonData.buttonValueDBMapping.get(key);
-				ArrayList<Integer> columnValues = new ArrayList<Integer>();
+				ArrayList<String> columnValues = new ArrayList<String>();
 				
 				for(String val : temp)
 				{
-					columnValues.add(new Integer(ButtonData.buttonValueDBMapping.get(val)));
+					columnValues.add(ButtonData.buttonValueDBMapping.get(val));
 				}
 				
 				selectedValues.put(columnName, columnValues);

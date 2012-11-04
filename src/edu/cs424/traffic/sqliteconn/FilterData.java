@@ -5,14 +5,14 @@ import java.util.HashMap;
 
 public class FilterData {
 
-	HashMap<String, ArrayList<Integer>> selectedValues;
+	HashMap<String, ArrayList<String>> selectedValues;
 	
-	public FilterData(HashMap<String, ArrayList<Integer>> selectedValues) 
+	public FilterData(HashMap<String, ArrayList<String>> selectedValues) 
 	{
 		this.selectedValues = selectedValues;
 	}
 
-	public HashMap<String, ArrayList<Integer>> getSelectedValues() {
+	public HashMap<String, ArrayList<String>> getSelectedValues() {
 		return selectedValues;
 	}
 

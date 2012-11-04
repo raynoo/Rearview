@@ -132,7 +132,7 @@ public class AppConstants {
 	//All selected filter values panel
 	public static int selectedValuesX = 480;
 	public static int selectedValuesY = 15;
-	public static int selectedValuesWidth = 100;
+	public static int selectedValuesWidth = 130;
 	public static int selectedValuesHeight = 100;	
 	
 

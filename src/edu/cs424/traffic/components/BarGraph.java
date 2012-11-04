@@ -25,17 +25,21 @@ import edu.cs424.traffic.pubsub.Suscribe;
 public class BarGraph extends Panel implements TouchEnabled,Suscribe
 {
 	public enum Type{
-		Month("Months"),Day("Days"),Year("Years");
+		Month("Months",3609),Day("Days",748),Year("Years",39252);
 		private String value;
-		private Type(String value) {
+		int highest;
+		private Type(String value,int highest) {
 			this.value = value;
+			this.highest = highest;
 		}
 		public String getValue(){
 			return value;
 		}
+		public int getHighest(){
+			return highest;
+		}
 	}
 
-	float highest = 30000;
 	public HashMap<String, Set<String>> selectedButtonList;
 	Event suscribed;
 	public Type currentType = Type.Year;
@@ -86,9 +90,9 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 					//				text("10.6%", graphAxisX + (i*28) + 14 , graphAxisHeight - y + 10);
 
 					fill(EnumColor.SOMERANDOM);				
-					y = PApplet.map(toPlot.get(key).size() , 0 , highest,0,graphAxisHeight);
+					y = PApplet.map(toPlot.get(key).size() , 0 , currentType.getHighest() ,0,graphAxisHeight);
 					rect(graphAxisX + (i*28), graphAxisY + graphAxisHeight - y , 28-5, y);		
-					Rectangle rect = new Rectangle(x0 + graphAxisX + (i*28),y0 + graphAxisY + graphAxisHeight - y , 28-5, y,"2050");
+					Rectangle rect = new Rectangle(x0 + graphAxisX + (i*28),y0 + graphAxisY + graphAxisHeight - y , 28-5, y,key);
 					currentRectList.add(rect);
 
 					textSize(8);				
@@ -97,6 +101,10 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 
 					needRedraw = false;
 					i++;
+					
+					//because i can plot only 10 bars :)
+					if(i >= 10)
+						break;
 				}
 			}
 
@@ -161,14 +169,14 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 							yearValue = temp.getValue();							
 							currentType = Type.Month;
 							monthValue = null;
-							DBCommand.getInstance().notifyTimeFilterChange(suscribed, Type.Year, yearValue, monthValue);
+							DBCommand.getInstance().notifyTimeFilterChange(suscribed, currentType, yearValue, monthValue);
 							break;
 						}
 						else if( currentType == Type.Month )
 						{
 							monthValue = temp.getValue();
 							currentType = Type.Day;
-							DBCommand.getInstance().notifyTimeFilterChange(suscribed, Type.Year, yearValue, monthValue);
+							DBCommand.getInstance().notifyTimeFilterChange(suscribed, currentType, yearValue, monthValue);
 							break;
 						}
 						else
