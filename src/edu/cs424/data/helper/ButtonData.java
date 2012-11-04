@@ -137,6 +137,7 @@ public class ButtonData
 		manncol.add("Sideswipe");
 		manncol.add("No Data");
 		manncol.add("No Loc Data");
+		buttonValues.put("Collision", manncol);
 		
 		ArrayList<String> age =  new ArrayList<String>();
 		age.add("< 16");
