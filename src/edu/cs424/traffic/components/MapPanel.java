@@ -16,6 +16,7 @@ import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.SettingsLoader;
 import edu.cs424.traffic.map.dataset.Cluster;
+import edu.cs424.traffic.map.dataset.CrashInfo;
 import edu.cs424.traffic.map.dataset.DataPoint;
 import edu.cs424.traffic.map.dataset.Grid;
 import edu.cs424.traffic.map.dataset.Marker;
@@ -381,16 +382,19 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	void drawClusterInfo(Marker m) {
 		System.out.println("clicked! " + m.getCluster().getDataID());
 		
-		ConnSqlite.getSingleCrashData(m.getCluster().getDataID());
+//		CrashInfo crashinfo = ConnSqlite.getSingleCrashData(m.getCluster().getDataID());
 		
 		pushStyle();
 		noFill();
 		strokeWeight(2);
 		fill(EnumColor.BLACK);
-		textSize(18);
-		text("Crash Details", mapControlPanelX+30, mapOffsetY);
-		textSize(12);
-		text(Integer.toString(m.getCluster().getCrashCount()), mapControlPanelX+30, mapOffsetY+30);
+		textSize(14);
+		text("Crash Details", mapControlPanelX+5, mapOffsetY-5);
+		textSize(10);
+//		text(crashinfo.toString(), (float)mapControlPanelX+5, (float)mapOffsetY+10, mapControlPanelWidth-10, mapOffsetHeight/3*2);
+		
+		String s = "Draws text \nto the screen. \nDisplays\n the information specified in the data or stringdata parameters on the screen in the position specified by the x and y parameters and the optional z parameter. A default font will be used unless a font is set with the textFont() function. Change the color of the text with the fill() function. The text displays in relation to the textAlign() function, which gives the option to draw to the left, right, and center of the coordinates.";
+		text(s, (float)mapControlPanelX+5, (float)mapOffsetY+10, mapControlPanelWidth-10, mapOffsetHeight/3*2);
 		popStyle();
 	}
 

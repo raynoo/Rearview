@@ -154,7 +154,7 @@ class Cell {
 	
 	public void createCluster() {
 		int uid = 0;
-		if(this.datapoints.size() == 1)
+//		if(this.datapoints.size() == 1)
 			uid = Integer.parseInt(this.datapoints.get(0).getUid());
 		
 		this.cluster = new Cluster((this.topLeft.x + this.bottomRight.x)/2, 
