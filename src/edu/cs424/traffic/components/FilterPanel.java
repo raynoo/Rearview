@@ -34,7 +34,7 @@ public class FilterPanel extends Panel implements TouchEnabled,Suscribe
 
 	public void setup()
 	{	
-		PubSub.suscribeEvent(Event.LOAD_FILTER, this);
+		PubSub.subscribeEvent(Event.LOAD_FILTER, this);
 		filterButtons = new HashMap<String, FilterButton>();
 		selectedButtonList = new HashMap<String, Set<String>>();
 

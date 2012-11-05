@@ -44,7 +44,7 @@ public class FilterHolder extends Panel implements TouchEnabled,Suscribe
 
 	public void setup() 
 	{
-		PubSub.suscribeEvent(Event.CLEAR_FILTER,this);
+		PubSub.subscribeEvent(Event.CLEAR_FILTER,this);
 
 		filter = new FilterPanel(AppConstants.filterButtonX, AppConstants.filterButtonY, 255, 95, x0, y0,this);
 		filter.setup();

@@ -314,7 +314,7 @@ public class ButtonData
 		dbMap.put( "Christmas", "11" );
 		dbMap.put( "New Year's Eve", "10" );
 		dbMap.put( "No Data", "9" );
-		dbMap.put( "No Loc Data", "99" );
+	//	dbMap.put( "No Loc Data", "99" );
 
 //		dbMap.put( "No Collision", "0" );
 //		dbMap.put( "Rear-End", "1" );

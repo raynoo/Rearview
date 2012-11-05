@@ -14,7 +14,7 @@ public class PubSub
 	
 	private static HashMap<Event , ArrayList<Suscribe> > listners = new HashMap<Event, ArrayList<Suscribe>>();
 
-	public static void suscribeEvent(Event eventName , Suscribe suscriber)
+	public static void subscribeEvent(Event eventName , Suscribe suscriber)
 	{
 		if(listners.containsKey(eventName))
 		{

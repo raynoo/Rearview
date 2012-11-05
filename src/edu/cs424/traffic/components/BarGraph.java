@@ -53,7 +53,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 			float parentX0, float parentY0,Event toSuscribe) 
 	{		
 		super(x0, y0, width, height, parentX0, parentY0);
-		PubSub.suscribeEvent(toSuscribe, this);
+		PubSub.subscribeEvent(toSuscribe, this);
 		suscribed = toSuscribe;		
 	}
 
@@ -72,12 +72,26 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 			pushStyle();			
 			background(EnumColor.WHITE);
 			rect(graphAxisX, graphAxisY, graphAxisWidth, graphAxisHeight);
+			
+			textSize(10);
+			fill(EnumColor.BLACK);
+			textAlign(PConstants.TOP, PConstants.LEFT);
+			if(currentType == Type.Month)
+			{
+				text(yearValue,graphAxisX,graphAxisY-10);
+			}
+			
+			if(currentType == Type.Day)
+			{
+				text(yearValue+ "   " + monthValue,graphAxisX,graphAxisY-10);
+			}
 
 			HashMap<String, ArrayList<DataPoint>> toPlot= DBCommand.getInstance().getGraphData(suscribed);
 			int i = 0 ;
 
 			if(toPlot != null)
 			{
+				textSize(8);
 				ArrayList<String> xLabels;
 
 				if( Type.Year == currentType)
