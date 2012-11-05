@@ -23,6 +23,15 @@ public class Helper {
 		Findings f2 = new Findings(s21, s22, "", 0.0f, 0.0f, 0);	
 		sending.add(f2);
 		
+		ArrayList<String> s31 = new ArrayList<String>();
+		s31.add("Body Type = Car");
+		s31.add("No. of Deaths = 5-10 Deaths");
+		s31.add("No. of Deaths = 3-5 Deaths");
+		
+		String s32 = "Somethings2";
+		Findings f3 = new Findings(s31, s32, "", 0.0f, 0.0f, 0);	
+		sending.add(f3);
+		
 		return sending;
 	}
 	
