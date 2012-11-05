@@ -103,12 +103,12 @@ public abstract class Panel
 	
 	public void text(String str, int start, int stop, float x, float y)
 	{
-		Main.main.text(str, s(start), s(stop), s(x), s(y));		
+		Main.main.text(str,x0Zoom+ s(start), y0Zoom+s(stop), s(x), s(y));		
 	}
 	
 	public void text(String str, float x, float y, float a, float b)
 	{
-		Main.main.text(str, s(x), s(y), s(a), s(b));
+		Main.main.text(str,x0Zoom+ s(x),y0Zoom+ s(y), s(a), s(b));
 	}
 
 	public void textAlign(int alignX, int alignY) {

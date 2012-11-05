@@ -153,13 +153,13 @@ public class AppConstants {
 	
 	public static int textBoxFindingX = 100;
 	public static int textBoxFindingY = 15;
-	public static int textBoxWidth = 260;
-	public static int textBoxHeight = 100;
+	public static float textBoxWidth = 260;
+	public static float textBoxHeight = 100;
 	
 	public static int textBoxEventX = 380;
 	public static int textBoxEventY = 15;
-	public static int textBoxEventWidth = 260;
-	public static int textBoxEventHeight = 100;
+	public static float textBoxEventWidth = 260;
+	public static float textBoxEventHeight = 100;
 	
 	
 	

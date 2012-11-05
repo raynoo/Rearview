@@ -17,6 +17,7 @@ public class Tab2 extends Panel implements TouchEnabled
 {
 	Button[] buttons;
 	ArrayList<Findings> findings;
+	int selectedButton = 0;
 
 	public Tab2(float x0, float y0, float width, float height, float parentX0,
 			float parentY0) 
@@ -30,27 +31,25 @@ public class Tab2 extends Panel implements TouchEnabled
 	{
 		if( event == MouseMovements.MOUSEDOWN )
 		{
+			int i = 0;
 			for(Button button : buttons)
 			{
 				if( button.containsPoint(x, y) )
-				{
-					button.setPressed(true);
+				{					
 					PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH1);
 					PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH2);
 					
-					PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH1,findings.get(0));
-					//PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH2);
-				}
-				else
-				{
-					button.setPressed(false);
-				}
+					PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH1,findings.get(i));
+					PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH2,findings.get(i));
+					
+					selectedButton = i;
+				}				
+				i++;
 			}
 		}
 		
 		return false;
 	}
-
 	
 	public void setup() 
 	{
@@ -60,9 +59,9 @@ public class Tab2 extends Panel implements TouchEnabled
 		for(int i = 0 ; i < 5 ; i++)
 		{
 			buttons[i] = new Button(eventButtonX,  eventButtonY + i*(eventButtonHeight + eventButtonSpacing),
-					eventButtonWidth, eventButtonHeight, x0, y0, "Finding "+i, true);
+					eventButtonWidth, eventButtonHeight, x0, y0, "Finding "+(i+1), true);
+			buttons[i].setPressed(false);
 		}
-
 	}
 
 	@Override
@@ -71,10 +70,27 @@ public class Tab2 extends Panel implements TouchEnabled
 		{
 			background(EnumColor.BLACK);
 			
+			int i = 0;
 			for(Button button : buttons)
 			{
+				if( i == selectedButton )
+				{
+					button.setPressed(true);
+				}
+				else
+				{
+					button.setPressed(false);
+				}
 				button.draw();
+				i++;
 			}
+			
+			pushStyle();
+			fill(EnumColor.WHITE);
+			textSize(9);
+			text(findings.get(selectedButton).getInterestingFinding(), textBoxFindingX, textBoxFindingY, textBoxWidth, textBoxHeight);
+			text(findings.get(selectedButton).getEvent(), textBoxEventX, textBoxEventY, textBoxEventWidth, textBoxEventHeight);
+			popStyle();			
 			
 			needRedraw = false;
 		}
