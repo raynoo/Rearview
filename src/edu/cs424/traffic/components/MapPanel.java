@@ -64,6 +64,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	ArrayList<DataPoint> pointsForGraph1 = new ArrayList<DataPoint>();
 	ArrayList<DataPoint> pointsForGraph2 = new ArrayList<DataPoint>();
 	
+	//take highest and lowest from 2 graphs
+	int lowestCrashCount, highestCrashCount;
 
 	//for buttons
 	Button out, in, aerial, hybrid, road;
@@ -361,13 +363,18 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					grid.clusterData(pointsForGraph1);
 					
+					if(this.lowestCrashCount > grid.low)
+						this.lowestCrashCount = grid.low;
+					else if(this.highestCrashCount < grid.high)
+						this.highestCrashCount = grid.high;
+					
 					if(map.getZoom() > stopClusterAtZoom)
 						//dont cluster beyond this zoom
-						markersForGraph1 = grid.showIndividualPoints(pointsForGraph1);
+						markersForGraph1 = grid.showIndividualPoints(pointsForGraph1, this.lowestCrashCount, this.highestCrashCount);
 					else
-						markersForGraph1 = grid.getMarkers(EnumColor.RED);
-					
-					drawMarkers(markersForGraph1);
+						markersForGraph1 = grid.getMarkers(EnumColor.RED, this.lowestCrashCount, this.highestCrashCount);
+
+						drawMarkers(markersForGraph1);
 				}
 				else if(isGraph2) {
 					grid.setColor(EnumColor.GOLD);
@@ -381,11 +388,16 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					grid.clusterData(pointsForGraph2);
 					
+					if(this.lowestCrashCount > grid.low)
+						this.lowestCrashCount = grid.low;
+					else if(this.highestCrashCount < grid.high)
+						this.highestCrashCount = grid.high;
+					
 					if(map.getZoom() > stopClusterAtZoom)
 						//dont cluster beyond this zoom
-						markersForGraph2 = grid.showIndividualPoints(pointsForGraph2);
+						markersForGraph2 = grid.showIndividualPoints(pointsForGraph2, this.lowestCrashCount, this.highestCrashCount);
 					else
-						markersForGraph2 = grid.getMarkers(EnumColor.GOLD);
+						markersForGraph2 = grid.getMarkers(EnumColor.GOLD, this.lowestCrashCount, this.highestCrashCount);
 					
 					drawMarkers(markersForGraph2);
 				}

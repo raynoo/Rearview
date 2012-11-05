@@ -23,8 +23,9 @@ public class Grid extends Panel {
 	public static PVector[][] gridLocations;
 	ArrayList<Marker> dataMarkers;
 	
-	static Cell highest, lowest;
+//	static Cell highest, lowest;
 	static float cellx, celly;
+	public int high = Integer.MIN_VALUE, low = Integer.MAX_VALUE;
 	
 	EnumColor graphColor;
 	
@@ -48,19 +49,9 @@ public class Grid extends Panel {
 		this.graphColor = color;
 	}
 	
-	void getHighLow() {
-		int high = Integer.MIN_VALUE, low = Integer.MAX_VALUE;
-		
-		for(Cell c : this.gridCellMap.values()) {
-			if(high < c.cluster.getCrashCount()) {
-				high = c.cluster.getCrashCount();
-				highest = c;
-			}
-			else if(low > c.cluster.getCrashCount()) {
-				low = c.cluster.getCrashCount();
-				lowest = c;
-			}
-		}
+	public int[] getHighLow() {
+		int[] lowhigh = {low, high};
+		return lowhigh;
 	}
 	
 	public void clusterData(ArrayList<DataPoint> data) {
@@ -103,44 +94,42 @@ public class Grid extends Panel {
 	}
 	
 	void createClusters() {
-		int high = Integer.MIN_VALUE, low = Integer.MAX_VALUE;
-		
 		for(Cell c: gridCellMap.values()) {
 			c.createCluster();
 			
 			if(high < c.cluster.getCrashCount()) {
 				high = c.cluster.getCrashCount();
-				highest = c;
+//				highest = c;
 			}
 			else if(low > c.cluster.getCrashCount()) {
 				low = c.cluster.getCrashCount();
-				lowest = c;
+//				lowest = c;
 			}
 		}
 	}
 	
-	void createMarkers() {
+	void createMarkers(int lowestCount, int highestCount) {
 		dataMarkers = new ArrayList<Marker>();
 		
 		for(Cell c: gridCellMap.values()) {
 			dataMarkers.add(c.getDataMarker(this.graphColor, 
-					lowest.cluster.getCrashCount(), highest.cluster.getCrashCount(),
+					lowestCount, highestCount,
 					this.celly));
 		}
 	}
 	
-	public ArrayList<Marker> showIndividualPoints(ArrayList<DataPoint> data) {
+	public ArrayList<Marker> showIndividualPoints(ArrayList<DataPoint> data, int lowestCount, int highestCount) {
 		dataMarkers = new ArrayList<Marker>();
 		
 		for(DataPoint d : data) {
-			dataMarkers.add(new Marker(d, this.graphColor, this.lowest.cluster.getCrashCount(), 
-					this.highest.cluster.getCrashCount(), this.celly));
+			dataMarkers.add(new Marker(d, this.graphColor, lowestCount, highestCount, this.celly));
 		}
 		return dataMarkers;
 	}
 	
-	public ArrayList<Marker> getMarkers(EnumColor color) {
-		createMarkers();
+	public ArrayList<Marker> getMarkers(EnumColor color, int lowestCount, int highestCount) {
+		createMarkers(lowestCount, highestCount);
+		
 		if(MapPanel.clusterGridMode) //TODO: how to handle state view?
 			drawClusterGridLines();
 		

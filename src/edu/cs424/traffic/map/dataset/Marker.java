@@ -37,7 +37,7 @@ public class Marker {
 			this.radius = SettingsLoader.scaleFactor * 5;
 		else
 			this.radius = p.map((float)this.cluster.getCrashCount(), 
-					(float)lowestCount, (float)highestCount, 0f, (float)(0.4 * celly));
+					(float)lowestCount, (float)highestCount, 0f, (float)(0.45 * celly));
 		//scale everything!
 	}
 	
