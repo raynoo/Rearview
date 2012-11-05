@@ -136,6 +136,10 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 				if(x > s(mapOffsetX) && x < s(mapOffsetX+mapOffsetWidth) 
 						&& y > s(mapOffsetY) && y < s(mapOffsetY+mapOffsetHeight)) {
 					
+					//if xy is on the circles
+					if(isOnMarker(x, y, event))
+						return false;
+					
 					if(touchList.size() < 2)
 					{
 						map.tx += (x - lastTouchPos.x)/map.sc;
@@ -183,10 +187,20 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	boolean isOnButton(float x, float y) {
 		if(in.containsPoint(x, y)) {
 			map.zoomIn();
+			
+			//update visible lat longs
+			Location[] loc = getBoundaryLatLong();
+			DBCommand.getInstance().updateVisibleCoordinate(loc[0], loc[1]);
+			
 			return true;
 		}
 		else if(out.containsPoint(x, y)) {
 			map.zoomOut();
+			
+			//update visible lat longs
+			Location[] loc = getBoundaryLatLong();
+			DBCommand.getInstance().updateVisibleCoordinate(loc[0], loc[1]);
+			
 			return true;
 		}
 		else if(aerial.containsPoint(x, y)) {
@@ -312,13 +326,15 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			System.out.println("MapPanel: Graph points " + points.size());
 			
 			if(clusterGridMode) {
+				clusterByGrid.setPressed(true);
 				PVector[] p = getBoundaryXY();
 				grid = new Grid(p[0], p[1], gridSize);
 				grid.clusterData(points);
 				drawMarkers(grid.getMarkers());
 				
 			} else {
-				drawRawData(points);
+				if(map.getZoom() > 15)
+					drawRawData(points);
 			}
 			
 			Location[] pv = getBoundaryLatLong();
