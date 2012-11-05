@@ -20,6 +20,10 @@ public class DataPoint {
 	public Location getLocation() {
 		return d;
 	}
+	
+	public String getUid() {
+		return uid;
+	}
 
 	public String getWhen() {
 		return when;

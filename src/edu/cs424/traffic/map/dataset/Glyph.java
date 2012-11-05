@@ -11,5 +11,8 @@ public class Glyph {
 
 	}
 	
+	public void draw() {
+		
+	}
 	
 }

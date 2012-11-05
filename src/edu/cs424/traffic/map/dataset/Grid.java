@@ -153,8 +153,12 @@ class Cell {
 	}
 	
 	public void createCluster() {
+		int uid = 0;
+		if(this.datapoints.size() == 1)
+			uid = Integer.parseInt(this.datapoints.get(0).getUid());
+		
 		this.cluster = new Cluster((this.topLeft.x + this.bottomRight.x)/2, 
-				(this.topLeft.y + this.bottomRight.y)/2, 0);
+				(this.topLeft.y + this.bottomRight.y)/2, uid);
 		
 		for(DataPoint d : datapoints)
 			this.cluster.addDataPoint(d);

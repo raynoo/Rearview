@@ -7,7 +7,6 @@ public class Cluster {
 
 	PVector locationxy;
 	int crashCount;
-	
 	int dataID;
 	
 	public Cluster() {
