@@ -32,7 +32,7 @@ public class MainPanel extends Panel implements TouchEnabled
 {	
 	public BarGraph graph1,graph2;
 	public MapPanel mapPanel;
-	Label label1,label2,label3;
+	Label label1,label2;
 
 	boolean isTab1 = true,isTab2 = false;
 	Tab1 tab1;
@@ -62,7 +62,7 @@ public class MainPanel extends Panel implements TouchEnabled
 			{
 				label1.setPressed(true);
 				label2.setPressed(false);
-				label3.setPressed(false);
+				//label3.setPressed(false);
 				isTab1 = true;
 				isTab2 = false;
 			}
@@ -70,7 +70,7 @@ public class MainPanel extends Panel implements TouchEnabled
 			{
 				label2.setPressed(true);
 				label1.setPressed(false);
-				label3.setPressed(false);
+				//label3.setPressed(false);
 				isTab1 = false;
 				isTab2 = true;
 			}	
@@ -104,7 +104,7 @@ public class MainPanel extends Panel implements TouchEnabled
 
 		label1.forceRedrawAllComponents();
 		label2.forceRedrawAllComponents();
-		label3.forceRedrawAllComponents();
+		//label3.forceRedrawAllComponents();
 		graph1.forceRedrawAllComponents();
 		graph2.forceRedrawAllComponents();
 		needRedraw = true;
@@ -135,7 +135,7 @@ public class MainPanel extends Panel implements TouchEnabled
 
 		label1.forceRedrawAllComponents();
 		label2.forceRedrawAllComponents();
-		label3.forceRedrawAllComponents();
+		//label3.forceRedrawAllComponents();
 		graph1.forceRedrawAllComponents();
 		graph2.forceRedrawAllComponents();
 		needRedraw = true;
@@ -163,8 +163,8 @@ public class MainPanel extends Panel implements TouchEnabled
 		label1.setup();
 		label2 = new Label(775, 225, 100, tabPanelHeight, x0, y0, "Events",false);	
 		label2.setup();
-		label3 = new Label(890, 225, 100, tabPanelHeight, x0, y0, "Search",false);	
-		label3.setup();
+		//label3 = new Label(890, 225, 100, tabPanelHeight, x0, y0, "Search",false);	
+		//label3.setup();
 
 		graph1  = new BarGraph(graph1X, graph1Y, graph1Width, graph1Height, x0, y0,Event.CHANGE_FILTER_GRAPH1);
 		graph1.setup();
@@ -182,7 +182,7 @@ public class MainPanel extends Panel implements TouchEnabled
 		mapPanel.forceRedrawAllComponents();
 		label1.forceRedrawAllComponents();
 		label2.forceRedrawAllComponents();
-		label3.forceRedrawAllComponents();
+	//	label3.forceRedrawAllComponents();
 		graph1.forceRedrawAllComponents();
 		graph2.forceRedrawAllComponents();
 
@@ -216,7 +216,7 @@ public class MainPanel extends Panel implements TouchEnabled
 			graph2.draw();
 			label1.draw();
 			label2.draw();
-			label3.draw();
+			//label3.draw();
 			needRedraw = false;
 		}
 	}

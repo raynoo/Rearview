@@ -2,6 +2,8 @@ package edu.cs424.traffic.components;
 
 import java.util.ArrayList;
 
+import processing.core.PConstants;
+
 import edu.cs424.data.helper.Findings;
 import edu.cs424.data.helper.Helper;
 import edu.cs424.traffic.central.EnumColor;
@@ -42,6 +44,7 @@ public class Tab2 extends Panel implements TouchEnabled
 					PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH1,findings.get(i));
 					PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH2,findings.get(i));
 					
+					MapPanel.fullZoomOut();
 					selectedButton = i;
 				}				
 				i++;
@@ -88,8 +91,14 @@ public class Tab2 extends Panel implements TouchEnabled
 			pushStyle();
 			fill(EnumColor.WHITE);
 			textSize(9);
-			text(findings.get(selectedButton).getInterestingFinding(), textBoxFindingX, textBoxFindingY, textBoxWidth, textBoxHeight);
-			text(findings.get(selectedButton).getEvent(), textBoxEventX, textBoxEventY, textBoxEventWidth, textBoxEventHeight);
+			text(findings.get(selectedButton).getInterestingFinding(), textBoxFindingX+15, textBoxFindingY+15, textBoxWidth, textBoxHeight);
+			text(findings.get(selectedButton).getEvent(), textBoxEventX+15, textBoxEventY+15, textBoxEventWidth, textBoxEventHeight);
+			
+			//textAlign(PConstants.LEFT, PConstants.TOP);
+			textSize(12);
+			text("Findings", textBoxFindingX, textBoxFindingY);
+			text("Events", textBoxEventX, textBoxEventY);
+			
 			popStyle();			
 			
 			needRedraw = false;
