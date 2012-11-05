@@ -5,7 +5,8 @@ public enum EnumConfig
 	
 ONWALL("onwall"),
 SCALEFACTOR("scalefactor"),
-RENDERER("renderer");
+RENDERER("renderer"),
+REPEATDRAW("repeatdraw");
 
 
 String propName;
