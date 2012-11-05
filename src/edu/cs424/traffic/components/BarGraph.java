@@ -249,8 +249,6 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 			currentType = Type.Year;
 			yearValue = null;
 			monthValue = null;
-
-			System.out.println("BarGraph.receiveNotification()" + selectedButtonList);
 		}		
 	}
 

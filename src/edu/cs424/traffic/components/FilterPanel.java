@@ -67,7 +67,6 @@ public class FilterPanel extends Panel implements TouchEnabled,Suscribe
 	{
 		if(needRedraw)
 		{
-			System.out.println("Filter.draw()");
 			for(Button button : filterButtons.values())
 			{
 				button.draw();

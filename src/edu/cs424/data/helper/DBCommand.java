@@ -114,8 +114,8 @@ public class DBCommand
 			d2.addAll(d);
 		}
 		
-		System.out.println("DB: filtered 1: " + d1.size());
-		System.out.println("DB: filtered 2: " + d2.size());
+//		System.out.println("DB: filtered 1: " + d1.size());
+//		System.out.println("DB: filtered 2: " + d2.size());
 		
 		mainPanel.forceRedrawAllComponents();
 	}
@@ -151,9 +151,9 @@ public class DBCommand
 		{
 			sum1 += unFilteredData.get(key).size();
 		}
-		
-		System.out.println("DBCommand.filterData() filtered size " + sum);
-		System.out.println("DBCommand.filterData() unfiltered size " + sum1);
+//		
+//		System.out.println("DBCommand.filterData() filtered size " + sum);
+//		System.out.println("DBCommand.filterData() unfiltered size " + sum1);
 	}
 
 	public HashMap<String, ArrayList<DataPoint>> getGraphData(Event event)

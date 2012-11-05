@@ -24,7 +24,6 @@ public class FilterValuePanel extends Panel implements TouchEnabled
 	@Override
 	public boolean touch(float x, float y, MouseMovements event) 
 	{
-		System.out.println("FilterValuePanel.touch()");
 		propagateTouch(x, y, event);
 		return false;
 	}

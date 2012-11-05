@@ -26,7 +26,7 @@ public class SettingsLoader
 		try 
 		{
 			dir = new File(".").getCanonicalPath();
-			System.out.println("SettingsLoader.SettingsLoader() " + dir);
+			
 			if (dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase(File.separator +"lib")   || dir.substring(dir.length() - 4, dir.length()).equalsIgnoreCase(File.separator +"bin")) 
 			{
 				dir = dir.substring(0, dir.length() - 4);
