@@ -100,6 +100,16 @@ public abstract class Panel
 	public void text(String str, float x, float y) {
 		Main.main.text(str, x0Zoom + s(x), y0Zoom + s(y));
 	}
+	
+	public void text(String str,int start,int stop ,float x, float y)
+	{
+		Main.main.text(str, start, stop, x, y);		
+	}
+	
+	public void text(String str, float x,float y, float a , float b)
+	{
+		Main.main.text(str,x,y,a,b);
+	}
 
 	public void textAlign(int alignX, int alignY) {
 		Main.main.textAlign(alignX, alignY);
@@ -129,7 +139,7 @@ public abstract class Panel
 		popStyle();
 	}
 	
-	public void backgroundLine(EnumColor fillColor, EnumColor strokeColor,float strokeWeight)
+	public void backgroundBorder(EnumColor fillColor, EnumColor strokeColor,float strokeWeight)
 	{
 		pushStyle();
 		fill(fillColor.getValue());
