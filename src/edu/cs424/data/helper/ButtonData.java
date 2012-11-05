@@ -226,7 +226,7 @@ public class ButtonData
 		dbMap.put( "Years", "Year" );
 		dbMap.put( "Months", "iaccmon" );
 		dbMap.put( "Days", "dayofweek" );
-		dbMap.put( "Time", "sacctime" );
+		dbMap.put( "Time", "iacchr" );
 		dbMap.put( "Hit & Run", "ihitrun" );
 		dbMap.put( "Holiday", "iholiday" );
 		dbMap.put( "Highway", "iholiday" );
