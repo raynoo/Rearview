@@ -93,7 +93,6 @@ public class FilterPanel extends Panel implements TouchEnabled
 				temp.setPressed(false);
 		}
 		setReDraw();
-
 	}
 
 

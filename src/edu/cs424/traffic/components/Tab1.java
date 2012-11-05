@@ -145,8 +145,6 @@ public class Tab1 extends Panel implements TouchEnabled
 			filterHolder2.forceRedraw();
 
 		needRedraw = true;
-
-
 	}
 
 }

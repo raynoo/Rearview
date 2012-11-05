@@ -29,8 +29,7 @@ public class FilterValueButton  extends Button
 			
 			setReDraw();
 			filterValuePanel.handleFilterValueButtonClick(isPressed,text);
-		}
-		
+		}		
 		return false;
 	}
 

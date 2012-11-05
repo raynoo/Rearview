@@ -9,14 +9,17 @@ import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
+import edu.cs424.traffic.pubsub.PubSub;
 import edu.cs424.traffic.pubsub.PubSub.Event;
+import edu.cs424.traffic.pubsub.Suscribe;
 
-public class FilterHolder extends Panel implements TouchEnabled
+public class FilterHolder extends Panel implements TouchEnabled,Suscribe
 {
 	public FilterPanel filter;
 	public FilterValuePanel filterValues;
 	public ShowSelectedAttribute showSelected;
 	public Tab1 tab;
+	Event toPublish;
 
 
 	public FilterHolder(float x0, float y0, float width, float height,
@@ -24,6 +27,7 @@ public class FilterHolder extends Panel implements TouchEnabled
 		super(x0, y0, width, height, parentX0, parentY0);
 
 		this.tab = tab;
+		this.toPublish = toPublish;
 		// TODO Auto-generated constructor stub
 	}
 	@Override
@@ -40,6 +44,8 @@ public class FilterHolder extends Panel implements TouchEnabled
 
 	public void setup() 
 	{
+		PubSub.suscribeEvent(Event.CLEAR_FILTER,this);
+
 		filter = new FilterPanel(AppConstants.filterButtonX, AppConstants.filterButtonY, 255, 95, x0, y0,this);
 		filter.setup();
 		addTouchSubscriber(filter);
@@ -53,7 +59,7 @@ public class FilterHolder extends Panel implements TouchEnabled
 				AppConstants.selectedValuesWidth, AppConstants.selectedValuesHeight, x0, y0 , filterValues,filter);
 		showSelected.setup();
 		addTouchSubscriber(showSelected);
-}
+	}
 
 	@Override
 	/*
@@ -76,6 +82,20 @@ public class FilterHolder extends Panel implements TouchEnabled
 		filterValues.forceRedrawAllComponents();
 		showSelected.forceRedrawAllComponents();
 		needRedraw = true;
+	}
+	@Override
+	public void receiveNotification(Event eventName, Object... object) 
+	{
+		if(eventName == Event.CLEAR_FILTER)
+		{
+			if( object[0] == toPublish)
+			{
+				// call the selected value panel to clear the data
+				showSelected.clearPanel();
+				updateFilter(toPublish);
+			}
+		}
+
 	}
 
 }

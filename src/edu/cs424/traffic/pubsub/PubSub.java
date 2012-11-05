@@ -7,7 +7,8 @@ public class PubSub
 {
 	public enum Event{
 		CHANGE_FILTER_GRAPH1,
-		CHANGE_FILTER_GRAPH2
+		CHANGE_FILTER_GRAPH2,
+		CLEAR_FILTER
 	}
 	
 	private static HashMap<Event , ArrayList<Suscribe> > listners = new HashMap<Event, ArrayList<Suscribe>>();

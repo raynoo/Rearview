@@ -144,4 +144,23 @@ public class AppConstants {
 	public static String textSelectedColor = "#D8D8D8";
 	public static String textUnselectedColor = "#898989";
 	
+	// Tab 2 
+	public static int eventButtonX = 15;
+	public static int eventButtonY = 7;
+	public static int eventButtonSpacing = 4;
+	public static int eventButtonWidth = 60;
+	public static int eventButtonHeight = 20;
+	
+	public static int textBoxFindingX = 100;
+	public static int textBoxFindingY = 15;
+	public static int textBoxWidth = 260;
+	public static int textBoxHeight = 100;
+	
+	public static int textBoxEventX = 380;
+	public static int textBoxEventY = 15;
+	public static int textBoxEventWidth = 260;
+	public static int textBoxEventHeight = 100;
+	
+	
+	
 }

@@ -4,9 +4,14 @@ import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
+import edu.cs424.traffic.gui.Button;
+import edu.cs424.traffic.pubsub.PubSub;
+import edu.cs424.traffic.pubsub.PubSub.Event;
+import static edu.cs424.data.helper.AppConstants.*;
 
 public class Tab2 extends Panel implements TouchEnabled
 {
+	Button[] buttons;
 
 	public Tab2(float x0, float y0, float width, float height, float parentX0,
 			float parentY0) {
@@ -15,14 +20,38 @@ public class Tab2 extends Panel implements TouchEnabled
 	}
 
 	@Override
-	public boolean touch(float x, float y, MouseMovements event) {
-		// TODO Auto-generated method stub
+	public boolean touch(float x, float y, MouseMovements event)
+	{
+		if( event == MouseMovements.MOUSEDOWN )
+		{
+			for(Button button : buttons)
+			{
+				if( button.containsPoint(x, y) )
+				{
+					button.setPressed(true);
+					PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH1);
+					PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH2);
+				}
+				else
+				{
+					button.setPressed(false);
+				}
+			}
+		}
+		
 		return false;
 	}
 
 	
-	public void setup() {
-		// TODO Auto-generated method stub
+	public void setup() 
+	{
+		buttons = new Button[5];
+		
+		for(int i = 0 ; i < 5 ; i++)
+		{
+			buttons[i] = new Button(eventButtonX,  eventButtonY + i*(eventButtonHeight + eventButtonSpacing),
+					eventButtonWidth, eventButtonHeight, x0, y0, "Finding "+i, true);
+		}
 
 	}
 
@@ -31,12 +60,22 @@ public class Tab2 extends Panel implements TouchEnabled
 		if(needRedraw)
 		{
 			background(EnumColor.BLACK);
+			
+			for(Button button : buttons)
+			{
+				button.draw();
+			}
+			
 			needRedraw = false;
 		}
 	}
 	
 	public void forceRedrawAllComponents()
 	{
+		for(Button button : buttons)
+		{
+			button.setReDraw();
+		}
 		needRedraw = true;
 	}
 

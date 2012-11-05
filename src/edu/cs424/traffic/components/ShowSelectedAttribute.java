@@ -109,5 +109,13 @@ public class ShowSelectedAttribute extends Panel implements TouchEnabled
 		down.setReDraw();
 		setReDraw();
 	}
+	
+	public void clearPanel()
+	{
+		for(SelectedAttrButton temp : buttonList)
+		{
+			removeAttribute(temp.text);
+		}
+	}
 
 }
