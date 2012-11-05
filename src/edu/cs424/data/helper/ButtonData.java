@@ -239,6 +239,7 @@ public class ButtonData
 		dbMap.put( "Speeding", "speeding" );
 		dbMap.put( "Alcohol", "ialcres" );
 		dbMap.put( "Weather", "iatmcond" );
+		dbMap.put("Traffic Flow", "itrafflow");
 
 		dbMap.put( "2001", "2001" );
 		dbMap.put( "2002", "2002" );
