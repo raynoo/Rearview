@@ -5,6 +5,7 @@ import static edu.cs424.data.helper.AppConstants.graphAxisWidth;
 import static edu.cs424.data.helper.AppConstants.graphAxisX;
 import static edu.cs424.data.helper.AppConstants.graphAxisY;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -25,9 +26,6 @@ import edu.cs424.traffic.pubsub.Suscribe;
 
 public class BarGraph extends Panel implements TouchEnabled,Suscribe
 {
-
-
-
 	public enum Type{
 		Month("Months",3609),Day("Days",748),Year("Years",39252);
 		private String value;
@@ -39,9 +37,9 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 		public String getValue(){
 			return value;
 		}
-		public int getHighest(){
-			return highest;
-		}
+		//		public int getHighest(){
+		//			return highest;
+		//		}
 	}
 
 	public HashMap<String, Set<String>> selectedButtonList;
@@ -61,7 +59,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 
 	public void setup() 
 	{
-		backButton = new Button(0, height-15, 15, 10, x0, y0, "<", true);	
+		backButton = new Button(0, height-15, 15, 15, x0, y0, "<", true);	
 		currentRectList = new ArrayList<Rectangle>();
 	}
 
@@ -95,14 +93,54 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 					xLabels = ButtonData.buttonValues.get("Days");
 				}
 
+				// get the highest height of bar graph for scaling
+				int max = 0;
+								
+				for( String key : toPlot.keySet() )
+				{
+					int y = toPlot.get(key).size();
+					if( y > max )
+					{
+						max = y;
+					}
+				}
+				max = max + 50;
+				float y;
+
+				float interval = max/12;
+				fill(EnumColor.BLACK);
+				textAlign(PConstants.LEFT, PConstants.TOP);
+				String label;
+				DecimalFormat form = new DecimalFormat("0.0");  
+				
+				for(int x = 1 ; x <= 12 ; x++)
+				{
+					float val = (float) interval * x;
+					y = PApplet.map(val , 0 , max ,0,graphAxisHeight);
+
+					if(val > 1000)
+					{
+
+						label = String.valueOf(form.format(val/1000)) + "K";
+					}
+					else
+					{
+						label = String.valueOf((int)val);
+					}
+
+
+					text(label, graphAxisX-23, graphAxisY + graphAxisHeight - y);
+				}
+
+
 				for( String key : xLabels )
 				{
 					textAlign(PConstants.CENTER, PConstants.CENTER);
-					float y;
+					y = 0;
 					if(toPlot.containsKey(key))
 					{
 						fill(EnumColor.SOMERANDOM);				
-						y = PApplet.map(toPlot.get(key).size() , 0 , currentType.getHighest() ,0,graphAxisHeight);
+						y = PApplet.map(toPlot.get(key).size() , 0 , max ,0,graphAxisHeight);
 						rect(graphAxisX + (i*25), graphAxisY + graphAxisHeight - y , 25-5, y);		
 						Rectangle rect = new Rectangle(x0 + graphAxisX + (i*25),y0 + graphAxisY + graphAxisHeight - y , 25-5, y,key);
 						currentRectList.add(rect);
@@ -114,8 +152,6 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 						needRedraw = false;
 						i++;
 					}
-
-
 				}
 			}
 

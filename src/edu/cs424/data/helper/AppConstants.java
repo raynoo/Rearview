@@ -37,12 +37,12 @@ public class AppConstants {
 	
 	
 	//Graph(1) panel
-	public static int graph1X = 660;
+	public static int graph1X = 665;
 	public static int graph1Y = 20;
 	public static int graph1Width = 330;
 	public static int graph1Height = 180;
 	
-	public static int graphAxisX = 20;
+	public static int graphAxisX = 25;
 	public static int graphAxisY = 20;
 	public static int graphAxisWidth = 300;
 	public static int graphAxisHeight = 140;	
