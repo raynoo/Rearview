@@ -16,7 +16,7 @@ public class Cluster {
 	public Cluster(DataPoint point) {
 		this(MapPanel.map.locationPoint(point.getLocation()).x,
 				MapPanel.map.locationPoint(point.getLocation()).y, 
-				Integer.parseInt(point.uid));
+				Integer.parseInt(point.getUid()));
 	}
 	
 	public Cluster(float x, float y, int dataID) {

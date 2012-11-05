@@ -7,6 +7,23 @@ public class CrashInfo {
 	public CrashInfo() {
 		
 	}
+	
+	public String toString() {
+		StringBuffer infoString = new StringBuffer("");
+		infoString.append("Date: " + this.getDate() + "\n");
+		infoString.append("State: " + this.getState() + "\n");
+		infoString.append("Deaths: " + this.getNumOfDeaths() + "\n");
+		infoString.append("Driver Age: " + this.getDriverAge() + "\n");
+		infoString.append("Driver Sex: " + this.getDriverSex() + "\n");
+		infoString.append("DUI: " + this.getDui() + "\n");
+		infoString.append("Speeding: " + this.getSpeeding() + "\n");
+		infoString.append("Weather: " + this.getWeather() + "\n");
+		infoString.append("Collision Type: " + this.getMannerOfCollision() + "\n");
+		infoString.append("Vehicle Type: " + this.getVehicleType() + "\n");
+		infoString.append("On Highway: " + this.getOnHighway());
+		
+		return infoString.toString();
+	}
 
 	public String getDate() {
 		return date;
