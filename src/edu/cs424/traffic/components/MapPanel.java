@@ -220,6 +220,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			clusterWithGrid.setPressed(true);
 			clusterGlyphMode = false;
 			clusterWithGlyph.setPressed(false);
+			
+			updateVisibleCoordinates();
 			return true;
 		}
 		else if(clusterWithGlyph.containsPoint(x, y) && clusterWithGlyph.isPressed == false) {
@@ -227,6 +229,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			clusterWithGlyph.setPressed(true);
 			clusterGridMode = false;
 			clusterWithGrid.setPressed(false);
+			
+			updateVisibleCoordinates();
 			return true;
 		}
 		//select graph
@@ -235,6 +239,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			isGraph1 = true;
 			isGraph2 = false;
 			graph2Button.setPressed(false);
+			
 			return true;
 		}
 		else if(graph2Button.containsPoint(x, y) && graph2Button.isPressed == false) {
@@ -242,6 +247,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			isGraph2 = true;
 			isGraph1 = false;
 			graph1Button.setPressed(false);
+			
 			return true;
 		}
 		return false;
@@ -351,7 +357,6 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					if(map.getZoom() > stopClusterAtZoom)
 						//dont cluster beyond this zoom
-//						markersForGraph1 = getMarkersFromList(pointsForGraph1, EnumColor.RED);
 						markersForGraph1 = grid.showIndividualPoints(pointsForGraph1);
 					else
 						markersForGraph1 = grid.getMarkers(EnumColor.RED);
@@ -370,7 +375,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					if(map.getZoom() > stopClusterAtZoom)
 						//dont cluster beyond this zoom
-						markersForGraph1 = grid.showIndividualPoints(pointsForGraph2);
+						markersForGraph2 = grid.showIndividualPoints(pointsForGraph2);
 					else
 						markersForGraph2 = grid.getMarkers(EnumColor.GOLD);
 					
@@ -394,6 +399,10 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			
 			needRedraw = false;
 		}
+	}
+	
+	void drawGraph(HashMap<String, ArrayList<DataPoint>> dataForGraph, EnumColor color) {
+		
 	}
 	
 	void initializeMap() {
