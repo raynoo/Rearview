@@ -36,10 +36,9 @@ public class Marker {
 		if(cluster.getCrashCount() == 1)
 			this.radius = SettingsLoader.scaleFactor * 5;
 		else
-//			this.radius = (int) ((float)cluster.getCrashCount() * factor * (float)SettingsLoader.scaleFactor);
-//			this.radius = (int)(this.cluster.getCrashCount() * rFactor);
 			this.radius = p.map((float)this.cluster.getCrashCount(), 
-					(float)lowestCount, (float)highestCount, 0f, (float)(0.3 * celly * SettingsLoader.scaleFactor));
+					(float)lowestCount, (float)highestCount, 0f, (float)(0.4 * celly));
+		//scale everything!
 	}
 	
 	public void draw() {
@@ -67,4 +66,7 @@ public class Marker {
 		return cluster;
 	}
 	
+	float scale(float i) {
+		return SettingsLoader.scaleFactor * i;
+	}
 }

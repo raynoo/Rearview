@@ -336,8 +336,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			//get data points from table (graph side)
 			this.getData();
 			
-			System.out.println("MapPanel: Graph 1 points " + dataForGraph1.size());
-			System.out.println("MapPanel: Graph 2 points " + dataForGraph2.size());
+//			System.out.println("MapPanel: Graph 1 points " + dataForGraph1.size());
+//			System.out.println("MapPanel: Graph 2 points " + dataForGraph2.size());
 			
 			//initialize and calculate grid stuff
 			grid = new Grid(gridSize);
@@ -352,6 +352,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					for(ArrayList<DataPoint> d : dataForGraph1.values())
 						pointsForGraph1.addAll(d);
+					
+					System.out.println("MapPanel: Graph 1 points " + pointsForGraph1.size());
 					
 					grid.clusterData(pointsForGraph1);
 					
@@ -370,6 +372,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					for(ArrayList<DataPoint> d : dataForGraph2.values())
 						pointsForGraph2.addAll(d);
+					
+					System.out.println("MapPanel: Graph 2 points " + pointsForGraph2.size());
 					
 					grid.clusterData(pointsForGraph2);
 					
