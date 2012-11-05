@@ -108,10 +108,14 @@ public class MainPanel extends Panel implements TouchEnabled
 		graph1.forceRedrawAllComponents();
 		graph2.forceRedrawAllComponents();
 		needRedraw = true;
-		
-		for(int i = 0; i < SettingsLoader.getConfigValueAsInt(EnumConfig.REPEATDRAW); i++)
+
+		if(event != MouseMovements.MOUSEMOVE)
 		{
-			callManyTime();
+			for(int i = 0; i < SettingsLoader.getConfigValueAsInt(EnumConfig.REPEATDRAW); i++)
+			{
+				callManyTime();
+				draw();
+			}
 		}
 		return false;
 	}
