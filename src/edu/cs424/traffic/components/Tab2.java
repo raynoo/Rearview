@@ -1,5 +1,8 @@
 package edu.cs424.traffic.components;
 
+import java.util.ArrayList;
+
+import edu.cs424.data.helper.Findings;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
@@ -12,9 +15,11 @@ import static edu.cs424.data.helper.AppConstants.*;
 public class Tab2 extends Panel implements TouchEnabled
 {
 	Button[] buttons;
+	ArrayList<Findings> findings = new ArrayList<Findings>();
 
 	public Tab2(float x0, float y0, float width, float height, float parentX0,
-			float parentY0) {
+			float parentY0) 
+	{
 		super(x0, y0, width, height, parentX0, parentY0);
 		// TODO Auto-generated constructor stub
 	}
@@ -45,6 +50,10 @@ public class Tab2 extends Panel implements TouchEnabled
 	
 	public void setup() 
 	{
+		// Payas init the class here
+		
+		
+		
 		buttons = new Button[5];
 		
 		for(int i = 0 ; i < 5 ; i++)
