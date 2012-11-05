@@ -32,14 +32,14 @@ public class Marker {
 		if(MapPanel.map.getZoom() <= 5)
 			factor = 0.0005f;
 		if(MapPanel.map.getZoom() >= 6)
-			factor = 0.005f;
+			factor = 0.0025f;
 		if(MapPanel.map.getZoom() >= 9)
 			factor = 0.05f;
 		if(MapPanel.map.getZoom() >= 13)
 			factor = 0.1f;
 		
 		if(cluster.getCrashCount() == 1)
-			this.radius = SettingsLoader.scaleFactor * 3;
+			this.radius = SettingsLoader.scaleFactor * 5;
 		else
 			this.radius = (int) ((float)cluster.getCrashCount() * factor * (float)SettingsLoader.scaleFactor);
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 
@@ -312,6 +313,15 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			drawMapOffsetArea();
 			drawMapControlPanel();
 
+			//print zoom
+			pushStyle();
+			fill(EnumColor.BLACK);
+			textAlign(PConstants.LEFT, PConstants.TOP);
+			textSize(14);
+			text(Integer.toString(map.getZoom()), 5, 5);
+			popStyle();
+			
+			
 			//get data points from table
 			this.getData();
 			points.clear();
@@ -357,7 +367,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		map = new InteractiveMap(SettingsLoader.papp, new Microsoft.RoadProvider(), 
 				mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
 		map.MAX_IMAGES_TO_KEEP = 256;
-		map.setCenterZoom(locationUSA, 4);
+		map.setCenterZoom(locationUSA, 6);
 	}
 
 	void drawMapControlPanel() {
