@@ -324,35 +324,30 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	@Override
 	public void draw() {
 		if(needRedraw) {
-			background(EnumColor.SOMERANDOM);
+			background(EnumColor.DARK_GRAY, 150);
 			map.draw();
 			drawMapOffsetArea();
 			drawMapControlPanel();
 
-			//TODO: print application title
-			
-			//print zoom TODO:Remove
+			//print texts
 			pushStyle();
 			fill(EnumColor.BLACK);
-			textAlign(PConstants.LEFT, PConstants.TOP);
-			textSize(14);
-			text(Integer.toString(map.getZoom()), 5, 5);
+			textSize(22);
+			text("Rear View Mirror", mapOffsetX, 40);
 			popStyle();
 			
 			//get data points from table (graph side)
 			this.getData();
 			
-//			System.out.println("MapPanel: Graph 1 points " + dataForGraph1.size());
-//			System.out.println("MapPanel: Graph 2 points " + dataForGraph2.size());
-			
 			//initialize and calculate grid stuff
 			grid = new Grid(gridSize);
+			this.lowestCrashCount = 0; this.highestCrashCount = 0;
 			
 			if(clusterGridMode) {
 				clusterWithGrid.setPressed(true);//if its set true at startup
 				
 				if(isGraph1) {
-					grid.setColor(EnumColor.RED);
+					grid.setColor(EnumColor.GRAPH1);
 					pointsForGraph1.clear();
 					markersForGraph1.clear();
 					
@@ -372,12 +367,12 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 						//dont cluster beyond this zoom
 						markersForGraph1 = grid.showIndividualPoints(pointsForGraph1, this.lowestCrashCount, this.highestCrashCount);
 					else
-						markersForGraph1 = grid.getMarkers(EnumColor.RED, this.lowestCrashCount, this.highestCrashCount);
+						markersForGraph1 = grid.getMarkers(EnumColor.GRAPH1, this.lowestCrashCount, this.highestCrashCount);
 
 						drawMarkers(markersForGraph1);
 				}
 				else if(isGraph2) {
-					grid.setColor(EnumColor.GOLD);
+					grid.setColor(EnumColor.GRAPH2);
 					pointsForGraph2.clear();
 					markersForGraph2.clear();
 					
@@ -397,7 +392,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 						//dont cluster beyond this zoom
 						markersForGraph2 = grid.showIndividualPoints(pointsForGraph2, this.lowestCrashCount, this.highestCrashCount);
 					else
-						markersForGraph2 = grid.getMarkers(EnumColor.GOLD, this.lowestCrashCount, this.highestCrashCount);
+						markersForGraph2 = grid.getMarkers(EnumColor.GRAPH2, this.lowestCrashCount, this.highestCrashCount);
 					
 					drawMarkers(markersForGraph2);
 				}
@@ -460,7 +455,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		noFill();
 		fill(EnumColor.BLACK);
 		textSize(14);
-		text("Crash Details", mapControlPanelX+5, mapOffsetY-5);
+		text("Crash Details", mapControlPanelX+5, 40);
 		
 		String info = "";
 		
@@ -471,7 +466,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		else
 			info = "Count: " + selectedMarker.getCluster().getCrashCount();
 		
-		textSize(10);
+		textSize(9);
 		text(info, (float)mapControlPanelX+5, (float)mapOffsetY, 
 				mapControlPanelWidth-10, mapOffsetHeight/3*2);
 		popStyle();

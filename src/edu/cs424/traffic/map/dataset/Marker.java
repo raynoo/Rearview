@@ -3,7 +3,6 @@ package edu.cs424.traffic.map.dataset;
 import processing.core.PApplet;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.SettingsLoader;
-import edu.cs424.traffic.components.MapPanel;
 
 public class Marker {
 	
@@ -38,7 +37,6 @@ public class Marker {
 		else
 			this.radius = p.map((float)this.cluster.getCrashCount(), 
 					(float)lowestCount, (float)highestCount, 0f, (float)(0.45 * celly));
-		//scale everything!
 	}
 	
 	public void draw() {

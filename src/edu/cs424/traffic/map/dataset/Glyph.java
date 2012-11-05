@@ -6,7 +6,6 @@ import com.modestmaps.geo.Location;
 
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.SettingsLoader;
-import edu.cs424.traffic.components.MapPanel;
 
 public class Glyph extends Marker {
 

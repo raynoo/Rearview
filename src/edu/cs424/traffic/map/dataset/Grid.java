@@ -23,7 +23,6 @@ public class Grid extends Panel {
 	public static PVector[][] gridLocations;
 	ArrayList<Marker> dataMarkers;
 	
-//	static Cell highest, lowest;
 	static float cellx, celly;
 	public int high = Integer.MIN_VALUE, low = Integer.MAX_VALUE;
 	
