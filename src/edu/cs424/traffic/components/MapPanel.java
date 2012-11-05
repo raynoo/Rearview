@@ -15,7 +15,6 @@ import edu.cs424.data.helper.DBCommand;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.SettingsLoader;
-import edu.cs424.traffic.map.dataset.Cluster;
 import edu.cs424.traffic.map.dataset.CrashInfo;
 import edu.cs424.traffic.map.dataset.DataPoint;
 import edu.cs424.traffic.map.dataset.Grid;
@@ -49,7 +48,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 	
 	//for cluster and grids
-	int gridSize = 3;
+	int gridSize = 4;
 	Grid grid;
 	public static boolean clusterGridMode = true, clusterStateMode = false;
 	
@@ -324,25 +323,22 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					points.addAll(d);
 			
 			System.out.println("MapPanel: Graph points " + points.size());
+			System.out.println("Zoom: " + map.getZoom());
 			
 			if(clusterGridMode) {
 				clusterByGrid.setPressed(true);
 				PVector[] p = getBoundaryXY();
 				grid = new Grid(p[0], p[1], gridSize);
 				grid.clusterData(points);
-				drawMarkers(grid.getMarkers());
+				
+				if(map.getZoom() > 12)
+					drawRawData(points);
+				else
+					drawMarkers(grid.getMarkers());
 				
 			} else {
-				if(map.getZoom() > 15)
-					drawRawData(points);
+				
 			}
-			
-			Location[] pv = getBoundaryLatLong();
-			pushStyle();
-			fill(EnumColor.RED);
-			ellipse(map.locationPoint(pv[0]).x, map.locationPoint(pv[0]).y, 10, 10);
-			ellipse(map.locationPoint(pv[1]).x, map.locationPoint(pv[1]).y, 10, 10);
-			popStyle();
 			
 			if(selectedMarker != null)
 				drawClusterInfo(selectedMarker);
@@ -362,7 +358,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 	void drawMapControlPanel() {
 		pushStyle();
-		fill(EnumColor.DARK_GRAY, 95);
+		fill(EnumColor.DARK_GRAY, 180);
 		noStroke();
 		rect(mapControlPanelX, mapControlPanelY, mapControlPanelWidth, mapControlPanelHeight);
 		popStyle();
@@ -396,21 +392,15 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	}
 	
 	void drawClusterInfo(Marker m) {
-		System.out.println("clicked! " + m.getCluster().getDataID());
-		
-//		CrashInfo crashinfo = ConnSqlite.getSingleCrashData(m.getCluster().getDataID());
+		CrashInfo crashinfo = ConnSqlite.getSingleCrashData(m.getCluster().getDataID());
 		
 		pushStyle();
 		noFill();
-		strokeWeight(2);
 		fill(EnumColor.BLACK);
 		textSize(14);
 		text("Crash Details", mapControlPanelX+5, mapOffsetY-5);
 		textSize(10);
-//		text(crashinfo.toString(), (float)mapControlPanelX+5, (float)mapOffsetY+10, mapControlPanelWidth-10, mapOffsetHeight/3*2);
-		
-		String s = "Draws text \nto the screen. \nDisplays\n the information specified in the data or stringdata parameters on the screen in the position specified by the x and y parameters and the optional z parameter. A default font will be used unless a font is set with the textFont() function. Change the color of the text with the fill() function. The text displays in relation to the textAlign() function, which gives the option to draw to the left, right, and center of the coordinates.";
-		text(s, (float)mapControlPanelX+5, (float)mapOffsetY+10, mapControlPanelWidth-10, mapOffsetHeight/3*2);
+		text(crashinfo.toString(), (float)mapControlPanelX+5, (float)mapOffsetY, mapControlPanelWidth-10, mapOffsetHeight/3*2);
 		popStyle();
 	}
 

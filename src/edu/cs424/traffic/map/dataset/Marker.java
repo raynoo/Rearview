@@ -48,7 +48,7 @@ public class Marker {
 		p.pushStyle();
 		p.stroke(EnumColor.DARK_GRAY.getValue());
 		p.strokeWeight(1f);
-		p.fill(EnumColor.RED.getValue(), 60);
+		p.fill(EnumColor.RED.getValue(), 150);
 		p.ellipse(cluster.getLocationXY().x, 
 				cluster.getLocationXY().y, 
 				2*radius, 2*radius);

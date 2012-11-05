@@ -61,13 +61,13 @@ public class ConnSqlite {
 	}
 	
 	public static CrashInfo getSingleCrashData(int uid) {
-		String query = "select * from crash1 where uid = " + uid;
+		String query = "select * from value where uid = " + uid;
 		
 		Statement stat;
 		ResultSet res;
 		CrashInfo info = new CrashInfo();
 		
-		int state, weather, deaths, driverage, driversex, dui, speeding, vehtype, highway, collision;
+//		String state, weather, deaths, driverage, driversex, dui, speeding, vehtype, highway, collision;
 		
 		try {
 			stat = conn.createStatement();
@@ -75,25 +75,23 @@ public class ConnSqlite {
 
 			while(res.next()) {
 				info.setDate(res.getString("date"));
-				state = res.getInt("istatenum");
-				weather = res.getInt("iatmcond");
-				deaths = res.getInt("numfatal");
-				driverage = res.getInt("iage");
-				driversex = res.getInt("isex");
-				dui = res.getInt("ialcres");
-				speeding = res.getInt("speeding");
-				vehtype = res.getInt("ibody");
-				highway = res.getInt("inhs");
-				collision = res.getInt("imanncol");
+				info.setWeather(res.getString("iatmcond"));
+				info.setNumOfDeaths(res.getString("numfatal"));
+				info.setDriverAge(res.getString("iage"));
+				info.setDriverSex(res.getString("isex"));
+				info.setDui(res.getString("ialcres"));
+				info.setTravelSpeed(res.getString("itravspd"));
+				info.setSpeedLimit(res.getString("ispdlim"));
+				info.setVehicleType(res.getString("ibody"));
+				info.setOnHighway(res.getString("inhs"));
 			}
-			//query from new table
 			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return info;
 	}
 
 	private static String appendFilters(FilterData filterData, String query) {

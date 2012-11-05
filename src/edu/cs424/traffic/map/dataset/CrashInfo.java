@@ -2,7 +2,7 @@ package edu.cs424.traffic.map.dataset;
 
 public class CrashInfo {
 
-	String date, state, weather, numOfDeaths, driverAge, driverSex, dui, speeding, vehicleType, onHighway, mannerOfCollision;
+	String date, weather, numOfDeaths, driverAge, driverSex, dui, travelSpeed, speedLimit, vehicleType, onHighway;
 	
 	public CrashInfo() {
 		
@@ -11,14 +11,13 @@ public class CrashInfo {
 	public String toString() {
 		StringBuffer infoString = new StringBuffer("");
 		infoString.append("Date: " + this.getDate() + "\n");
-		infoString.append("State: " + this.getState() + "\n");
 		infoString.append("Deaths: " + this.getNumOfDeaths() + "\n");
 		infoString.append("Driver Age: " + this.getDriverAge() + "\n");
 		infoString.append("Driver Sex: " + this.getDriverSex() + "\n");
 		infoString.append("DUI: " + this.getDui() + "\n");
-		infoString.append("Speeding: " + this.getSpeeding() + "\n");
+		infoString.append("Speed: " + this.getTravelSpeed() + "\n");
+		infoString.append("Speed Limit: " + this.getSpeedLimit() + "\n");
 		infoString.append("Weather: " + this.getWeather() + "\n");
-		infoString.append("Collision Type: " + this.getMannerOfCollision() + "\n");
 		infoString.append("Vehicle Type: " + this.getVehicleType() + "\n");
 		infoString.append("On Highway: " + this.getOnHighway());
 		
@@ -31,14 +30,6 @@ public class CrashInfo {
 
 	public void setDate(String date) {
 		this.date = date;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
 	}
 
 	public String getWeather() {
@@ -81,14 +72,6 @@ public class CrashInfo {
 		this.dui = dui;
 	}
 
-	public String getSpeeding() {
-		return speeding;
-	}
-
-	public void setSpeeding(String speeding) {
-		this.speeding = speeding;
-	}
-
 	public String getVehicleType() {
 		return vehicleType;
 	}
@@ -105,11 +88,20 @@ public class CrashInfo {
 		this.onHighway = onHighway;
 	}
 
-	public String getMannerOfCollision() {
-		return mannerOfCollision;
+	public String getTravelSpeed() {
+		return travelSpeed;
 	}
 
-	public void setMannerOfCollision(String mannerOfCollision) {
-		this.mannerOfCollision = mannerOfCollision;
+	public void setTravelSpeed(String travelSpeed) {
+		this.travelSpeed = travelSpeed;
 	}
+
+	public String getSpeedLimit() {
+		return speedLimit;
+	}
+
+	public void setSpeedLimit(String speedLimit) {
+		this.speedLimit = speedLimit;
+	}
+
 }
