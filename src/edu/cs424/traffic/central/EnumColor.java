@@ -10,8 +10,8 @@ public enum EnumColor
 	BLACK(0,0,0),
 	GOLD(255,215,0),
 	RED(255,153,204),
-	GRAPH1(255,153,204),
-	GRAPH2(255,215,0);
+	GRAPH1(32,129,93),
+	GRAPH2(83,35,0);
 	
 	int color;
 	private EnumColor(int r,int g , int b) 

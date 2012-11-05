@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PVector;
-import processing.event.MouseEvent;
 
 import com.modestmaps.InteractiveMap;
 import com.modestmaps.geo.Location;
@@ -36,8 +34,8 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	PVector mapSize;
 	PVector mapOffset;
 	static Location locationUSA = new Location(38.962f, -93.928f);
-	int initialZoom = 6, stopClusterAtZoom = 11, stateLevelZoom = 5,
-			noMoreZoomIn = 16, noMoreZoomOut = 5;//these are optimal for wall
+	int initialZoom = 6, stopClusterAtZoom = 9, stateLevelZoom = 5,
+			noMoreZoomIn = 15, noMoreZoomOut = 5;//these are optimal for wall
 	
 	
 	//for touch
@@ -68,7 +66,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	int lowestCrashCount, highestCrashCount;
 
 	//for buttons
-	Button out, in, aerial, hybrid, road;
+	Button out, in, up, down, left, right, aerial, hybrid, road;
 	Button clusterWithGrid, clusterWithGlyph, graph1Button, graph2Button;
 	ArrayList<Button> buttons = new ArrayList<Button>();
 
@@ -203,6 +201,28 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			updateVisibleCoordinates();
 			return true;
 		}
+		else if(up.containsPoint(x, y)) {
+			map.panUp();
+			updateVisibleCoordinates();
+			return true;
+		}
+		else if(down.containsPoint(x, y)) {
+			map.panDown();
+			updateVisibleCoordinates();
+			return true;
+		}
+		else if(left.containsPoint(x, y)) {
+			map.panLeft();
+			updateVisibleCoordinates();
+			return true;
+		}
+		else if(right.containsPoint(x, y)) {
+			map.panRight();
+			updateVisibleCoordinates();
+			return true;
+		}
+		
+		
 		else if(aerial.containsPoint(x, y)) {
 			map.setMapProvider( new Microsoft.AerialProvider() );
 			return true;
@@ -284,19 +304,27 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		initTouchPos2 = new PVector();
 
 		//initialize map buttons
-		in = new Button(mapControlPanelX+55, mapControlPanelHeight-80, 20, 20, x0, y0, "+", true);
-		out = new Button(mapControlPanelX+55, mapControlPanelHeight-55, 20, 20, x0, y0, "-", true);
-		road = new Button(mapControlPanelX+30, mapControlPanelHeight-30, 20, 20, x0, y0, "R", true);
-		hybrid = new Button(mapControlPanelX+55, mapControlPanelHeight-30, 20, 20, x0, y0, "H", true);
-		aerial = new Button(mapControlPanelX+80, mapControlPanelHeight-30, 20, 20, x0, y0, "A", true);
+		in = new Button((mapControlPanelX+mapControlPanelWidth/2)-10, mapControlPanelHeight-70, 20, 20, x0, y0, "+", true);
+		out = new Button((mapControlPanelX+mapControlPanelWidth/2)-10, mapControlPanelHeight-50, 20, 20, x0, y0, "-", true);
 
+		up = new Button((mapControlPanelX+mapControlPanelWidth/2)-10, mapControlPanelHeight-95, 20, 20, x0, y0, "^", true);
+		down = new Button((mapControlPanelX+mapControlPanelWidth/2)-10, mapControlPanelHeight-25, 20, 20, x0, y0, "v", true);
+		
+		left = new Button((mapControlPanelX+mapControlPanelWidth/2)-35, mapControlPanelHeight-60, 20, 20, x0, y0, "<", true);
+		right = new Button((mapControlPanelX+mapControlPanelWidth/2)+15, mapControlPanelHeight-60, 20, 20, x0, y0, ">", true);
+		
+		
+		road = new Button((mapOffsetX+mapOffsetWidth/2)-65, mapControlPanelHeight-25, 40, 20, x0, y0, "Road", true);
+		hybrid = new Button((mapOffsetX+mapOffsetWidth/2)-20, mapControlPanelHeight-25, 40, 20, x0, y0, "Hybrid", true);
+		aerial = new Button((mapOffsetX+mapOffsetWidth/2)+25, mapControlPanelHeight-25, 40, 20, x0, y0, "Aerial", true);
+		
 		//control buttons
-		clusterWithGrid = new Button(mapControlPanelX+30, mapControlPanelHeight-125, 40, 20, x0, y0, "Cluster", true);
-		clusterWithGlyph = new Button(mapControlPanelX+75, mapControlPanelHeight-125, 40, 20, x0, y0, "Glyph", true);
+		clusterWithGrid = new Button((mapOffsetX+mapOffsetWidth/3*2)+30, mapControlPanelHeight-25, 40, 20, x0, y0, "Cluster", true);
+		clusterWithGlyph = new Button((mapOffsetX+mapOffsetWidth/3*2)+75, mapControlPanelHeight-25, 40, 20, x0, y0, "Glyph", true);
 		
 		//select graph
-		graph1Button = new Button(mapControlPanelX+30, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 1", true);
-		graph2Button = new Button(mapControlPanelX+75, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 2", true);
+		graph1Button = new Button(mapControlPanelX+20, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 1", true);
+		graph2Button = new Button(mapControlPanelX+65, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 2", true);
 
 		buttons.add(in);
 		buttons.add(out);
@@ -307,6 +335,10 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		buttons.add(clusterWithGlyph);
 		buttons.add(graph1Button);
 		buttons.add(graph2Button);
+		buttons.add(up);
+		buttons.add(down);
+		buttons.add(left);
+		buttons.add(right);
 
 		initializeMap();
 	}
