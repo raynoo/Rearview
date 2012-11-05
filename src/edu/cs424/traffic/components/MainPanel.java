@@ -109,7 +109,7 @@ public class MainPanel extends Panel implements TouchEnabled
 		graph2.forceRedrawAllComponents();
 		needRedraw = true;
 
-		if(event != MouseMovements.MOUSEMOVE)
+		if(event != MouseMovements.MOUSEMOVE && mapPanel.containsPoint(x, y))
 		{
 			for(int i = 0; i < SettingsLoader.getConfigValueAsInt(EnumConfig.REPEATDRAW); i++)
 			{
