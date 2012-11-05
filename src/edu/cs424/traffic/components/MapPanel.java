@@ -22,6 +22,7 @@ import edu.cs424.traffic.map.dataset.Marker;
 import edu.cs424.traffic.map.utils.Point;
 import edu.cs424.traffic.pubsub.PubSub.Event;
 import edu.cs424.traffic.pubsub.Suscribe;
+import edu.cs424.traffic.sqliteconn.ConnSqlite;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
@@ -380,12 +381,14 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	void drawClusterInfo(Marker m) {
 		System.out.println("clicked! " + m.getCluster().getDataID());
 		
+		ConnSqlite.getSingleCrashData(m.getCluster().getDataID());
+		
 		pushStyle();
 		noFill();
 		strokeWeight(2);
 		fill(EnumColor.BLACK);
 		textSize(18);
-		text("Details:", mapControlPanelX+30, mapOffsetY);
+		text("Crash Details", mapControlPanelX+30, mapOffsetY);
 		textSize(12);
 		text(Integer.toString(m.getCluster().getCrashCount()), mapControlPanelX+30, mapOffsetY+30);
 		popStyle();
