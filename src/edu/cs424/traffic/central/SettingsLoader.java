@@ -8,7 +8,6 @@ import java.util.Properties;
 import processing.core.PApplet;
 import processing.core.PFont;
 
-import com.carinov.commons.aider.sql.DBAider;
 
 public class SettingsLoader 
 {
@@ -39,16 +38,11 @@ public class SettingsLoader
 		}
 		loadConfigFile();
 		loadPappletSetting();
-		loadSQLSettings();
 
 		scaleFactor = getConfigValueAsInt(EnumConfig.SCALEFACTOR);
 	}
 
-	private void loadSQLSettings()
-	{
-		com.carinov.commons.aider.sql.SettingsLoader settings = new com.carinov.commons.aider.sql.SettingsLoader(dir + File.separator + "app.settings");
-		DBAider.init(settings);
-	}
+
 
 	private void loadPappletSetting() {
 		helvetica = papp.loadFont(dir +"/fonts/Helvetica-120.vlw");
