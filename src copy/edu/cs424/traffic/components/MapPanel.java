@@ -340,7 +340,6 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 				clusterWithGrid.setPressed(true);//if its set true at startup
 				
 				if(isGraph1) {
-					grid.setColor(EnumColor.RED);
 					pointsForGraph1.clear();
 					markersForGraph1.clear();
 					
@@ -351,15 +350,13 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					if(map.getZoom() > stopClusterAtZoom)
 						//dont cluster beyond this zoom
-//						markersForGraph1 = getMarkersFromList(pointsForGraph1, EnumColor.RED);
-						markersForGraph1 = grid.showIndividualPoints(pointsForGraph1);
+						markersForGraph1 = getMarkersFromList(pointsForGraph1, EnumColor.RED);
 					else
 						markersForGraph1 = grid.getMarkers(EnumColor.RED);
 					
 					drawMarkers(markersForGraph1);
 				}
 				else if(isGraph2) {
-					grid.setColor(EnumColor.GOLD);
 					pointsForGraph2.clear();
 					markersForGraph2.clear();
 					
@@ -370,7 +367,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					if(map.getZoom() > stopClusterAtZoom)
 						//dont cluster beyond this zoom
-						markersForGraph1 = grid.showIndividualPoints(pointsForGraph2);
+						markersForGraph2 = getMarkersFromList(pointsForGraph2, EnumColor.GOLD);
 					else
 						markersForGraph2 = grid.getMarkers(EnumColor.GOLD);
 					
@@ -402,7 +399,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		map = new InteractiveMap(SettingsLoader.papp, new Microsoft.RoadProvider(), 
 				mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
 		map.MAX_IMAGES_TO_KEEP = 256;
-		map.setCenterZoom(locationUSA, initialZoom);
+		map.setCenterZoom(locationUSA, 6);
 	}
 
 	void drawMapControlPanel() {
@@ -419,6 +416,15 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	public void getData() {
 		dataForGraph1 = DBCommand.getInstance().getGraphData(Event.CHANGE_FILTER_GRAPH1);
 		dataForGraph2 = DBCommand.getInstance().getGraphData(Event.CHANGE_FILTER_GRAPH2);
+	}
+
+	ArrayList<Marker> getMarkersFromList(ArrayList<DataPoint> data, EnumColor color) {
+		ArrayList<Marker> m = new ArrayList<Marker>();
+		
+		for(DataPoint d : data) {
+			m.add(new Marker(d, color, 1));
+		}
+		return m;
 	}
 	
 	void drawMarkers(ArrayList<Marker> markers) {

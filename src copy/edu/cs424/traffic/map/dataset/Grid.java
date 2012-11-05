@@ -21,12 +21,9 @@ public class Grid extends Panel {
 	int gridSize;
 	HashMap<Integer, Cell> gridCellMap;
 	public static PVector[][] gridLocations;
-	ArrayList<Marker> dataMarkers;
 	
 	static Cell highest, lowest;
 	static float cellx, celly;
-	
-	EnumColor graphColor;
 	
 	PApplet p;
 	
@@ -42,10 +39,6 @@ public class Grid extends Panel {
 		this.bottomRight = p[1];
 		this.gridSize = gridSize;
 		this.gridLocations = new PVector[gridSize+1][gridSize+1];
-	}
-	
-	public void setColor(EnumColor color) {
-		this.graphColor = color;
 	}
 	
 	void getHighLow() {
@@ -98,53 +91,24 @@ public class Grid extends Panel {
 					break;
 			}
 		}
-		createClusters();
-		createMarkers();
-	}
-	
-	void createClusters() {
-		int high = Integer.MIN_VALUE, low = Integer.MAX_VALUE;
-		
-		for(Cell c: gridCellMap.values()) {
-			c.createCluster();
-			
-			if(high < c.cluster.getCrashCount()) {
-				high = c.cluster.getCrashCount();
-				highest = c;
-			}
-			else if(low > c.cluster.getCrashCount()) {
-				low = c.cluster.getCrashCount();
-				lowest = c;
-			}
-		}
-	}
-	
-	void createMarkers() {
-		dataMarkers = new ArrayList<Marker>();
-		
-		for(Cell c: gridCellMap.values()) {
-			dataMarkers.add(c.getDataMarker(this.graphColor, 
-					lowest.cluster.getCrashCount(), highest.cluster.getCrashCount(),
-					this.celly));
-		}
-	}
-	
-	public ArrayList<Marker> showIndividualPoints(ArrayList<DataPoint> data) {
-		dataMarkers = new ArrayList<Marker>();
-		
-		for(DataPoint d : data) {
-			dataMarkers.add(new Marker(d, this.graphColor, this.lowest.cluster.getCrashCount(), 
-					this.highest.cluster.getCrashCount(), this.celly));
-		}
-		return dataMarkers;
 	}
 	
 	public ArrayList<Marker> getMarkers(EnumColor color) {
+		ArrayList<Marker> markers = new ArrayList<Marker>();
 		
+
+		getHighLow();
+		int r = (int)(0.4 * (float)celly * (float)SettingsLoader.scaleFactor);
+		float relativeRadiusFactor = r / highest.cluster.getCrashCount();
+		
+		for(Cell c: gridCellMap.values()) {
+			c.createCluster();
+			markers.add(c.getDataMarker(color, relativeRadiusFactor));
+		}
 		if(MapPanel.clusterGridMode) //TODO: how to handle state view?
 			drawClusterGridLines();
 		
-		return dataMarkers;
+		return markers;
 	}
 	
 	public void drawClusterGridLines() {
@@ -221,8 +185,8 @@ class Cell {
 		
 	}
 	
-	public Marker getDataMarker(EnumColor color, int lowestCount, int highestCount, float celly) {
-		Marker marker = new Marker(this.cluster, color, lowestCount, highestCount, celly);
+	public Marker getDataMarker(EnumColor color, float rFactor) {
+		Marker marker = new Marker(this.cluster, color, rFactor);
 		
 		return marker;
 	}

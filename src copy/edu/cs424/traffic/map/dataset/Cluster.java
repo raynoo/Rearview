@@ -11,8 +11,6 @@ public class Cluster {
 	
 	int dataID;
 	
-	int highestClusterCount, lowestClusterCount;
-	
 	public Cluster() {
 		
 	}

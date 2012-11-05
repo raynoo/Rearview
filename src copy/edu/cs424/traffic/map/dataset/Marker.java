@@ -7,7 +7,7 @@ import edu.cs424.traffic.components.MapPanel;
 
 public class Marker {
 	
-	float radius;
+	int radius;
 	EnumColor color;
 	Cluster cluster;
 
@@ -17,29 +17,40 @@ public class Marker {
 		
 	}
 	
-	public Marker(Cluster cluster, EnumColor color, int lowestCount, int highestCount, float celly) {
+	public Marker(Cluster cluster, EnumColor color, float rFactor) {
 		this.cluster = cluster;
 		this.color = color;
-		calculateRadius(lowestCount, highestCount, celly);
+		calculateRadius(rFactor);
 		p = SettingsLoader.papp;
 	}
 	
-	public Marker(DataPoint data, EnumColor color, int lowestCount, int highestCount, float celly) {
+	public Marker(DataPoint data, EnumColor color, float rFactor) {
 		this.cluster = new Cluster(data);
 		this.color = color;
-		calculateRadius(lowestCount, highestCount, celly);
+		calculateRadius(rFactor);
 		p = SettingsLoader.papp;
 	}
 	
-	void calculateRadius(int lowestCount, int highestCount, float celly) {
+	void calculateRadius(float rFactor) {
+		float factor = 0.01f;
+		
+		if(MapPanel.map.getZoom() <= 5)
+			factor = 0.0005f;
+		if(MapPanel.map.getZoom() >= 6)
+			factor = 0.0025f;
+		if(MapPanel.map.getZoom() >= 9)
+			factor = 0.05f;
+		if(MapPanel.map.getZoom() >= 13)
+			factor = 0.1f;
+		
+		
+		
 		
 		if(cluster.getCrashCount() == 1)
 			this.radius = SettingsLoader.scaleFactor * 5;
 		else
 //			this.radius = (int) ((float)cluster.getCrashCount() * factor * (float)SettingsLoader.scaleFactor);
-//			this.radius = (int)(this.cluster.getCrashCount() * rFactor);
-			this.radius = p.map((float)this.cluster.getCrashCount(), 
-					(float)lowestCount, (float)highestCount, 0f, (float)(0.3 * celly * SettingsLoader.scaleFactor));
+			this.radius = (int)(this.cluster.getCrashCount() * rFactor);
 	}
 	
 	public void draw() {
