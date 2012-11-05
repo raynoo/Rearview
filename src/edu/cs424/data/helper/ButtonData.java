@@ -70,6 +70,19 @@ public class ButtonData
 		time.add("No Loc. Data");
 		buttonValues.put("Time", time);
 		
+		ArrayList<String> weather = new ArrayList<String>();
+		weather.add("Fine Weather");
+		weather.add("Rain");
+		weather.add("Sleet");
+		weather.add("Snow");
+		weather.add("Fog");
+		weather.add("Rain+Fog");
+		weather.add("Sleet+Fog");
+		weather.add("Other");
+		weather.add("Unknown");
+		weather.add("No Loc. Data");
+		buttonValues.put("Weather", weather);
+		
 		ArrayList<String> hitrun = new ArrayList<String>();
 		hitrun.add("No Hit-Run");
 		hitrun.add("Motor Vehicle");
@@ -94,15 +107,6 @@ public class ButtonData
 		holiday.add("No Data");
 		holiday.add("No Loc. Data");
 		buttonValues.put("Holiday", holiday);
-		
-//		ArrayList<String> collision =  new ArrayList<String>();
-//		collision.add("No Collision");
-//		collision.add("Rear-End");
-//		collision.add("Head On");
-//		collision.add("Angled");
-//		collision.add("Sideswipe");
-//		collision.add("No Data");
-//		buttonValues.put("Collision Type", collision);
 		
 		ArrayList<String> highway =  new ArrayList<String>();
 		highway.add("Not on NH");
@@ -129,15 +133,15 @@ public class ButtonData
 //		spdlim.add("No Data");
 //		buttonValues.put("Speed Limit", spdlim);
 		
-		ArrayList<String> manncol = new ArrayList<String>();
-		manncol.add("No Collision");
-		manncol.add("Rear-End");
-		manncol.add("Head On");
-		manncol.add("Angled");
-		manncol.add("Sideswipe");
-		manncol.add("No Data");
-		manncol.add("No Loc Data");
-		buttonValues.put("Collision", manncol);
+//		ArrayList<String> manncol = new ArrayList<String>();
+//		manncol.add("No Collision");
+//		manncol.add("Rear-End");
+//		manncol.add("Head On");
+//		manncol.add("Angled");
+//		manncol.add("Sideswipe");
+//		manncol.add("No Data");
+//		manncol.add("No Loc Data");
+//		buttonValues.put("Collision", manncol);
 		
 		ArrayList<String> age =  new ArrayList<String>();
 		age.add("< 16");
@@ -277,6 +281,17 @@ public class ButtonData
 		dbMap.put( "Late Night", "1" );
 		dbMap.put( "No Data", "9" );
 		dbMap.put( "No Loc. Data", "99" );
+		
+		dbMap.put( "Fine Weather", "1" );
+		dbMap.put( "Rain", "2" );
+		dbMap.put( "Sleet", "3" );
+		dbMap.put( "Snow", "4" );
+		dbMap.put( "Fog", "5" );
+		dbMap.put( "Rain+Fog", "6" );
+		dbMap.put( "Sleet+Fog", "7" );
+		dbMap.put( "Other", "8" );
+		dbMap.put( "Unknown", "9" );
+		dbMap.put( "No Loc. Data", "13" );
 
 		dbMap.put( "No Hit-Run", "0" );
 		dbMap.put( "Motor Vehicle", "1" );
@@ -299,13 +314,13 @@ public class ButtonData
 		dbMap.put( "No Data", "9" );
 		dbMap.put( "No Loc Data", "99" );
 
-		dbMap.put( "No Collision", "0" );
-		dbMap.put( "Rear-End", "1" );
-		dbMap.put( "Head On", "2" );
-		dbMap.put( "Angled", "4" );
-		dbMap.put( "No Data", "9" );
-		dbMap.put( "Sideswipe", "5" );
-		dbMap.put( "No Loc Data", "13" );
+//		dbMap.put( "No Collision", "0" );
+//		dbMap.put( "Rear-End", "1" );
+//		dbMap.put( "Head On", "2" );
+//		dbMap.put( "Angled", "4" );
+//		dbMap.put( "No Data", "9" );
+//		dbMap.put( "Sideswipe", "5" );
+//		dbMap.put( "No Loc Data", "13" );
 
 		dbMap.put( "Not on NH", "0" );
 		dbMap.put( "On NH", "1" );
