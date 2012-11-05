@@ -35,7 +35,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	public static InteractiveMap map;
 	PVector mapSize;
 	PVector mapOffset;
-	Location locationUSA = new Location(38.962f, -93.928f);
+	static Location locationUSA = new Location(38.962f, -93.928f);
 	int initialZoom = 6, stopClusterAtZoom = 11, stateLevelZoom = 5,
 			noMoreZoomIn = 16, noMoreZoomOut = 5;//these are optimal for wall
 	
@@ -165,8 +165,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					}
 					else if( touchList.size() >= 5 )
 					{
-						// Zoom to entire USA
-						map.setCenterZoom(locationUSA, 5);
+						fullZoomOut();
 					}
 					// Update touch IDs 1 and 2
 					if( ID == touchID1 ){
@@ -315,6 +314,11 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			b.draw();
 	}
 
+	public static void fullZoomOut() {
+		// Zoom to entire USA
+		map.setCenterZoom(locationUSA, 5);
+	}
+	
 	@Override
 	public void draw() {
 		if(needRedraw) {

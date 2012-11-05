@@ -99,7 +99,7 @@ public class Grid extends Panel {
 			}
 		}
 		createClusters();
-		createMarkers();
+//		createMarkers();
 	}
 	
 	void createClusters() {
@@ -140,7 +140,7 @@ public class Grid extends Panel {
 	}
 	
 	public ArrayList<Marker> getMarkers(EnumColor color) {
-		
+		createMarkers();
 		if(MapPanel.clusterGridMode) //TODO: how to handle state view?
 			drawClusterGridLines();
 		
