@@ -3,6 +3,7 @@ package edu.cs424.traffic.components;
 import java.util.ArrayList;
 
 import edu.cs424.data.helper.Findings;
+import edu.cs424.data.helper.Helper;
 import edu.cs424.traffic.central.EnumColor;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
@@ -15,7 +16,7 @@ import static edu.cs424.data.helper.AppConstants.*;
 public class Tab2 extends Panel implements TouchEnabled
 {
 	Button[] buttons;
-	ArrayList<Findings> findings = new ArrayList<Findings>();
+	ArrayList<Findings> findings;
 
 	public Tab2(float x0, float y0, float width, float height, float parentX0,
 			float parentY0) 
@@ -36,6 +37,9 @@ public class Tab2 extends Panel implements TouchEnabled
 					button.setPressed(true);
 					PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH1);
 					PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH2);
+					
+					PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH1,findings.get(0));
+					//PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH2);
 				}
 				else
 				{
@@ -50,12 +54,9 @@ public class Tab2 extends Panel implements TouchEnabled
 	
 	public void setup() 
 	{
-		// Payas init the class here
-		
-		
+		findings = Helper.getFindings();
 		
 		buttons = new Button[5];
-		
 		for(int i = 0 ; i < 5 ; i++)
 		{
 			buttons[i] = new Button(eventButtonX,  eventButtonY + i*(eventButtonHeight + eventButtonSpacing),

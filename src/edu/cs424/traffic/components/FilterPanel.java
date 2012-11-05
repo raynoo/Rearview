@@ -6,14 +6,16 @@ import java.util.Set;
 
 import edu.cs424.data.helper.ButtonData;
 import edu.cs424.data.helper.DBCommand;
+import edu.cs424.data.helper.Findings;
 import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.TouchEnabled;
 import edu.cs424.traffic.components.MainPanel.MouseMovements;
 import edu.cs424.traffic.gui.Button;
 import edu.cs424.traffic.pubsub.PubSub;
 import edu.cs424.traffic.pubsub.PubSub.Event;
+import edu.cs424.traffic.pubsub.Suscribe;
 
-public class FilterPanel extends Panel implements TouchEnabled
+public class FilterPanel extends Panel implements TouchEnabled,Suscribe
 {	
 	FilterHolder filterHolder;
 
@@ -32,6 +34,7 @@ public class FilterPanel extends Panel implements TouchEnabled
 
 	public void setup()
 	{	
+		PubSub.suscribeEvent(Event.LOAD_FILTER, this);
 		filterButtons = new HashMap<String, FilterButton>();
 		selectedButtonList = new HashMap<String, Set<String>>();
 
@@ -136,6 +139,25 @@ public class FilterPanel extends Panel implements TouchEnabled
 	{
 		PubSub.publishEvent(event, null);
 		DBCommand.getInstance().updateFilter(selectedButtonList, event);
+	}
+
+
+	@Override
+	public void receiveNotification(Event eventName, Object... object)
+	{
+		if(eventName == Event.LOAD_FILTER)
+		{
+			Findings toShow = (Findings) object[1];
+			
+			for(String temp : toShow.getFilters())
+			{
+				selectDeselectbutton( temp.split(" = ")[0], temp.split(" = ")[1], true);
+			}
+			
+			updateFilter((Event)object[0]);
+		}
+		
+		
 	}
 
 }

@@ -6,8 +6,9 @@ public class Helper {
 
 	static ArrayList<Findings> sending;
 		
-	public static ArrayList<Findings> getFindings(){
-		
+	public static ArrayList<Findings> getFindings()
+	{
+		sending = new ArrayList<Findings>();
 		
 		ArrayList<String> s11 = new ArrayList<String>();
 		s11.add("Driver Age = < 16");

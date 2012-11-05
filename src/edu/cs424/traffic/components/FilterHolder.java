@@ -92,7 +92,7 @@ public class FilterHolder extends Panel implements TouchEnabled,Suscribe
 			{
 				// call the selected value panel to clear the data
 				showSelected.clearPanel();
-				updateFilter(toPublish);
+				//updateFilter(toPublish);
 			}
 		}
 
