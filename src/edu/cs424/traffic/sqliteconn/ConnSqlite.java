@@ -12,8 +12,10 @@ import java.util.Map.Entry;
 
 import com.modestmaps.geo.Location;
 
+import edu.cs424.data.helper.ButtonData;
 import edu.cs424.traffic.central.SettingsLoader;
 import edu.cs424.traffic.components.BarGraph.Type;
+import edu.cs424.traffic.map.dataset.CrashInfo;
 import edu.cs424.traffic.map.dataset.DataPoint;
 
 public class ConnSqlite {
@@ -57,6 +59,42 @@ public class ConnSqlite {
 
 		return executeFilterQuery(query, type);
 	}
+	
+	public static CrashInfo getSingleCrashData(int uid) {
+		String query = "select * from crash1 where uid = " + uid;
+		
+		Statement stat;
+		ResultSet res;
+		CrashInfo info = new CrashInfo();
+		
+		int state, weather, deaths, driverage, driversex, dui, speeding, vehtype, highway, collision;
+		
+		try {
+			stat = conn.createStatement();
+			res = stat.executeQuery(query);
+
+			while(res.next()) {
+				info.setDate(res.getString("date"));
+				state = res.getInt("istatenum");
+				weather = res.getInt("iatmcond");
+				deaths = res.getInt("numfatal");
+				driverage = res.getInt("iage");
+				driversex = res.getInt("isex");
+				dui = res.getInt("ialcres");
+				speeding = res.getInt("speeding");
+				vehtype = res.getInt("ibody");
+				highway = res.getInt("inhs");
+				collision = res.getInt("imanncol");
+			}
+			//query from new table
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	private static String appendFilters(FilterData filterData, String query) {
 
@@ -95,7 +133,6 @@ public class ConnSqlite {
 
 		return query;
 	}
-
 
 	private static HashMap<String, ArrayList<DataPoint>> executeFilterQuery(String query,Type type) 
 	{
