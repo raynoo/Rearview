@@ -25,7 +25,7 @@ public class Helper {
 		ArrayList<String> s21 = new ArrayList<String>();
 		s21.add("Body Type = Motorcycle");
 		s21.add("Driver Age = 51 - 75");
-		s21.add("Body Type = > 75");
+		s21.add("Driver Age = > 75");
 		String s22 = "There is an overall decline in the number of fatalities on the road due to strict regulations all around." +
 				" However this is not reflected in the motorcycle fatalities which have actually increased from 2000 to 2010." +
 				" This graph shows the especially worrying increase in motorcyclists above the age of 50";

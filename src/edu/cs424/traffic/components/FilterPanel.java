@@ -151,12 +151,9 @@ public class FilterPanel extends Panel implements TouchEnabled,Suscribe
 			for(String temp : toShow.getFilters())
 			{
 				selectDeselectbutton( temp.split(" = ")[0], temp.split(" = ")[1], true);
-			}
-			
+			}			
 			updateFilter((Event)object[0]);
-		}
-		
-		
+		}		
 	}
 
 }
