@@ -16,6 +16,7 @@ import edu.cs424.traffic.central.Panel;
 import edu.cs424.traffic.central.SettingsLoader;
 import edu.cs424.traffic.map.dataset.CrashInfo;
 import edu.cs424.traffic.map.dataset.DataPoint;
+import edu.cs424.traffic.map.dataset.Glyph;
 import edu.cs424.traffic.map.dataset.Grid;
 import edu.cs424.traffic.map.dataset.Marker;
 import edu.cs424.traffic.map.utils.Point;
@@ -34,7 +35,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	PVector mapSize;
 	PVector mapOffset;
 	static Location locationUSA = new Location(38.962f, -93.928f);
-	int initialZoom = 6, stopClusterAtZoom = 9, stateLevelZoom = 5,
+	int initialZoom = 6, stopClusterAtZoom = 10, stateLevelZoom = 5,
 			noMoreZoomIn = 15, noMoreZoomOut = 5;//these are optimal for wall
 	
 	
@@ -62,12 +63,16 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	ArrayList<DataPoint> pointsForGraph1 = new ArrayList<DataPoint>();
 	ArrayList<DataPoint> pointsForGraph2 = new ArrayList<DataPoint>();
 	
+	HashMap<String, ArrayList<DataPoint>> glyphData;
+	ArrayList<DataPoint> glyphPoints = new ArrayList<DataPoint>();
+	ArrayList<Marker> glyphMarkers = new ArrayList<Marker>();
+	
 	//take highest and lowest from 2 graphs
 	int lowestCrashCount, highestCrashCount;
 
 	//for buttons
 	Button out, in, up, down, left, right, aerial, hybrid, road;
-	Button clusterWithGrid, clusterWithGlyph, graph1Button, graph2Button;
+	Button clusterWithGrid, clusterWithGlyph, graph1Button, graph2Button, USA;
 	ArrayList<Button> buttons = new ArrayList<Button>();
 
 	boolean firstIter = true;
@@ -227,6 +232,13 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			return true;
 		}
 		
+		else if(USA.containsPoint(x, y)) {
+			fullZoomOut();
+			updateVisibleCoordinates();
+			needRedraw = true;
+			return true;
+		}
+		
 		
 		else if(aerial.containsPoint(x, y)) {
 			map.setMapProvider( new Microsoft.AerialProvider() );
@@ -337,23 +349,27 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		clusterWithGrid = new Button((mapOffsetX+mapOffsetWidth/3*2)+30, mapControlPanelHeight-25, 40, 20, x0, y0, "Cluster", true);
 		clusterWithGlyph = new Button((mapOffsetX+mapOffsetWidth/3*2)+75, mapControlPanelHeight-25, 40, 20, x0, y0, "Glyph", true);
 		
+//		USA = new Button((mapOffsetX+mapOffsetWidth/3)-70, mapControlPanelHeight-25, 45, 20, x0, y0, "Show USA", true);
+		USA = new Button((mapOffsetX+mapOffsetWidth/3*2)+30, mapControlPanelHeight-25, 45, 20, x0, y0, "Show USA", true);
+		
 		//select graph
-		graph1Button = new Button(mapControlPanelX+20, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 1", true);
-		graph2Button = new Button(mapControlPanelX+65, mapControlPanelHeight-150, 40, 20, x0, y0, "Graph 2", true);
+		graph1Button = new Button(mapControlPanelX+20, mapControlPanelHeight-130, 40, 20, x0, y0, "Graph 1", true);
+		graph2Button = new Button(mapControlPanelX+65, mapControlPanelHeight-130, 40, 20, x0, y0, "Graph 2", true);
 
 		buttons.add(in);
 		buttons.add(out);
 		buttons.add(road);
 		buttons.add(hybrid);
 		buttons.add(aerial);
-		buttons.add(clusterWithGrid);
-		buttons.add(clusterWithGlyph);
+//		buttons.add(clusterWithGrid);
+//		buttons.add(clusterWithGlyph);
 		buttons.add(graph1Button);
 		buttons.add(graph2Button);
 		buttons.add(up);
 		buttons.add(down);
 		buttons.add(left);
 		buttons.add(right);
+		buttons.add(USA);
 
 		initializeMap();
 	}
@@ -365,7 +381,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 	public static void fullZoomOut() {
 		// Zoom to entire USA
-		map.setCenterZoom(locationUSA, 5);
+		map.setCenterZoom(locationUSA, 6);
 	}
 	
 	@Override
@@ -443,23 +459,40 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					
 					drawMarkers(markersForGraph2);
 				}
-				
-			} else if(clusterGlyphMode) {
-				
-				if(isGraph1) {
-					
-					
-				}
-				else if(isGraph2) {
-					
-				}
 			}
+				
+//			else if(clusterGlyphMode) {
+//				
+//				if(isGraph1 && pointsForGraph1 != null) {
+//					
+//					
+//					drawMarkers(markersForGraph1);
+//					
+//				}
+//				else if(isGraph2) {
+//					
+//				}
+//			}
 			
 			if(selectedMarker != null)
 				drawClusterInfo(selectedMarker);
 			
 			needRedraw = false;
 		}
+	}
+	
+	public ArrayList<Marker> showIndividualGlyph(ArrayList<DataPoint> data) {
+		glyphMarkers = new ArrayList<Marker>();
+		
+		for(DataPoint d : data) {
+			glyphMarkers.add(new Glyph(d, EnumColor.GOLD, EnumColor.RED));
+		}
+		return glyphMarkers;
+	}
+	
+	public void drawGlyphs() {
+		for(Marker g : glyphMarkers)
+			g.draw();
 	}
 	
 	void drawGraph(HashMap<String, ArrayList<DataPoint>> dataForGraph, EnumColor color) {
