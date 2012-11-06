@@ -72,7 +72,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 			pushStyle();			
 			background(EnumColor.WHITE);
 			rect(graphAxisX, graphAxisY, graphAxisWidth, graphAxisHeight);
-			
+
 			textSize(10);
 			fill(EnumColor.BLACK);
 			textAlign(PConstants.TOP, PConstants.LEFT);
@@ -80,7 +80,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 			{
 				text(yearValue,graphAxisX,graphAxisY-10);
 			}
-			
+
 			if(currentType == Type.Day)
 			{
 				text(yearValue+ "   " + monthValue,graphAxisX,graphAxisY-10);
@@ -109,7 +109,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 
 				// get the highest height of bar graph for scaling
 				int max = 0;
-								
+
 				for( String key : toPlot.keySet() )
 				{
 					int y = toPlot.get(key).size();
@@ -126,7 +126,7 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 				textAlign(PConstants.LEFT, PConstants.TOP);
 				String label;
 				DecimalFormat form = new DecimalFormat("0.0");  
-				
+
 				for(int x = 1 ; x <= 12 ; x++)
 				{
 					float val = (float) interval * x;
@@ -153,7 +153,14 @@ public class BarGraph extends Panel implements TouchEnabled,Suscribe
 					y = 0;
 					if(toPlot.containsKey(key))
 					{
-						fill(EnumColor.SOMERANDOM);				
+						if(suscribed == Event.CHANGE_FILTER_GRAPH1)
+						{
+							fill(EnumColor.GRAPH1);
+						}
+						else
+						{
+							fill(EnumColor.GRAPH2);
+						}
 						y = PApplet.map(toPlot.get(key).size() , 0 , max ,0,graphAxisHeight);
 						rect(graphAxisX + (i*25), graphAxisY + graphAxisHeight - y , 25-5, y);		
 						Rectangle rect = new Rectangle(x0 + graphAxisX + (i*25),y0 + graphAxisY + graphAxisHeight - y , 25-5, y,key);
