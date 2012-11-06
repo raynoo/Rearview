@@ -105,7 +105,7 @@ public class ButtonData
 		holiday.add("Christmas");
 		holiday.add("New Year's Eve");
 		holiday.add("No Data");
-		holiday.add("No Loc. Data");
+		
 		buttonValues.put("Holiday", holiday);
 		
 		ArrayList<String> highway =  new ArrayList<String>();
