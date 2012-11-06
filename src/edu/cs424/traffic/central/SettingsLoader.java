@@ -31,6 +31,8 @@ public class SettingsLoader
 			{
 				dir = dir.substring(0, dir.length() - 4);
 			}
+			
+			System.out.println("SettingsLoader.SettingsLoader() file location " +dir);
 		} 
 		catch (IOException e)
 		{

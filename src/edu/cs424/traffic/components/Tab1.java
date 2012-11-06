@@ -87,9 +87,9 @@ public class Tab1 extends Panel implements TouchEnabled
 
 	public void setup() {
 
-		graph1Button = new Button(graph1ButtonX,graph1ButtonY,graphButtonWidth,graphButtonHeight,x0,y0,"graph 1",true);
+		graph1Button = new Button(graph1ButtonX,graph1ButtonY,graphButtonWidth,graphButtonHeight,x0,y0,"Graph 1",true);
 		graph1Button.setup();
-		graph2Button = new Button(graph2ButtonX,graph2ButtonY,graphButtonWidth,graphButtonHeight,x0,y0,"graph 2",true);
+		graph2Button = new Button(graph2ButtonX,graph2ButtonY,graphButtonWidth,graphButtonHeight,x0,y0,"Graph 2",true);
 		graph2Button.setup();
 		graph1Button.setPressed(true);
 		

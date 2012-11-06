@@ -33,7 +33,8 @@ public class MainPanel extends Panel implements TouchEnabled
 	public BarGraph graph1,graph2;
 	public MapPanel mapPanel;
 	Label label1,label2;
-
+	boolean isFirstTime = true;
+	
 	boolean isTab1 = true,isTab2 = false;
 	Tab1 tab1;
 	Tab2 tab2;
@@ -218,6 +219,19 @@ public class MainPanel extends Panel implements TouchEnabled
 			label2.draw();
 			//label3.draw();
 			needRedraw = false;
+		}
+		
+		if(isFirstTime)
+		{
+			isFirstTime = false;
+			tab2.showStartingMap();
+			
+			for(int i = 0; i < SettingsLoader.getConfigValueAsInt(EnumConfig.REPEATDRAW); i++)
+			{
+				callManyTime();
+				draw();
+			}
+			
 		}
 	}
 

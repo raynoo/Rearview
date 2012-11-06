@@ -113,5 +113,16 @@ public class Tab2 extends Panel implements TouchEnabled
 		}
 		needRedraw = true;
 	}
+	
+	public void showStartingMap()
+	{
+		PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH1);
+		PubSub.publishEvent(Event.CLEAR_FILTER, Event.CHANGE_FILTER_GRAPH2);
+		
+		PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH1,findings.get(0));
+		PubSub.publishEvent(Event.LOAD_FILTER, Event.CHANGE_FILTER_GRAPH2,findings.get(0));
+		
+		MapPanel.fullZoomOut();
+	}
 
 }
