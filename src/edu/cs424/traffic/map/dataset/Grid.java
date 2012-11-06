@@ -89,7 +89,6 @@ public class Grid extends Panel {
 			}
 		}
 		createClusters();
-//		createMarkers();
 	}
 	
 	void createClusters() {
@@ -98,11 +97,9 @@ public class Grid extends Panel {
 			
 			if(high < c.cluster.getCrashCount()) {
 				high = c.cluster.getCrashCount();
-//				highest = c;
 			}
 			else if(low > c.cluster.getCrashCount()) {
 				low = c.cluster.getCrashCount();
-//				lowest = c;
 			}
 		}
 	}

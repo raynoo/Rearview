@@ -194,31 +194,36 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		if(in.containsPoint(x, y) && map.getZoom() < noMoreZoomIn) {
 			map.zoomIn();
 			updateVisibleCoordinates();
+			needRedraw = true;
 			return true;
 		}
 		else if(out.containsPoint(x, y) && map.getZoom() > noMoreZoomOut) {
 			map.zoomOut();
 			updateVisibleCoordinates();
+			needRedraw = true;
 			return true;
 		}
 		else if(up.containsPoint(x, y)) {
 			map.panUp();
 			updateVisibleCoordinates();
+			needRedraw = true;
 			return true;
 		}
 		else if(down.containsPoint(x, y)) {
 			map.panDown();
-			updateVisibleCoordinates();
+			updateVisibleCoordinates();needRedraw = true;
 			return true;
 		}
 		else if(left.containsPoint(x, y)) {
 			map.panLeft();
 			updateVisibleCoordinates();
+			needRedraw = true;
 			return true;
 		}
 		else if(right.containsPoint(x, y)) {
 			map.panRight();
 			updateVisibleCoordinates();
+			needRedraw = true;
 			return true;
 		}
 		
@@ -243,6 +248,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			clusterWithGlyph.setPressed(false);
 			
 			updateVisibleCoordinates();
+			needRedraw = true;
 			return true;
 		}
 		else if(clusterWithGlyph.containsPoint(x, y) && clusterWithGlyph.isPressed == false) {
@@ -252,6 +258,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			clusterWithGrid.setPressed(false);
 			
 			updateVisibleCoordinates();
+			needRedraw = true;
 			return true;
 		}
 		//select graph
@@ -260,7 +267,9 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			isGraph1 = true;
 			isGraph2 = false;
 			graph2Button.setPressed(false);
-			
+			drawMarkers(markersForGraph1);
+			needRedraw = false;
+//			updateVisibleCoordinates();
 			return true;
 		}
 		else if(graph2Button.containsPoint(x, y) && graph2Button.isPressed == false) {
@@ -268,7 +277,9 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			isGraph2 = true;
 			isGraph1 = false;
 			graph1Button.setPressed(false);
-			
+			drawMarkers(markersForGraph2);
+			needRedraw = false;
+//			updateVisibleCoordinates();
 			return true;
 		}
 		return false;
@@ -276,18 +287,22 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 	
 	boolean isOnMarker(float x, float y, MouseMovements event) {
 		//touch on marker
-		for(Marker m : markersForGraph1) {
-			if(m.containsPoint(x, y)) {
-				if(event == MouseMovements.MOUSEDOWN)
-					selectedMarker = m;
-				return true;
+		if(isGraph1) {
+			for(Marker m : markersForGraph1) {
+				if(m.containsPoint(x, y)) {
+					if(event == MouseMovements.MOUSEDOWN)
+						selectedMarker = m;
+					return true;
+				}
 			}
 		}
-		for(Marker m : markersForGraph2) {
-			if(m.containsPoint(x, y)) {
-				if(event == MouseMovements.MOUSEDOWN)
-					selectedMarker = m;
-				return true;
+		else if(isGraph2) {
+			for(Marker m : markersForGraph2) {
+				if(m.containsPoint(x, y)) {
+					if(event == MouseMovements.MOUSEDOWN)
+						selectedMarker = m;
+					return true;
+				}
 			}
 		}
 		return false;
@@ -386,7 +401,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					for(ArrayList<DataPoint> d : dataForGraph1.values())
 						pointsForGraph1.addAll(d);
 					
-					System.out.println("MapPanel: Graph 1 points " + pointsForGraph1.size());
+//					System.out.println("MapPanel: Graph 1 points " + pointsForGraph1.size());
 					
 					grid.clusterData(pointsForGraph1);
 					
@@ -411,7 +426,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 					for(ArrayList<DataPoint> d : dataForGraph2.values())
 						pointsForGraph2.addAll(d);
 					
-					System.out.println("MapPanel: Graph 2 points " + pointsForGraph2.size());
+//					System.out.println("MapPanel: Graph 2 points " + pointsForGraph2.size());
 					
 					grid.clusterData(pointsForGraph2);
 					
@@ -432,7 +447,6 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 			} else if(clusterGlyphMode) {
 				
 				if(isGraph1) {
-					
 					
 					
 				}
@@ -463,9 +477,12 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 	void drawMapControlPanel() {
 		pushStyle();
-		fill(EnumColor.DARK_GRAY, 180);
+		fill(EnumColor.DARK_GRAY, 160);
 		noStroke();
 		rect(mapControlPanelX, mapControlPanelY, mapControlPanelWidth, mapControlPanelHeight);
+		rect(0, 0, mapOffsetX+mapOffsetWidth, mapOffsetY);
+		rect(0, mapOffsetY, mapOffsetX, mapOffsetY+mapOffsetHeight);
+		rect(mapOffsetX, mapOffsetY+mapOffsetHeight, mapOffsetWidth, height-(mapOffsetY+mapOffsetHeight));
 		//draw 3 more surrounding offset
 		popStyle();
 		
@@ -498,7 +515,7 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 		else
 			info = "Count: " + selectedMarker.getCluster().getCrashCount();
 		
-		textSize(9);
+		textSize(8);
 		text(info, (float)mapControlPanelX+5, (float)mapOffsetY, 
 				mapControlPanelWidth-10, mapOffsetHeight/3*2);
 		popStyle();
@@ -561,7 +578,6 @@ public class MapPanel extends Panel implements TouchEnabled, Suscribe {
 
 	@Override
 	public boolean touch(float x, float y, MouseMovements event) {
-		System.out.println("MapPanel.touch()" + "NOT IMPLEMENTED");
 		return false;
 	}
 	

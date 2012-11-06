@@ -36,9 +36,12 @@ public class ConnSqlite {
 		}
 	}
 
-	public static String getCrashByState(FilterData filterData) {
+	public static HashMap<String, ArrayList<DataPoint>> getCrashByState(FilterData filterData) {
 
-		return appendFilters(filterData, "SELECT latitude, longitude, istatenum FROM crash1");
+		String query = appendFilters(filterData, "SELECT UID, latitude, longitude, istatenum, ialcres, speeding FROM crash1");
+		
+		return executeFilterQuery(query, Type.Year);
+		
 	}
 
 	public static HashMap<String, ArrayList<DataPoint>> getCrashData( FilterData filterData,Type type) 
@@ -67,8 +70,6 @@ public class ConnSqlite {
 		ResultSet res;
 		CrashInfo info = new CrashInfo();
 		
-//		String state, weather, deaths, driverage, driversex, dui, speeding, vehtype, highway, collision;
-		
 		try {
 			stat = conn.createStatement();
 			res = stat.executeQuery(query);
@@ -85,7 +86,6 @@ public class ConnSqlite {
 				info.setVehicleType(res.getString("ibody"));
 				info.setOnHighway(res.getString("inhs"));
 			}
-			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -131,6 +131,54 @@ public class ConnSqlite {
 
 		return query;
 	}
+	
+	private static HashMap<String, ArrayList<DataPoint>> executeFilterQueryByState(String query,Type type) 
+	{
+		Statement stat;
+		ResultSet res;
+		HashMap<String, ArrayList<DataPoint>> result = new HashMap<String, ArrayList<DataPoint>>();
+
+		try 
+		{
+			stat = conn.createStatement();
+			res = stat.executeQuery(query);
+
+			while( res.next() )
+			{
+				String key;
+				Location loc = new Location(res.getFloat("latitude"), res.getFloat("longitude"));
+				
+				if ( type == type.Year )
+				{
+					key = res.getString("Year");
+				}
+				else if (type == type.Month )
+				{
+					key = res.getString("iaccmon");
+				}
+				else
+				{
+					key = res.getString("dayofweek");
+				}
+				
+				if( !result.containsKey(key) )
+				{
+					ArrayList<DataPoint> temp = new ArrayList<DataPoint>();
+					result.put(key, temp);
+				}
+				
+				DataPoint dp = new DataPoint(res.getString("UID"),loc, key);
+				result.get(key).add(dp);
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+
+		return result;
+	}
 
 	private static HashMap<String, ArrayList<DataPoint>> executeFilterQuery(String query,Type type) 
 	{
@@ -168,7 +216,7 @@ public class ConnSqlite {
 				}
 				
 				DataPoint dp = new DataPoint(res.getString("UID"),loc, key);
-				result.get(key).add(dp);				
+				result.get(key).add(dp);
 			}
 
 		} 

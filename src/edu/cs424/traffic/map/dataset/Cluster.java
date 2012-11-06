@@ -11,7 +11,7 @@ public class Cluster {
 	
 	int dataID;
 	
-	int highestClusterCount, lowestClusterCount;
+//	int highestClusterCount, lowestClusterCount;
 	
 	public Cluster() {
 		
