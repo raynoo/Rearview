@@ -1,7 +1,7 @@
 Visualizing Highway Fatalities
 
-A tool that visualizes data maintained by FARS of National Highway Traffic Safety Administration from 2001-10. The tool is intended to help a user to visualize various aspects/causes of highway accidents using maps and graphs, and thus allowing a meaningful analysis of existing data of fatalities. This application has been optimized for a 8160x2304 px (52 inch) touch-screen at UIC's EVL Lab.
+A tool that visualizes data maintained by FARS of National Highway Traffic Safety Administration from 2001-10. The tool is intended to help a user to visualize various aspects/causes of highway accidents using maps and graphs, and thus allowing a meaningful analysis of existing data. This application has been optimized for a 8160x2304 px (52 inch) touch-screen at UIC's EVL Lab. A scaled down version is available to be run on smaller screens as well.
 
-Developed using: Java, Processing, Modest Maps
+Developed using: Java, Processing, Modest Maps, SQLite, Omicron API
 
-Project site: http://goo.gl/uYg1I
+Project site with a detailed analysis and installation instructions: http://goo.gl/uYg1I
